@@ -28,14 +28,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate()) {
-      // do something
-      context.read<LoginBloc>().add(LoginEvent.login(
-            email: _emailController.text,
-            password: _passwordController.text,
-          ));
-      // Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => const HomePage()));
+    if (_formKey.currentState!.validate()) {      
+      // context.read<LoginBloc>().add(LoginEvent.login(
+      //       email: _emailController.text,
+      //       password: _passwordController.text,
+      //     ));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
   }
 
@@ -121,17 +120,17 @@ class _LoginPageState extends State<LoginPage> {
                       listener: (context, state) {
                         state.maybeWhen(
                           success: (data) async {
-                            await AuthLocalDatasource().saveUserData(data);
-                            final response =
-                                await AuthRemoteDataSource().myoutlet();
-                            response.fold(
-                              (l) {
-                                print(l);
-                              },
-                              (r) async {
-                                await AuthLocalDatasource().saveOutletData(r);
-                              },
-                            );
+                            // await AuthLocalDatasource().saveUserData(data);
+                            // final response =
+                            //     await AuthRemoteDataSource().myoutlet();
+                            // response.fold(
+                            //   (l) {
+                            //     print(l);
+                            //   },
+                            //   (r) async {
+                            //     await AuthLocalDatasource().saveOutletData(r);
+                            //   },
+                            // );
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

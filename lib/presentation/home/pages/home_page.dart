@@ -74,9 +74,9 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    context.read<ProductBloc>().add(ProductEvent.fetchLocal());
-    context.read<CategoryBloc>().add(const CategoryEvent.fetchLocal());
-    context.read<AccountBloc>().add(const AccountEvent.getAccount());
+    // context.read<ProductBloc>().add(ProductEvent.fetchLocal());
+    // context.read<CategoryBloc>().add(const CategoryEvent.fetchLocal());
+    // context.read<AccountBloc>().add(const AccountEvent.getAccount());
     // context
     //     .read<BusinessSettingBloc>()
     //     .add(const BusinessSettingEvent.getBusinessSetting());
@@ -92,9 +92,9 @@ class _HomePageState extends State<HomePage>
       }
     });
 
-    Connectivity().checkConnectivity().then(_handleConnectivity);
-    _connectivitySubscription =
-        Connectivity().onConnectivityChanged.listen(_handleConnectivity);
+    // Connectivity().checkConnectivity().then(_handleConnectivity);
+    // _connectivitySubscription =
+    //     Connectivity().onConnectivityChanged.listen(_handleConnectivity);
 
     // StreamSubscription<List<ConnectivityResult>> subscription = Connectivity()
     //     .onConnectivityChanged

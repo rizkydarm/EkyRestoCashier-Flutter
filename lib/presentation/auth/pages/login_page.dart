@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
-import 'package:eky_pos/data/datasources/auth_remote_datasource.dart';
 import 'package:eky_pos/presentation/auth/bloc/login/login_bloc.dart';
 import 'package:eky_pos/presentation/home/pages/home_page.dart';
 

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/components/spaces.dart';
 import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
-import 'package:eky_pos/presentation/auth/bloc/account/account_bloc.dart';
-import 'package:eky_pos/presentation/auth/bloc/logout/logout_bloc.dart';
-import 'package:eky_pos/presentation/auth/pages/splash_page.dart';
 import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:eky_pos/presentation/items/pages/item_page.dart';
 import 'package:eky_pos/presentation/outlet/pages/outlet_page.dart';

@@ -157,6 +157,7 @@ class _EditProductPageState extends State<EditProductPage> {
                   value: _selectedCategoryData,
                   items: categories,
                   label: 'Kategori',
+                  hint: 'Pilih Kategori',
                   onChanged: (value) {
                     setState(() {
                       _selectedCategoryData = value;
@@ -338,20 +339,19 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  final authData = await AuthLocalDatasource().getUserData();
-                  final outletData =
-                      await AuthLocalDatasource().getOutletData();
-                  final data = ProductModel(
+                  // final authData = await AuthLocalDatasource().getUserData();
+                  // final outletData =
+                  //     await AuthLocalDatasource().getOutletData();
+                  final data = Product(
                     name: _nameController.text,
                     categoryId: 0,
-                    price: _priceController.text.toIntegerFromText.toDouble(),
-                    cost: _costController.text.toIntegerFromText.toDouble(),
+                    price: _priceController.text.toIntegerFromText.toDouble().toString(),
+                    cost: _costController.text.toIntegerFromText.toDouble().toString(),
                     stock: 0,
                     color: getColorString(_selectedColor),
                     barcode: _barcodeController.text,
-                    businessId: authData!.data!.businessId!,
+                    // businessId: authData!.data!.businessId!,
                     description: _nameController.text,
-                    outletId: outletData.id!,
                   );
 
                   if (_isImage) {

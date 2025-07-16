@@ -4,6 +4,7 @@ import 'package:eky_pos/core/utils/talker.dart';
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/data/models/responses/product_response_model.dart';
 import 'package:eky_pos/data/models/responses/user_model.dart';
+import 'package:eky_pos/presentation/items/models/product_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/responses/tax_discount_model.dart';
@@ -55,7 +56,6 @@ class DBLocalDatasource {
     await db.execute('''
       CREATE TABLE $tableProducts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        product_id INTEGER,
         name TEXT,
         category_id INTEGER,
         business_id INTEGER,
@@ -334,41 +334,16 @@ class DBLocalDatasource {
   //save data product
   Future<int> saveProduct(Product product) async {
     final db = await instance.database;
-    log("Save product: ${product.toMap()}");
-    return await db.insert(tableProducts, product.toMap());
+    talkerInfoDB("Save product: ${product.name}");
+    return await db.insert(tableProducts, product.toLocalMap());
   }
 
   //get all data product
   Future<List<Product>> getAllProduct() async {
     final db = await instance.database;
     final result = await db.query(tableProducts);
-
+    talkerInfoDB("Get all product: ${result.length} total");
     return result.map((e) => Product.fromMap(e)).toList();
-
-    // final db = await instance.database;
-
-    // // get all product from tableProducts
-    // final productMaps = await db.query(tableProducts);
-
-    // // get all stock from table stocks
-    // final stockMaps = await db.query('stocks');
-
-    // // create List<Stock> from result query
-    // final allStocks = stockMaps.map((e) => Stock.fromMap(e)).toList();
-
-    // // merge product with stock match
-    // final products = productMaps.map((productMap) {
-    //   final productId = productMap['productId'];
-    //   final relatedStocks =
-    //       allStocks.where((s) => s.productId == productId).toList();
-
-    //   return Product.fromMap({
-    //     ...productMap,
-    //     'stocks': relatedStocks.map((s) => s.toMap()).toList(),
-    //   });
-    // }).toList();
-
-    // return products;
   }
 
   // Future<Product> getProductById(String id) async {
@@ -417,23 +392,26 @@ class DBLocalDatasource {
 
   Future<void> removeAllProduct() async {
     final db = await instance.database;
+    talkerInfoDB("Remove all product");
     await db.delete(tableProducts);
   }
 
 // update data product
   Future<int> updateProduct(Product product) async {
     final db = await instance.database;
+    talkerInfoDB("Update product: ${product.name}");
     return await db.update(
       tableProducts,
-      product.toMap(),
+      product.toLocalMap().update('updated_at', (value) => DateTime.now()),
       where: 'id = ?',
-      whereArgs: [product.id.toString()],
+      whereArgs: [product.id!],
     );
   }
 
   // delete data product
   Future<int> deleteProduct(int id) async {
     final db = await instance.database;
+    talkerInfoDB("Delete product: $id");
     return await db.delete(
       tableProducts,
       where: 'id = ?',

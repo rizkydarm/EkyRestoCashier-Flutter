@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:eky_pos/presentation/items/models/product_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'package:eky_pos/data/datasources/product_remote_datasource.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../data/datasources/db_local_datasource.dart';
@@ -13,117 +11,73 @@ part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-  final ProductRemoteDataSource productRemoteDataSource;
-  List<Product> products = [];
-  ProductBloc(
-    this.productRemoteDataSource,
-  ) : super(_Initial()) {
+  ProductBloc() : super(_Initial()) {
+
+    final dbLocalDatasource = DBLocalDatasource.instance;
+
+    on<_DeleteProduct>((event, emit) async {
+      emit(ProductState.loading());
+      await dbLocalDatasource.deleteProduct(event.id);
+      add(_GetProducts());
+    });
+    
     on<_AddProduct>((event, emit) async {
       emit(ProductState.loading());
-      final result = await productRemoteDataSource.addProduct(
-        event.product,
-      );
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) => add(_GetProducts()),
-      );
+      await dbLocalDatasource.saveProduct(event.product);
+      add(_GetProducts());
     });
 
     on<_AddProductWithImage>((event, emit) async {
       emit(ProductState.loading());
-      final result = await productRemoteDataSource.addProductWithImage(
-        event.product,
-        event.image,
-      );
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) => add(_GetProducts()),
-      );
+      add(_GetProducts());
     });
 
     on<_EditProduct>((event, emit) async {
       emit(ProductState.loading());
-      final result = await productRemoteDataSource.editProduct(
-        event.product,
-        event.id,
-      );
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) => add(_GetProducts()),
-      );
+      await dbLocalDatasource.updateProduct(event.product);
+      add(_GetProducts());
     });
 
     on<_EditProductWithImage>((event, emit) async {
       emit(ProductState.loading());
-      final result = await productRemoteDataSource.editProductWithImage(
-        event.product,
-        event.image,
-        event.id,
-      );
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) => add(_GetProducts()),
-      );
+      add(_GetProducts());
     });
 
     on<_GetProducts>((event, emit) async {
       emit(ProductState.loading());
-      final result = await productRemoteDataSource.getProducts();
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) {
-          products = r.data ?? [];
-          emit(_Success(r.data ?? []));
-        },
-      );
+      final result = await dbLocalDatasource.getAllProduct();
+      emit(_Success(result));
     });
 
     on<_SearchProduct>((event, emit) async {
-      final searchResult = products
-          .where((element) =>
-              element.name!.toLowerCase().contains(event.query.toLowerCase()))
-          .toList();
-
+      final result = await dbLocalDatasource.getAllProduct();
+      final searchResult = result.where((element) =>
+        element.name!.toLowerCase().contains(event.query.toLowerCase()))
+      .toList();
       emit(_Success(searchResult));
     });
 
     on<_UpdateStock>((event, emit) async {
       emit(ProductState.loading());
-      final result = await productRemoteDataSource.updateStock(
-        event.stock,
-        event.type,
-        event.note,
-        event.id,
-      );
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) => add(_GetProducts()),
-      );
+      add(_GetProducts());
     });
 
     on<_GetProductsByCategory>((event, emit) async {
       emit(ProductState.loading());
-      final result = products
-          .where((element) => element.categoryId! == event.categoryId)
-          .toList();
-      emit(_Success(result));
+      final result = await dbLocalDatasource.getAllProduct();
+      final searchResult = result.where((element) =>
+        element.categoryId! == event.categoryId)
+      .toList();
+      emit(_Success(searchResult));
     });
 
     on<_GetProductByBarcode>((event, emit) async {
       emit(ProductState.loading());
-      final result = products
-          .where((element) => element.barcode == event.barcode)
-          .toList();
-      emit(_Success(result));
-    });
-
-    on<_FetchLocal>((event, emit) async {
-      emit(const _Loading());
-      final localProducts =
-          await DBLocalDatasource.instance.getAllProduct();
-      products = localProducts;
-
-      emit(_Success(products));
+      final result = await dbLocalDatasource.getAllProduct();
+      final searchResult = result.where((element) =>
+        element.barcode == event.barcode)
+      .toList();
+      emit(_Success(searchResult));
     });
   }
 }

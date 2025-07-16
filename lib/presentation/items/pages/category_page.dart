@@ -24,6 +24,9 @@ class CategoryPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             },
+            error: (message) {
+              return Center(child: Text(message));
+            },
             success: (data) {
               if (data.isEmpty) {
                 return const Center(

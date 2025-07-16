@@ -76,18 +76,14 @@ class Product {
         id: json["id"],
         productId: json["product_id"],
         name: json["name"],
-        categoryId: json["category_id"] is int
-            ? json["category_id"]
-            : int.parse(json["category_id"]),
-        businessId: json["business_id"] is int
-            ? json["business_id"]
-            : int.parse(json["business_id"]),
+        categoryId: json["category_id"],
+        businessId: json["business_id"],
         description: json["description"],
         image: json["image"],
         color: json["color"],
         price: json["price"],
         cost: json["cost"],
-        stock: json["stock"] is int ? json["stock"] : int.parse(json["stock"]),
+        stock: json["stock"],
         barcode: json["barcode"],
         sku: json["sku"],
         createdAt: json["created_at"] == null
@@ -137,7 +133,6 @@ class Product {
         "sku": sku,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        // "category": category?.toMap(),
       };
 }
 

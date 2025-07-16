@@ -34,14 +34,10 @@ import 'package:eky_pos/presentation/sales_report/bloc/sales_report/sales_report
 import 'package:eky_pos/presentation/scanner/blocs/get_qrcode/get_qrcode_bloc.dart';
 import 'package:eky_pos/presentation/staff/bloc/staff/staff_bloc.dart';
 import 'package:eky_pos/presentation/tax_discount/bloc/business_setting/business_setting_bloc.dart';
-import 'package:eky_pos/presentation/tax_discount/bloc/business_setting_local/business_setting_local_bloc.dart';
-import 'package:eky_pos/presentation/transaction/blocs/sync_order/sync_order_bloc.dart';
-import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 
 import 'presentation/auth/bloc/register/register_bloc.dart';
 
 void main() {
-  Bloc.observer = TalkerBlocObserver(talker: talker);
   runApp(const MyApp());
 }
 
@@ -65,7 +61,7 @@ class MyApp extends StatelessWidget {
           create: (context) => CategoryBloc(),
         ),
         BlocProvider(
-          create: (context) => ProductBloc(ProductRemoteDataSource()),
+          create: (context) => ProductBloc(),
         ),
         BlocProvider(
           create: (context) => CheckoutBloc(),

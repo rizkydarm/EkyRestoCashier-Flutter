@@ -6,20 +6,14 @@ import 'package:eky_pos/presentation/items/pages/stock/stock_page.dart';
 
 import '../../../core/constants/colors.dart';
 
-class ItemPage extends StatefulWidget {
+class ItemPage extends StatelessWidget {
   const ItemPage({super.key});
 
   @override
-  State<ItemPage> createState() => _ItemPageState();
-}
-
-class _ItemPageState extends State<ItemPage> {
-  //global key
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  @override
   Widget build(BuildContext context) {
+    final scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       drawer: DrawerWidget(),
       appBar: AppBar(
         title: const Text(
@@ -32,10 +26,9 @@ class _ItemPageState extends State<ItemPage> {
         ),
         centerTitle: true,
         leading: IconButton(
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer();
-            },
-            icon: Icon(Icons.menu, color: AppColors.white)),
+          onPressed: () => scaffoldKey.currentState?.openDrawer(),
+          icon: Icon(Icons.menu, color: AppColors.white)
+        ),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
@@ -43,31 +36,25 @@ class _ItemPageState extends State<ItemPage> {
           ListTile(
             leading: Icon(Icons.list),
             title: Text("Products"),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ProductPage();
-              }));
-            },
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ProductPage();
+            })),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.category),
             title: Text("Categories"),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CategoryPage();
-              }));
-            },
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return CategoryPage();
+            })),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.inventory),
             title: Text("Stocks"),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return StockPage();
-              }));
-            },
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return StockPage();
+            })),
           ),
           Divider(),
         ],

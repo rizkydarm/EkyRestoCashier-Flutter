@@ -34,7 +34,6 @@ class HomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: null,
         child: ElevatedButton.icon(
           onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage())),
           icon: const Icon(Icons.payment),

@@ -9,100 +9,65 @@ import 'package:eky_pos/presentation/items/pages/product/detail_product_page.dar
 
 import '../../bloc/product/product_bloc.dart';
 
-class ProductPage extends StatefulWidget {
+class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
-}
-
-class _ProductPageState extends State<ProductPage> {
-  @override
-  void initState() {
+  Widget build(BuildContext context) {
     context.read<ProductBloc>().add(ProductEvent.getProducts());
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Products',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios, color: AppColors.white)),
+        title: const Text('Products'),
+        centerTitle: true
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           return state.maybeWhen(
-            orElse: () {
-              return Center(child: CircularProgressIndicator());
-            },
-            loading: () {
-              return Center(child: CircularProgressIndicator());
-            },
-            error: (message) {
-              return Center(child: Text(message));
-            },
+            orElse: () => Center(child: Text("No Items")),
+            loading: () => Center(child: CircularProgressIndicator()),
+            error: (message) => Center(child: Text(message)),
             success: (data) {
               if (data.isEmpty) {
-                return Center(child: Text("No data"));
+                return Center(child: Text("No Items"));
               }
-              return ListView.builder(
+              return ListView.separated(
+                itemCount: data.length,
+                separatorBuilder: (context, index) => const Divider(),
                 itemBuilder: (context, index) {
                   final product = data[index];
-                  return Column(
-                    children: [
-                      ListTile(
-                        leading: product.image != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  '${Variables.baseUrl}${product.image!}',
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color:
-                                      changeStringtoColor(product.color ?? ""),
-                                ),
-                              ),
-                        title: Text(product.name ?? ""),
-                        subtitle: Text("Category: ${product.category?.name}"),
-                        trailing: Text(product.price!.currencyFormatRpV3,
-                            style: TextStyle(fontSize: 14)),
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return DetailProductPage(data: product);
-                          }));
-                        },
+                  return ListTile(
+                    leading: product.image != null ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        '${Variables.baseUrl}${product.image!}',
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Divider(),
+                    ) : Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: changeStringtoColor(product.color ?? ""),
                       ),
-                    ],
+                    ),
+                    title: Text(product.name ?? "-"),
+                    subtitle: BlocBuilder<CategoryBloc, CategoryState>(
+                      builder: (context, state) {
+                        final categories = state.maybeWhen(
+                          orElse: () => [],
+                          success: (data) => data,
+                        );
+                        final categoryName = categories.firstWhere((element) => element.id == product.categoryId)?.name ?? "-";
+                        return Text("Category: $categoryName");
+                      }
+                    ),
+                    trailing: Text(product.price!.currencyFormatRpV3, style: TextStyle(fontSize: 14)),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProductPage(data: product))),
                   );
                 },
-                itemCount: data.length,
               );
             },
           );
@@ -112,23 +77,19 @@ class _ProductPageState extends State<ProductPage> {
         builder: (context, state) {
           final categories = state.maybeWhen(
             orElse: () => [],
-            success: (data) => data ?? [],
+            success: (data) => data,
           );
           return FloatingActionButton(
             onPressed: () {
               if (categories.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text("Please add category first"),
-                  backgroundColor: AppColors.red,
                 ));
                 return;
               }
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AddProductPage();
-              }));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductPage()));
             },
-            backgroundColor: AppColors.primary,
-            child: const Icon(Icons.add, color: AppColors.white),
+            child: const Icon(Icons.add),
           );
         },
       ),

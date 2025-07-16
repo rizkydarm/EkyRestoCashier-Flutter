@@ -16,155 +16,74 @@ import '../../../core/constants/colors.dart';
 import '../bloc/online_checker/online_checker_bloc.dart';
 import '../bloc/order_offline/order_offline_bloc.dart';
 
-class PaymentPage extends StatefulWidget {
+class PaymentPage extends StatelessWidget {
   const PaymentPage({
     super.key,
   });
 
   @override
-  State<PaymentPage> createState() => _PaymentPageState();
-}
-
-class _PaymentPageState extends State<PaymentPage> {
-  final TextEditingController nominalController =
-      TextEditingController(text: 'Rp 100.000');
-
-  String paymentMethod = 'Tunai';
-
-  @override
-  void initState() {
-    super.initState();
-
-    nominalController.text = context.read<CheckoutBloc>().state.maybeWhen(
-          orElse: () => '',
-          success: (orders, total, tax, subtotal, totalPayment, qty) {
-            return totalPayment.currencyFormatRp;
-          },
-        );
-
+  Widget build(BuildContext context) {
+    final nominalController = TextEditingController(text: 'Rp 0');
     nominalController.addListener(() {
       final nominal = nominalController.text.replaceAll(RegExp(r'[^0-9]'), '');
       nominalController.value = TextEditingValue(
         text: nominal.currencyFormatRp,
-        selection:
-            TextSelection.collapsed(offset: nominal.currencyFormatRp.length),
+        selection: TextSelection.collapsed(offset: nominal.currencyFormatRp.length),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+    bool isCash = true;
+    bool sameNominal = false;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Pembayaran',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: const Text('Payment'),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: AppColors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 80,
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BlocBuilder<CheckoutBloc, CheckoutState>(
-                  builder: (context, state) {
-                    return Text(
-                      state.maybeWhen(
-                        orElse: () => '',
-                        success:
-                            (orders, total, tax, subtotal, totalPayment, qty) {
-                          return totalPayment.currencyFormatRp;
-                        },
-                      ),
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    );
-                  },
-                ),
-                const SpaceHeight(8.0),
-                Text(
-                  'Total Pembayaran',
-                  style: TextStyle(
-                    color: AppColors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Container(
+              height: 80,
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BlocBuilder<CheckoutBloc, CheckoutState>(
+                    builder: (context, state) {
+                      return Text(
+                        state.maybeWhen(
+                          orElse: () => '',
+                          success:
+                              (orders, subtotal, totalPayment, qty) {
+                            return totalPayment.currencyFormatRp;
+                          },
+                        ),
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      );
+                    },
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SpaceHeight(16.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Text(
-                  'Nominal Pembayaran',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                  const SpaceHeight(8.0),
+                  Text(
+                    'Total Payment',
+                    style: TextStyle(
+                      color: AppColors.grey,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SpaceHeight(16.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextField(
-              controller: nominalController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: 'Rp 100.000',
-                hintStyle: TextStyle(
-                  color: AppColors.grey,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: AppColors.grey,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    color: AppColors.primary,
-                  ),
-                ),
+                ],
               ),
             ),
-          ),
-          const SpaceHeight(16.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
+            const SpaceHeight(16.0),
+            Row(
               children: [
                 Text(
-                  'Metode Pembayaran',
+                  'Nominal Payment',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16,
@@ -173,175 +92,185 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ],
             ),
-          ),
-          const SpaceHeight(16.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+            const SpaceHeight(16.0),
+            StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  children: [
+                    TextField(
+                      enabled: !sameNominal,
+                      controller: nominalController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'Rp',
+                        hintStyle: TextStyle(
+                          color: AppColors.grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: AppColors.grey,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SpaceHeight(8.0),
+                    Row(
+                      children: [
+                        Switch(
+                          value: sameNominal,
+                          onChanged: (value) => setState(() => sameNominal = !sameNominal),
+                        ),
+                        const Text('Same Nominal'),
+                      ],
+                    ),
+                  ],
+                );
+              }
+            ),
+            const SpaceHeight(16.0),
+            Row(
               children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      paymentMethod = 'Tunai';
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: paymentMethod == 'Tunai'
-                          ? AppColors.primary
-                          : AppColors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.grey),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.black.withOpacity(0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: paymentMethod == 'Tunai'
-                                ? AppColors.white
-                                : AppColors.primary,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.money,
-                                color: paymentMethod == 'Tunai'
-                                    ? AppColors.primary
-                                    : AppColors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SpaceWidth(16),
-                        Text('Tunai',
-                            style: TextStyle(
-                              color: paymentMethod == 'Tunai'
-                                  ? AppColors.white
-                                  : AppColors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            )),
-                      ],
-                    ),
-                  ),
-                ),
-                const SpaceWidth(16),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      paymentMethod = 'QRIS';
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: paymentMethod == 'QRIS'
-                          ? AppColors.primary
-                          : AppColors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.grey),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.black.withOpacity(0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: paymentMethod == 'QRIS'
-                                ? AppColors.white
-                                : AppColors.primary,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.qr_code,
-                                color: paymentMethod == 'QRIS'
-                                    ? AppColors.primary
-                                    : AppColors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SpaceWidth(16),
-                        Text('QRIS',
-                            style: TextStyle(
-                              color: paymentMethod == 'QRIS'
-                                  ? AppColors.white
-                                  : AppColors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            )),
-                      ],
-                    ),
+                Text(
+                  'Payment Method',
+                  style: TextStyle(
+                    color: AppColors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ],
             ),
-          ),
-          const SpaceHeight(28.0),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            child: BlocBuilder<CheckoutBloc, CheckoutState>(
+            const SpaceHeight(16.0),
+            StatefulBuilder(
+              builder: (context, setState) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Card(
+                      color: isCash ? AppColors.primary : AppColors.white,
+                      clipBehavior: Clip.antiAlias,
+                      child: InkWell(
+                      onTap: () => setState(() => isCash = true),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: isCash ? AppColors.white : AppColors.primary,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.money,
+                                    color: isCash ? AppColors.primary : AppColors.white,
+                                  ),
+                                ),
+                              ),
+                              const SpaceWidth(16),
+                              Text('Cash',
+                                style: TextStyle(
+                                  color: isCash ? AppColors.white : AppColors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                )
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SpaceWidth(16),
+                    Card(
+                      color: !isCash ? AppColors.primary : AppColors.white,
+                      clipBehavior: Clip.antiAlias,
+                      child: InkWell(
+                      onTap: () => setState(() => isCash = false),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: !isCash ? AppColors.white : AppColors.primary,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.qr_code,
+                                    color: !isCash ? AppColors.primary : AppColors.white,
+                                  ),
+                                ),
+                              ),
+                              const SpaceWidth(16),
+                              Text('QRIS',
+                                style: TextStyle(
+                                  color: !isCash ? AppColors.white : AppColors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                )
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            ),
+            const SpaceHeight(28.0),
+            BlocBuilder<CheckoutBloc, CheckoutState>(
               builder: (context, state) {
                 double subtotal = state.maybeWhen(
                   orElse: () => 0,
-                  success: (orders, total, tax, subtotal, totalPayment, qty) {
+                  success: (orders, subtotal, totalPayment, qty) {
                     return subtotal;
                   },
                 );
-
+                    
                 double totalPrice = state.maybeWhen(
                   orElse: () => 0,
-                  success: (orders, total, tax, subtotal, totalPayment, qty) {
+                  success: (orders, subtotal, totalPayment, qty) {
                     return totalPayment;
                   },
                 );
-
+                    
                 int totalItems = state.maybeWhen(
                   orElse: () => 0,
-                  success: (orders, total, tax, subtotal, totalPayment, qty) {
+                  success: (orders, subtotal, totalPayment, qty) {
                     return qty;
                   },
                 );
-
-                double tax = state.maybeWhen(
-                  orElse: () => 0,
-                  success: (orders, total, tax, subtotal, totalPayment, qty) {
-                    return tax;
-                  },
-                );
-
+                    
+                // double tax = state.maybeWhen(
+                //   orElse: () => 0,
+                //   success: (orders, subtotal, totalPayment, qty) {
+                //     return tax;
+                //   },
+                // );
+                    
                 double discount = state.maybeWhen(
                   orElse: () => 0,
-                  success: (orders, total, tax, subtotal, totalPayment, qty) {
+                  success: (orders, subtotal, totalPayment, qty) {
                     return 0;
                   },
                 );
-
+                    
                 List<ProductQuantity> items = state.maybeWhen(
                   orElse: () => [],
-                  success: (orders, total, tax, subtotal, totalPayment, qty) {
+                  success: (orders, subtotal, totalPayment, qty) {
                     return orders;
                   },
                 );
@@ -406,18 +335,18 @@ class _PaymentPageState extends State<PaymentPage> {
                     onPressed: () async {
                       final outlet =
                           await AuthLocalDatasource().getOutletData();
-
+                    
                       final request = OrderRequestModel(
                         outletId: outlet.id!,
                         subtotal: subtotal,
                         totalPrice: totalPrice,
                         totalItems: totalItems,
-                        tax: tax,
+                        // tax: tax,
                         discount: discount,
-                        paymentMethod: paymentMethod,
+                        paymentMethod: isCash ? 'Cash' : 'QRIS',
                         items: items,
                       );
-
+                    
                       await _submitPayment(
                         context: context,
                         request: request,
@@ -428,25 +357,24 @@ class _PaymentPageState extends State<PaymentPage> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.white,
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      minimumSize: const Size(double.infinity, 56),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text(
-                      'Bayar',
-                      style: TextStyle(
-                        color: AppColors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    child: const Text('Bayar'),
                   ),
-
+                    
                   // ElevatedButton(
                   //   onPressed: () async {
                   //     final outletData =
                   //         await AuthLocalDatasource().getOutletData();
-
+                    
                   //     final data = OrderRequestModel(
                   //       outletId: outletData.id!,
                   //       subtotal: subtotal,
@@ -457,7 +385,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   //       paymentMethod: paymentMethod,
                   //       items: items,
                   //     );
-
+                    
                   //     context
                   //         .read<OrderBloc>()
                   //         .add(OrderEvent.createOrder(data));
@@ -481,8 +409,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

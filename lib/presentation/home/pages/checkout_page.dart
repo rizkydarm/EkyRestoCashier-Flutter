@@ -1,180 +1,125 @@
+import 'package:eky_pos/core/components/spaces.dart';
+import 'package:eky_pos/core/constants/colors.dart';
+import 'package:eky_pos/data/models/responses/product_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/extensions/int_ext.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
-import 'package:eky_pos/core/utils/business_setting_mapper.dart';
-import 'package:eky_pos/data/models/requests/business_setting_request_model.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
-
 import 'package:eky_pos/presentation/home/pages/payment_page.dart';
-import 'package:eky_pos/presentation/tax_discount/bloc/business_setting/business_setting_bloc.dart';
 
-import '../../../core/components/spaces.dart';
-import '../../../core/constants/colors.dart';
-import '../../tax_discount/bloc/business_setting_local/business_setting_local_bloc.dart';
-import '../bloc/online_checker/online_checker_bloc.dart';
 
-class CheckoutPage extends StatefulWidget {
+class CheckoutPage extends StatelessWidget {
+
   const CheckoutPage({super.key});
-
-  @override
-  State<CheckoutPage> createState() => _CheckoutPageState();
-}
-
-class _CheckoutPageState extends State<CheckoutPage> {
-  BusinessSettingRequestModel? _selectedDiscount;
-
-  void _toggleDiscount(BusinessSettingRequestModel? disc,
-      List<BusinessSettingRequestModel> taxs) {
-    setState(() => _selectedDiscount = disc);
-    if (disc != null) {
-      context
-          .read<CheckoutBloc>()
-          .add(CheckoutEvent.addDiscount(discount: disc));
-    } else {
-      context
-          .read<CheckoutBloc>()
-          .add(CheckoutEvent.removeDiscount(discount: _selectedDiscount!));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(context),
+      appBar: AppBar(
+        title: const Text('Checkout'),
+        centerTitle: true,
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: ElevatedButton.icon(
+          onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (_) => const PaymentPage()),),
+          icon: const Icon(Icons.payment),
+          label: const Text('Pay'),
+        )
+      ),
       body: Column(
         children: [
-          const SpaceHeight(16),
-          Expanded(child: _buildOrderList()),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildDiscountSection(),
+          Expanded(
+            child: BlocBuilder<CheckoutBloc, CheckoutState>(
+              builder: (context, state) => state.maybeWhen(
+              success: (cart, subtotal, total, totalItem) =>
+                ListView.builder(
+                  itemCount: cart.length,
+                  itemBuilder: (_, i) => ListTile(
+                    leading: Text(cart[i].quantity.toString()),
+                    title: Text(
+                      '${cart[i].product.name}',
+                      maxLines: 2,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    subtitle: Text(
+                      (cart[i].product.price!.toDouble * cart[i].quantity).currencyFormatRp,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 8,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          color: AppColors.green,
+                          onPressed: () {
+                            context.read<CheckoutBloc>().add(CheckoutEvent.addToCart(product: cart[i].product));
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.remove),
+                          color: AppColors.red,
+                          onPressed: () {
+                            context.read<CheckoutBloc>().add(CheckoutEvent.removeFromCart(product: cart[i].product));
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                ),
+                orElse: () => const Center(child: CircularProgressIndicator()),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: _buildSummarySection(),
           ),
-          _buildPayButton(context),
         ],
       ),
     );
   }
 
-  /* ────────────────────── APP BAR ───────────────────── */
-
-  AppBar _appBar(BuildContext ctx) => AppBar(
-        title: const Text(
-          'Detail Pesanan',
-          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w700),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      );
-
-  /* ───────────── ORDER LIST (produk di cart) ─────────── */
-
-  Widget _buildOrderList() {
-    return _withBusinessSetting(
-      builder: (taxs) {
-        return BlocBuilder<CheckoutBloc, CheckoutState>(
-          builder: (_, state) => state.maybeWhen(
-            success: (orders, ___, ____, _____, ______, x) =>
-                ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: orders.length,
-              separatorBuilder: (_, __) => const SpaceHeight(16),
-              itemBuilder: (_, i) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: Text(
-                      '${orders[i].quantity} x ${orders[i].product.name}',
-                      maxLines: 2,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  const SpaceWidth(8),
-                  Text(
-                    (orders[i].product.price!.toDouble * orders[i].quantity)
-                        .currencyFormatRp,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SpaceWidth(8),
-                  InkWell(
-                    onTap: () {
-                      context.read<CheckoutBloc>().add(
-                            CheckoutEvent.removeFromCart(
-                              product: orders[i].product,
-                              businessSetting: taxs,
-                            ),
-                          );
-                    },
-                    child: const Icon(Icons.delete,
-                        color: AppColors.red, size: 18),
-                  ),
-                ],
-              ),
-            ),
-            orElse: () => const Center(child: CircularProgressIndicator()),
-          ),
-        );
-      },
-    );
-  }
-
   /* ──────────── DISCOUNT (checkbox list) ───────────── */
 
-  Widget _buildDiscountSection() {
-    return _withBusinessSetting(
-      builder: (taxs) {
-        final discounts =
-            taxs.where((e) => e.chargeType == 'discount').toList();
+  // Widget _buildDiscountSection() {
+  //   return _withBusinessSetting(
+  //     builder: (taxs) {
+  //       final discounts =
+  //           taxs.where((e) => e.chargeType == 'discount').toList();
 
-        if (discounts.isEmpty) return const SizedBox();
+  //       if (discounts.isEmpty) return const SizedBox();
 
-        return Wrap(
-          children: discounts
-              .map((e) => CheckboxListTile(
-                    title: Text(e.name),
-                    value: _selectedDiscount == e,
-                    onChanged: (v) => _toggleDiscount(v! ? e : null, taxs),
-                  ))
-              .toList(),
-        );
-      },
-    );
-  }
+  //       return Wrap(
+  //         children: discounts
+  //             .map((e) => CheckboxListTile(
+  //                   title: Text(e.name),
+  //                   value: _selectedDiscount == e,
+  //                   onChanged: (v) => _toggleDiscount(v! ? e : null, taxs),
+  //                 ))
+  //             .toList(),
+  //       );
+  //     },
+  //   );
+  // }
 
   /* ──────────────── SUMMARY (subtotal, tax, dst.) ───────────── */
 
   Widget _buildSummarySection() {
-    return _withBusinessSetting(
-      builder: (taxs) {
-        final taxList = taxs.where((e) => e.chargeType == 'tax').toList();
-
-        return BlocBuilder<CheckoutBloc, CheckoutState>(
+    return BlocBuilder<CheckoutBloc, CheckoutState>(
           builder: (_, st) => st.maybeWhen(
-            success: (_, discount, __, subtotal, totalPayment, qty) => Column(
+            success: (orders, subtotal, total, qty) => Column(
               children: [
                 const Divider(thickness: 1),
                 _line('Jumlah Item', qty.toString()),
                 const SpaceHeight(8),
                 _line('Subtotal', subtotal.currencyFormatRp),
-                ...taxList.map((t) => _line(
-                      t.name,
-                      (subtotal * (t.value.toIntegerFromText / 100).toDouble())
-                          .currencyFormatRp,
-                    )),
-                const SpaceHeight(8),
-                _line('Diskon', discount.currencyFormatRp),
                 const SpaceHeight(8),
                 _line(
                   'Total',
-                  totalPayment.currencyFormatRp,
+                  total.currencyFormatRp,
                   bold: true,
                 ),
               ],
@@ -182,8 +127,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
             orElse: () => const SizedBox(),
           ),
         );
-      },
-    );
   }
 
   Widget _line(String label, String value, {bool bold = false}) => Row(
@@ -200,77 +143,42 @@ class _CheckoutPageState extends State<CheckoutPage> {
         ],
       );
 
-  /* ───────────────────── BUTTON BAYAR ─────────────────── */
-
-  Widget _buildPayButton(BuildContext ctx) => Container(
-        height: 120,
-        width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        alignment: Alignment.center,
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-            onPressed: () {
-              Navigator.push(
-                ctx,
-                MaterialPageRoute(builder: (_) => const PaymentPage()),
-              );
-            },
-            child: const Text(
-              'Bayar',
-              style: TextStyle(
-                color: AppColors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ),
-      );
-
   /* ──────────── HELPER: pilih BusinessSetting online/offline ───────── */
 
-  Widget _withBusinessSetting({
-    required Widget Function(List<BusinessSettingRequestModel>) builder,
-  }) {
-    return BlocBuilder<OnlineCheckerBloc, OnlineCheckerState>(
-      builder: (context, conn) {
-        final bool isOnline =
-            conn.maybeWhen(online: () => true, orElse: () => false);
+  // Widget _withBusinessSetting({
+  //   required Widget Function(List<BusinessSettingRequestModel>) builder,
+  // }) {
+  //   return BlocBuilder<OnlineCheckerBloc, OnlineCheckerState>(
+  //     builder: (context, conn) {
+  //       final bool isOnline =
+  //           conn.maybeWhen(online: () => true, orElse: () => false);
 
-        return isOnline
-            ? BlocBuilder<BusinessSettingBloc, BusinessSettingState>(
-                builder: (_, bs) => builder(_extractTaxDiscount(bs)),
-              )
-            : BlocBuilder<BusinessSettingLocalBloc, BusinessSettingLocalState>(
-                builder: (_, bs) => builder(_extractLocalTaxDiscount(bs)),
-              );
-      },
-    );
-  }
+  //       return isOnline
+  //           ? BlocBuilder<BusinessSettingBloc, BusinessSettingState>(
+  //               builder: (_, bs) => builder(_extractTaxDiscount(bs)),
+  //             )
+  //           : BlocBuilder<BusinessSettingLocalBloc, BusinessSettingLocalState>(
+  //               builder: (_, bs) => builder(_extractLocalTaxDiscount(bs)),
+  //             );
+  //     },
+  //   );
+  // }
 
-  List<BusinessSettingRequestModel> _extractTaxDiscount(
-      BusinessSettingState bs) {
-    return bs.maybeWhen(
-      loaded: (data) => data,
-      orElse: () => <BusinessSettingRequestModel>[],
-    );
-  }
+  // List<BusinessSettingRequestModel> _extractTaxDiscount(
+  //     BusinessSettingState bs) {
+  //   return bs.maybeWhen(
+  //     loaded: (data) => data,
+  //     orElse: () => <BusinessSettingRequestModel>[],
+  //   );
+  // }
 
-  List<BusinessSettingRequestModel> _extractLocalTaxDiscount(
-      BusinessSettingLocalState bs) {
-    return bs.maybeWhen(
-      loaded: (data) => data.map((e) => e.toRequestModel()).toList(),
-      orElse: () => <BusinessSettingRequestModel>[],
-    );
-  }
+  // List<BusinessSettingRequestModel> _extractLocalTaxDiscount(
+  //     BusinessSettingLocalState bs) {
+  //   return bs.maybeWhen(
+  //     loaded: (data) => data.map((e) => e.toRequestModel()).toList(),
+  //     orElse: () => <BusinessSettingRequestModel>[],
+  //   );
+  // }
 }
 
 // class CheckoutPage extends StatefulWidget {

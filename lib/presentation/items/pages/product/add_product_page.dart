@@ -21,16 +21,12 @@ class AddProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scaffoldKey = GlobalKey<ScaffoldState>();
-
+    
     final nameController = TextEditingController();
     final priceController = TextEditingController();
-    final stockController = TextEditingController();
-    final descriptionController = TextEditingController();
     final barcodeController = TextEditingController();
     final costController = TextEditingController();
-    final businessIdController = TextEditingController();
-
+    
     priceController.addListener(() {
       final nominal = priceController.text.replaceAll(RegExp(r'[^0-9]'), '');
       priceController.value = TextEditingValue(

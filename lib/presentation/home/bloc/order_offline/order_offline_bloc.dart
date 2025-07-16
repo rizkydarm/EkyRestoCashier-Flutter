@@ -35,7 +35,7 @@ class OrderOfflineBloc extends Bloc<OrderOfflineEvent, OrderOfflineState> {
           subTotal: event.orderRequestModel.subtotal.toString(),
           totalPrice: event.orderRequestModel.totalPrice.toString(),
           totalItems: event.orderRequestModel.totalItems,
-          tax: event.orderRequestModel.tax.toString(),
+          // tax: event.orderRequestModel.tax.toString(),
           discount: event.orderRequestModel.discount.toString(),
           paymentMethod: event.orderRequestModel.paymentMethod,
           status: 'pending',

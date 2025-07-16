@@ -102,6 +102,23 @@ class _EditProductPageState extends State<EditProductPage> {
       _isImage = true;
     }
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
+    _priceController.addListener(() {
+      final nominal = _priceController.text.replaceAll(RegExp(r'[^0-9]'), '');
+      _priceController.value = TextEditingValue(
+        text: nominal.currencyFormatRp,
+        selection:
+            TextSelection.collapsed(offset: nominal.currencyFormatRp.length),
+      );
+    });
+
+    _costController.addListener(() {
+      final nominal = _costController.text.replaceAll(RegExp(r'[^0-9]'), '');
+      _costController.value = TextEditingValue(
+        text: nominal.currencyFormatRp,
+        selection:
+            TextSelection.collapsed(offset: nominal.currencyFormatRp.length),
+      );
+    });
     super.initState();
   }
 
@@ -343,6 +360,7 @@ class _EditProductPageState extends State<EditProductPage> {
                   // final outletData =
                   //     await AuthLocalDatasource().getOutletData();
                   final data = Product(
+                    id: widget.data.id,
                     name: _nameController.text,
                     categoryId: 0,
                     price: _priceController.text.toIntegerFromText.toDouble().toString(),
@@ -356,9 +374,9 @@ class _EditProductPageState extends State<EditProductPage> {
 
                   if (_isImage) {
                     if (_isImage) {
-                      context.read<ProductBloc>().add(
-                          ProductEvent.editProductWithImage(
-                              data, _image!, widget.data.id!));
+                      // context.read<ProductBloc>().add(
+                      //     ProductEvent.editProductWithImage(
+                      //         data, _image!, widget.data.id!));
                     } else {
                       context
                           .read<ProductBloc>()

@@ -128,7 +128,7 @@ class _InvoiceOfflinePageState extends State<InvoiceOfflinePage> {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
-                }, success: (orders, total, tax, subtotal, totalPayment, qty) {
+                }, success: (orders, subtotal, total, qty) {
                   return ListView.builder(
                     // padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: orders.length,
@@ -210,7 +210,7 @@ class _InvoiceOfflinePageState extends State<InvoiceOfflinePage> {
                     child: CircularProgressIndicator(),
                   );
                 },
-                success: (cart, discount, tax, subtotal, total, totalItems) {
+                success: (cart, subtotal, total, totalItems) {
                   return Container(
                     height: 240,
                     width: double.infinity,
@@ -221,21 +221,19 @@ class _InvoiceOfflinePageState extends State<InvoiceOfflinePage> {
                         const SpaceHeight(16.0),
                         InkWell(
                           onTap: () async {
-                            final printValue = await CwbPrint.instance
-                                .printOrderV2(
-                                    cart,
-                                    totalItems,
-                                    total.toInt(),
-                                    'Tunai',
-                                    widget.nominal.toInt(),
-                                    'Mawar',
-                                    'Customer',
-                                    tax,
-                                    subtotal,
-                                    widget.transaction.orderNumber ?? '',
-                                    discount,
-                                    false);
-                            await PrintBluetoothThermal.writeBytes(printValue);
+                            // final printValue = await CwbPrint.instance
+                            //     .printOrderV2(
+                            //         cart,
+                            //         totalItems,
+                            //         total.toInt(),
+                            //         'Tunai',
+                            //         widget.nominal.toInt(),
+                            //         'Mawar',
+                            //         'Customer',
+                            //         subtotal,
+                            //         widget.transaction.orderNumber ?? '',
+                            //         false);
+                            // await PrintBluetoothThermal.writeBytes(printValue);
                           },
                           child: Container(
                             width: double.infinity,

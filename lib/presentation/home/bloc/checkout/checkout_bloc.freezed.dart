@@ -53,8 +53,6 @@ extension CheckoutEventPatterns on CheckoutEvent {
     TResult Function(_Started value)? started,
     TResult Function(_AddToCart value)? addToCart,
     TResult Function(_RemoveFromCart value)? removeFromCart,
-    TResult Function(_AddDiscount value)? addDiscount,
-    TResult Function(_RemoveDiscount value)? removeDiscount,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -65,10 +63,6 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that);
       case _RemoveFromCart() when removeFromCart != null:
         return removeFromCart(_that);
-      case _AddDiscount() when addDiscount != null:
-        return addDiscount(_that);
-      case _RemoveDiscount() when removeDiscount != null:
-        return removeDiscount(_that);
       case _:
         return orElse();
     }
@@ -92,8 +86,6 @@ extension CheckoutEventPatterns on CheckoutEvent {
     required TResult Function(_Started value) started,
     required TResult Function(_AddToCart value) addToCart,
     required TResult Function(_RemoveFromCart value) removeFromCart,
-    required TResult Function(_AddDiscount value) addDiscount,
-    required TResult Function(_RemoveDiscount value) removeDiscount,
   }) {
     final _that = this;
     switch (_that) {
@@ -103,10 +95,6 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that);
       case _RemoveFromCart():
         return removeFromCart(_that);
-      case _AddDiscount():
-        return addDiscount(_that);
-      case _RemoveDiscount():
-        return removeDiscount(_that);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -129,8 +117,6 @@ extension CheckoutEventPatterns on CheckoutEvent {
     TResult? Function(_Started value)? started,
     TResult? Function(_AddToCart value)? addToCart,
     TResult? Function(_RemoveFromCart value)? removeFromCart,
-    TResult? Function(_AddDiscount value)? addDiscount,
-    TResult? Function(_RemoveDiscount value)? removeDiscount,
   }) {
     final _that = this;
     switch (_that) {
@@ -140,10 +126,6 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that);
       case _RemoveFromCart() when removeFromCart != null:
         return removeFromCart(_that);
-      case _AddDiscount() when addDiscount != null:
-        return addDiscount(_that);
-      case _RemoveDiscount() when removeDiscount != null:
-        return removeDiscount(_that);
       case _:
         return null;
     }
@@ -164,14 +146,8 @@ extension CheckoutEventPatterns on CheckoutEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(
-            Product product, List<BusinessSettingRequestModel> businessSetting)?
-        addToCart,
-    TResult Function(
-            Product product, List<BusinessSettingRequestModel> businessSetting)?
-        removeFromCart,
-    TResult Function(BusinessSettingRequestModel discount)? addDiscount,
-    TResult Function(BusinessSettingRequestModel discount)? removeDiscount,
+    TResult Function(Product product)? addToCart,
+    TResult Function(Product product)? removeFromCart,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -179,13 +155,9 @@ extension CheckoutEventPatterns on CheckoutEvent {
       case _Started() when started != null:
         return started();
       case _AddToCart() when addToCart != null:
-        return addToCart(_that.product, _that.businessSetting);
+        return addToCart(_that.product);
       case _RemoveFromCart() when removeFromCart != null:
-        return removeFromCart(_that.product, _that.businessSetting);
-      case _AddDiscount() when addDiscount != null:
-        return addDiscount(_that.discount);
-      case _RemoveDiscount() when removeDiscount != null:
-        return removeDiscount(_that.discount);
+        return removeFromCart(_that.product);
       case _:
         return orElse();
     }
@@ -207,28 +179,17 @@ extension CheckoutEventPatterns on CheckoutEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(
-            Product product, List<BusinessSettingRequestModel> businessSetting)
-        addToCart,
-    required TResult Function(
-            Product product, List<BusinessSettingRequestModel> businessSetting)
-        removeFromCart,
-    required TResult Function(BusinessSettingRequestModel discount) addDiscount,
-    required TResult Function(BusinessSettingRequestModel discount)
-        removeDiscount,
+    required TResult Function(Product product) addToCart,
+    required TResult Function(Product product) removeFromCart,
   }) {
     final _that = this;
     switch (_that) {
       case _Started():
         return started();
       case _AddToCart():
-        return addToCart(_that.product, _that.businessSetting);
+        return addToCart(_that.product);
       case _RemoveFromCart():
-        return removeFromCart(_that.product, _that.businessSetting);
-      case _AddDiscount():
-        return addDiscount(_that.discount);
-      case _RemoveDiscount():
-        return removeDiscount(_that.discount);
+        return removeFromCart(_that.product);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -249,27 +210,17 @@ extension CheckoutEventPatterns on CheckoutEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(
-            Product product, List<BusinessSettingRequestModel> businessSetting)?
-        addToCart,
-    TResult? Function(
-            Product product, List<BusinessSettingRequestModel> businessSetting)?
-        removeFromCart,
-    TResult? Function(BusinessSettingRequestModel discount)? addDiscount,
-    TResult? Function(BusinessSettingRequestModel discount)? removeDiscount,
+    TResult? Function(Product product)? addToCart,
+    TResult? Function(Product product)? removeFromCart,
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started();
       case _AddToCart() when addToCart != null:
-        return addToCart(_that.product, _that.businessSetting);
+        return addToCart(_that.product);
       case _RemoveFromCart() when removeFromCart != null:
-        return removeFromCart(_that.product, _that.businessSetting);
-      case _AddDiscount() when addDiscount != null:
-        return addDiscount(_that.discount);
-      case _RemoveDiscount() when removeDiscount != null:
-        return removeDiscount(_that.discount);
+        return removeFromCart(_that.product);
       case _:
         return null;
     }
@@ -299,18 +250,9 @@ class _Started implements CheckoutEvent {
 /// @nodoc
 
 class _AddToCart implements CheckoutEvent {
-  const _AddToCart(
-      {required this.product,
-      required final List<BusinessSettingRequestModel> businessSetting})
-      : _businessSetting = businessSetting;
+  const _AddToCart({required this.product});
 
   final Product product;
-  final List<BusinessSettingRequestModel> _businessSetting;
-  List<BusinessSettingRequestModel> get businessSetting {
-    if (_businessSetting is EqualUnmodifiableListView) return _businessSetting;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_businessSetting);
-  }
 
   /// Create a copy of CheckoutEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -324,18 +266,15 @@ class _AddToCart implements CheckoutEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _AddToCart &&
-            (identical(other.product, product) || other.product == product) &&
-            const DeepCollectionEquality()
-                .equals(other._businessSetting, _businessSetting));
+            (identical(other.product, product) || other.product == product));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, product,
-      const DeepCollectionEquality().hash(_businessSetting));
+  int get hashCode => Object.hash(runtimeType, product);
 
   @override
   String toString() {
-    return 'CheckoutEvent.addToCart(product: $product, businessSetting: $businessSetting)';
+    return 'CheckoutEvent.addToCart(product: $product)';
   }
 }
 
@@ -346,8 +285,7 @@ abstract mixin class _$AddToCartCopyWith<$Res>
           _AddToCart value, $Res Function(_AddToCart) _then) =
       __$AddToCartCopyWithImpl;
   @useResult
-  $Res call(
-      {Product product, List<BusinessSettingRequestModel> businessSetting});
+  $Res call({Product product});
 }
 
 /// @nodoc
@@ -362,17 +300,12 @@ class __$AddToCartCopyWithImpl<$Res> implements _$AddToCartCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? product = null,
-    Object? businessSetting = null,
   }) {
     return _then(_AddToCart(
       product: null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable
               as Product,
-      businessSetting: null == businessSetting
-          ? _self._businessSetting
-          : businessSetting // ignore: cast_nullable_to_non_nullable
-              as List<BusinessSettingRequestModel>,
     ));
   }
 }
@@ -380,18 +313,9 @@ class __$AddToCartCopyWithImpl<$Res> implements _$AddToCartCopyWith<$Res> {
 /// @nodoc
 
 class _RemoveFromCart implements CheckoutEvent {
-  const _RemoveFromCart(
-      {required this.product,
-      required final List<BusinessSettingRequestModel> businessSetting})
-      : _businessSetting = businessSetting;
+  const _RemoveFromCart({required this.product});
 
   final Product product;
-  final List<BusinessSettingRequestModel> _businessSetting;
-  List<BusinessSettingRequestModel> get businessSetting {
-    if (_businessSetting is EqualUnmodifiableListView) return _businessSetting;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_businessSetting);
-  }
 
   /// Create a copy of CheckoutEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -405,18 +329,15 @@ class _RemoveFromCart implements CheckoutEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _RemoveFromCart &&
-            (identical(other.product, product) || other.product == product) &&
-            const DeepCollectionEquality()
-                .equals(other._businessSetting, _businessSetting));
+            (identical(other.product, product) || other.product == product));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, product,
-      const DeepCollectionEquality().hash(_businessSetting));
+  int get hashCode => Object.hash(runtimeType, product);
 
   @override
   String toString() {
-    return 'CheckoutEvent.removeFromCart(product: $product, businessSetting: $businessSetting)';
+    return 'CheckoutEvent.removeFromCart(product: $product)';
   }
 }
 
@@ -427,8 +348,7 @@ abstract mixin class _$RemoveFromCartCopyWith<$Res>
           _RemoveFromCart value, $Res Function(_RemoveFromCart) _then) =
       __$RemoveFromCartCopyWithImpl;
   @useResult
-  $Res call(
-      {Product product, List<BusinessSettingRequestModel> businessSetting});
+  $Res call({Product product});
 }
 
 /// @nodoc
@@ -444,146 +364,12 @@ class __$RemoveFromCartCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? product = null,
-    Object? businessSetting = null,
   }) {
     return _then(_RemoveFromCart(
       product: null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable
               as Product,
-      businessSetting: null == businessSetting
-          ? _self._businessSetting
-          : businessSetting // ignore: cast_nullable_to_non_nullable
-              as List<BusinessSettingRequestModel>,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _AddDiscount implements CheckoutEvent {
-  const _AddDiscount({required this.discount});
-
-  final BusinessSettingRequestModel discount;
-
-  /// Create a copy of CheckoutEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$AddDiscountCopyWith<_AddDiscount> get copyWith =>
-      __$AddDiscountCopyWithImpl<_AddDiscount>(this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _AddDiscount &&
-            (identical(other.discount, discount) ||
-                other.discount == discount));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, discount);
-
-  @override
-  String toString() {
-    return 'CheckoutEvent.addDiscount(discount: $discount)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$AddDiscountCopyWith<$Res>
-    implements $CheckoutEventCopyWith<$Res> {
-  factory _$AddDiscountCopyWith(
-          _AddDiscount value, $Res Function(_AddDiscount) _then) =
-      __$AddDiscountCopyWithImpl;
-  @useResult
-  $Res call({BusinessSettingRequestModel discount});
-}
-
-/// @nodoc
-class __$AddDiscountCopyWithImpl<$Res> implements _$AddDiscountCopyWith<$Res> {
-  __$AddDiscountCopyWithImpl(this._self, this._then);
-
-  final _AddDiscount _self;
-  final $Res Function(_AddDiscount) _then;
-
-  /// Create a copy of CheckoutEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? discount = null,
-  }) {
-    return _then(_AddDiscount(
-      discount: null == discount
-          ? _self.discount
-          : discount // ignore: cast_nullable_to_non_nullable
-              as BusinessSettingRequestModel,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _RemoveDiscount implements CheckoutEvent {
-  const _RemoveDiscount({required this.discount});
-
-  final BusinessSettingRequestModel discount;
-
-  /// Create a copy of CheckoutEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$RemoveDiscountCopyWith<_RemoveDiscount> get copyWith =>
-      __$RemoveDiscountCopyWithImpl<_RemoveDiscount>(this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _RemoveDiscount &&
-            (identical(other.discount, discount) ||
-                other.discount == discount));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, discount);
-
-  @override
-  String toString() {
-    return 'CheckoutEvent.removeDiscount(discount: $discount)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$RemoveDiscountCopyWith<$Res>
-    implements $CheckoutEventCopyWith<$Res> {
-  factory _$RemoveDiscountCopyWith(
-          _RemoveDiscount value, $Res Function(_RemoveDiscount) _then) =
-      __$RemoveDiscountCopyWithImpl;
-  @useResult
-  $Res call({BusinessSettingRequestModel discount});
-}
-
-/// @nodoc
-class __$RemoveDiscountCopyWithImpl<$Res>
-    implements _$RemoveDiscountCopyWith<$Res> {
-  __$RemoveDiscountCopyWithImpl(this._self, this._then);
-
-  final _RemoveDiscount _self;
-  final $Res Function(_RemoveDiscount) _then;
-
-  /// Create a copy of CheckoutEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? discount = null,
-  }) {
-    return _then(_RemoveDiscount(
-      discount: null == discount
-          ? _self.discount
-          : discount // ignore: cast_nullable_to_non_nullable
-              as BusinessSettingRequestModel,
     ));
   }
 }
@@ -732,8 +518,8 @@ extension CheckoutStatePatterns on CheckoutState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductQuantity> cart, double discount, double tax,
-            double subtotal, double total, int totalItems)?
+    TResult Function(List<ProductQuantity> cart, double subtotal, double total,
+            int totalItems)?
         success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -745,8 +531,8 @@ extension CheckoutStatePatterns on CheckoutState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(_that.cart, _that.discount, _that.tax, _that.subtotal,
-            _that.total, _that.totalItems);
+        return success(
+            _that.cart, _that.subtotal, _that.total, _that.totalItems);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -771,8 +557,8 @@ extension CheckoutStatePatterns on CheckoutState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductQuantity> cart, double discount,
-            double tax, double subtotal, double total, int totalItems)
+    required TResult Function(List<ProductQuantity> cart, double subtotal,
+            double total, int totalItems)
         success,
     required TResult Function(String message) error,
   }) {
@@ -783,8 +569,8 @@ extension CheckoutStatePatterns on CheckoutState {
       case _Loading():
         return loading();
       case _Success():
-        return success(_that.cart, _that.discount, _that.tax, _that.subtotal,
-            _that.total, _that.totalItems);
+        return success(
+            _that.cart, _that.subtotal, _that.total, _that.totalItems);
       case _Error():
         return error(_that.message);
       case _:
@@ -808,8 +594,8 @@ extension CheckoutStatePatterns on CheckoutState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductQuantity> cart, double discount, double tax,
-            double subtotal, double total, int totalItems)?
+    TResult? Function(List<ProductQuantity> cart, double subtotal, double total,
+            int totalItems)?
         success,
     TResult? Function(String message)? error,
   }) {
@@ -820,8 +606,8 @@ extension CheckoutStatePatterns on CheckoutState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(_that.cart, _that.discount, _that.tax, _that.subtotal,
-            _that.total, _that.totalItems);
+        return success(
+            _that.cart, _that.subtotal, _that.total, _that.totalItems);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -873,8 +659,8 @@ class _Loading implements CheckoutState {
 /// @nodoc
 
 class _Success implements CheckoutState {
-  const _Success(final List<ProductQuantity> cart, this.discount, this.tax,
-      this.subtotal, this.total, this.totalItems)
+  const _Success(final List<ProductQuantity> cart, this.subtotal, this.total,
+      this.totalItems)
       : _cart = cart;
 
   final List<ProductQuantity> _cart;
@@ -884,8 +670,8 @@ class _Success implements CheckoutState {
     return EqualUnmodifiableListView(_cart);
   }
 
-  final double discount;
-  final double tax;
+// double discount,
+// double tax,
   final double subtotal;
   final double total;
   final int totalItems;
@@ -903,9 +689,6 @@ class _Success implements CheckoutState {
         (other.runtimeType == runtimeType &&
             other is _Success &&
             const DeepCollectionEquality().equals(other._cart, _cart) &&
-            (identical(other.discount, discount) ||
-                other.discount == discount) &&
-            (identical(other.tax, tax) || other.tax == tax) &&
             (identical(other.subtotal, subtotal) ||
                 other.subtotal == subtotal) &&
             (identical(other.total, total) || other.total == total) &&
@@ -914,18 +697,12 @@ class _Success implements CheckoutState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_cart),
-      discount,
-      tax,
-      subtotal,
-      total,
-      totalItems);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_cart), subtotal, total, totalItems);
 
   @override
   String toString() {
-    return 'CheckoutState.success(cart: $cart, discount: $discount, tax: $tax, subtotal: $subtotal, total: $total, totalItems: $totalItems)';
+    return 'CheckoutState.success(cart: $cart, subtotal: $subtotal, total: $total, totalItems: $totalItems)';
   }
 }
 
@@ -937,8 +714,6 @@ abstract mixin class _$SuccessCopyWith<$Res>
   @useResult
   $Res call(
       {List<ProductQuantity> cart,
-      double discount,
-      double tax,
       double subtotal,
       double total,
       int totalItems});
@@ -956,8 +731,6 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? cart = null,
-    Object? discount = null,
-    Object? tax = null,
     Object? subtotal = null,
     Object? total = null,
     Object? totalItems = null,
@@ -967,14 +740,6 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
           ? _self._cart
           : cart // ignore: cast_nullable_to_non_nullable
               as List<ProductQuantity>,
-      null == discount
-          ? _self.discount
-          : discount // ignore: cast_nullable_to_non_nullable
-              as double,
-      null == tax
-          ? _self.tax
-          : tax // ignore: cast_nullable_to_non_nullable
-              as double,
       null == subtotal
           ? _self.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable

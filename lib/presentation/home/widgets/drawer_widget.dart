@@ -48,40 +48,44 @@ class DrawerWidget extends StatelessWidget {
             leading: Icon(Icons.food_bank),
             title: Text('Sales'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return const HomePage();
-              }));
+              Navigator.popUntil(context, (route) => route.isFirst); // Clear stack
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
             },
           ),
           ListTile(
             leading: Icon(Icons.receipt),
             title: Text('Transaksi'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return HistoryTransactionPage();
-              }));
+              Navigator.popUntil(context, (route) => route.isFirst); // Clear stack
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HistoryTransactionPage()),
+              );
             },
           ),
           ListTile(
             leading: Icon(Icons.list),
             title: Text('Product & Stock'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return const ItemPage();
-              }));
+              Navigator.popUntil(context, (route) => route.isFirst); // Clear stack
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ItemPage()),
+              );
             },
           ),
           ListTile(
             leading: Icon(Icons.print),
             title: Text('Printers'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return const PrinterPage();
-              }));
+              Navigator.popUntil(context, (route) => route.isFirst); // Clear stack
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const PrinterPage()),
+              );
             },
           ),
           Divider(),
@@ -89,10 +93,11 @@ class DrawerWidget extends StatelessWidget {
             leading: Icon(Icons.people),
             title: Text('Staff Management'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return const StaffPage();
-              }));
+              Navigator.popUntil(context, (route) => route.isFirst); // Clear stack
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const StaffPage()),
+              );
             },
           ),
           ListTile(
@@ -109,22 +114,24 @@ class DrawerWidget extends StatelessWidget {
             leading: Icon(Icons.analytics),
             title: Text('Sales Report'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return const SalesReportPage();
-              }));
+              Navigator.popUntil(context, (route) => route.isFirst); // Clear stack
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const SalesReportPage()),
+              );
             },
           ),
           ListTile(
             leading: Icon(Icons.store),
             title: Text('Outlet Management'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                return OutletPage(
+              Navigator.popUntil(context, (route) => route.isFirst); // Clear stack
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => OutletPage(
                   outletName: 'Pusat',
-                );
-              }));
+                )),
+              );
             },
           ),
           SpaceHeight(60),

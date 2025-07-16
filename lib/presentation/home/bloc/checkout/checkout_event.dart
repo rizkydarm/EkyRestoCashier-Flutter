@@ -6,22 +6,20 @@ class CheckoutEvent with _$CheckoutEvent {
   //add to product
   const factory CheckoutEvent.addToCart({
     required Product product,
-    required List<BusinessSettingRequestModel> businessSetting,
   }) = _AddToCart;
 
   //remove from cart
   const factory CheckoutEvent.removeFromCart({
     required Product product,
-    required List<BusinessSettingRequestModel> businessSetting,
   }) = _RemoveFromCart;
 
   //addDiscount
-  const factory CheckoutEvent.addDiscount({
-    required BusinessSettingRequestModel discount,
-  }) = _AddDiscount;
+  // const factory CheckoutEvent.addDiscount({
+  //   required BusinessSettingRequestModel discount,
+  // }) = _AddDiscount;
 
   //removeDiscount
-  const factory CheckoutEvent.removeDiscount({
-    required BusinessSettingRequestModel discount,
-  }) = _RemoveDiscount;
+  // const factory CheckoutEvent.removeDiscount({
+  //   required BusinessSettingRequestModel discount,
+  // }) = _RemoveDiscount;
 }

@@ -75,7 +75,7 @@ class SyncOrderBloc extends Bloc<SyncOrderEvent, SyncOrderState> {
             subtotal: double.tryParse(localTrx.subTotal ?? '') ?? 0,
             totalPrice: double.tryParse(localTrx.totalPrice ?? '') ?? 0,
             totalItems: localTrx.totalItems ?? 0,
-            tax: double.tryParse(localTrx.tax ?? '') ?? 0,
+            // tax: double.tryParse(localTrx.tax ?? '') ?? 0,
             discount: double.tryParse(localTrx.discount ?? '') ?? 0,
             paymentMethod: localTrx.paymentMethod ?? '',
             items: prodQuantities,

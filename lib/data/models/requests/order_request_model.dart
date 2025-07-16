@@ -7,7 +7,7 @@ class OrderRequestModel {
   final double subtotal;
   final double totalPrice;
   final int totalItems;
-  final double tax;
+  // final double tax;
   final double discount;
   final String paymentMethod;
   final List<ProductQuantity> items;
@@ -17,7 +17,7 @@ class OrderRequestModel {
       required this.subtotal,
       required this.totalPrice,
       required this.totalItems,
-      required this.tax,
+      // required this.tax,
       required this.discount,
       required this.paymentMethod,
       required this.items});
@@ -28,7 +28,7 @@ class OrderRequestModel {
       'sub_total': subtotal,
       'total_price': totalPrice,
       'total_items': totalItems,
-      'tax': tax,
+      // 'tax': tax,
       'discount': discount,
       'payment_method': paymentMethod,
       'items': items.map((x) => x.toMap()).toList(),

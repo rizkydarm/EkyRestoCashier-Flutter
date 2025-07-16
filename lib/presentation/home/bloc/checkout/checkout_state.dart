@@ -6,11 +6,11 @@ class CheckoutState with _$CheckoutState {
   const factory CheckoutState.loading() = _Loading;
   const factory CheckoutState.success(
     List<ProductQuantity> cart,
-    double discount,
-    double tax,
+    // double discount,
+    // double tax,
     double subtotal,
     double total,
-    int totalItems,
+    int quantity
   ) = _Success;
   const factory CheckoutState.error(String message) = _Error;
 }

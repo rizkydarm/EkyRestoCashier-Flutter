@@ -399,10 +399,10 @@ class DBLocalDatasource {
 // update data product
   Future<int> updateProduct(Product product) async {
     final db = await instance.database;
-    talkerInfoDB("Update product: ${product.name}");
+    talkerInfoDB("Update product: ${product.id} ${product.name}");
     return await db.update(
       tableProducts,
-      product.toLocalMap().update('updated_at', (value) => DateTime.now()),
+      product.toLocalMap(),
       where: 'id = ?',
       whereArgs: [product.id!],
     );

@@ -1,68 +1,51 @@
 import 'package:bloc/bloc.dart';
+import 'package:uuid/uuid.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'package:eky_pos/data/datasources/category_remote_datasource.dart';
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
-
-import '../../../../data/datasources/db_local_datasource.dart';
+import 'package:eky_pos/data/datasources/db_local_datasource.dart';
 
 part 'category_bloc.freezed.dart';
 part 'category_event.dart';
 part 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
-  final CategoryRemoteDataSource categoryRemoteDataSource;
-  List<Category> categories = [];
-  CategoryBloc(
-    this.categoryRemoteDataSource,
-  ) : super(_Initial()) {
+
+  final _uuid = Uuid();
+  
+  CategoryBloc() : super(_Initial()) {
+
+    final dbLocalDatasource = DBLocalDatasource.instance;
+    
     on<_GetCategories>((event, emit) async {
       emit(CategoryState.loading());
-      final result = await categoryRemoteDataSource.getCategories();
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) {
-          categories = r.data ?? [];
-          emit(_Success(r.data ?? []));
-        },
-      );
+      final result = await dbLocalDatasource.getAllCategory();
+      emit(CategoryState.success(result));
     });
 
-    //add
     on<_AddCategory>((event, emit) async {
       emit(CategoryState.loading());
-      final result = await categoryRemoteDataSource.addCategory(
-        event.name,
+      final category = Category(
+        name: event.name,        
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) {
-          add(_GetCategories());
-        },
-      );
+      await dbLocalDatasource.saveCategory(category);
+      add(_GetCategories());
     });
 
-    //update
     on<_UpdateCategory>((event, emit) async {
       emit(CategoryState.loading());
-      final result = await categoryRemoteDataSource.updateCategory(
+      await dbLocalDatasource.updateCategory(
         event.id,
         event.name,
       );
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) {
-          add(_GetCategories());
-        },
-      );
+      add(_GetCategories());
     });
 
-    on<_FetchLocal>((event, emit) async {
-      emit(const _Loading());
-      final localCategories = await DBLocalDatasource.instance.getAllCategory();
-      categories = localCategories;
-
-      emit(_Success(categories));
+    on<_DeleteCategory>((event, emit) async {
+      emit(CategoryState.loading());
+      await dbLocalDatasource.deleteCategory(event.id);
+      add(_GetCategories());
     });
   }
 }

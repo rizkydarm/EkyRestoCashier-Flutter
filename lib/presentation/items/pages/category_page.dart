@@ -1,113 +1,110 @@
+import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eky_pos/core/components/spaces.dart';
-import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
-import 'package:eky_pos/presentation/items/pages/add_category_page.dart';
-import 'package:eky_pos/presentation/items/pages/edit_category_page.dart';
 
-class CategoryPage extends StatefulWidget {
+class CategoryPage extends StatelessWidget {
   const CategoryPage({super.key});
 
   @override
-  State<CategoryPage> createState() => _CategoryPageState();
-}
-
-class _CategoryPageState extends State<CategoryPage> {
-  @override
-  void initState() {
-    context.read<CategoryBloc>().add(CategoryEvent.getCategories());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    context.read<CategoryBloc>().add(CategoryEvent.getCategories());
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-        ),
-        title: const Text('Categories',
-            style: TextStyle(
-                color: AppColors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w700)),
+        title: const Text('Categories'),
         centerTitle: true,
       ),
       body: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {
-          return state.map(
-              initial: (_) => const Center(child: CircularProgressIndicator()),
-              loading: (_) => const Center(child: CircularProgressIndicator()),
-              error: (error) => Center(
-                    child: Text(error.message),
-                  ),
-              success: (success) {
-                if (success.data.isEmpty) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Center(child: Text('No Categories')),
-                      SpaceHeight(30),
-                      //add category button
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                          ),
-                          onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return const AddCategoryPage();
-                            }));
-                          },
-                          child: const Text('Add Category',
-                              style: TextStyle(color: AppColors.white))),
-                    ],
-                  );
-                }
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: success.data.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == success.data.length) {
-                      return const SizedBox();
-                    }
-                    final category = success.data[index];
-                    return Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.category),
-                          title: Text(category.name!),
-                          trailing: IconButton(
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return EditCategoryPage(category: category);
-                              }));
-                            },
-                            icon: const Icon(Icons.edit),
-                          ),
-                        ),
-                        const Divider(),
-                      ],
-                    );
-                  },
+          return state.maybeWhen(
+            orElse: () {
+              return const Text("No Items");
+            },
+            loading: () {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+            success: (data) {
+              if (data.isEmpty) {
+                return const Center(
+                  child: Text('No Items'),
                 );
-              });
+              }
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(data[index].name ?? '-'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        context.read<CategoryBloc>().add(CategoryEvent.deleteCategory(id: data[index].id!));
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary,
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const AddCategoryPage();
-          }));
+          String? name;
+          final formKey = GlobalKey<FormState>();
+          showModalBottomSheet(context: context,
+            showDragHandle: true,
+            isScrollControlled: true,
+            useRootNavigator: true,
+            useSafeArea: true,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.5,
+            ),
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Form(
+                      key: formKey,
+                      child: TextFormField(
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: 'Category name',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          filled: true,
+                        ),
+                        onChanged: (value) => name = value,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Category name is required';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      onPressed: () {
+                        final isValid = formKey.currentState?.validate() ?? false;
+                        if (isValid && name != null) {
+                          context.read<CategoryBloc>().add(CategoryEvent.addCategory(name: name!));
+                          Navigator.pop(context);
+                        }
+                      }, 
+                      child: const Text('Save'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
         },
-        child: const Icon(Icons.add, color: AppColors.white),
+        child: const Icon(Icons.add),
       ),
     );
   }

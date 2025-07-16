@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:eky_pos/core/utils/talker.dart';
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/data/models/responses/product_response_model.dart';
 import 'package:eky_pos/data/models/responses/user_model.dart';
@@ -25,7 +26,7 @@ class DBLocalDatasource {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = dbPath + filePath;
-
+    talkerInfoDB("Init DB");
     return await openDatabase(
       path,
       version: 1,
@@ -33,11 +34,18 @@ class DBLocalDatasource {
     );
   }
 
+  Future<void> deleteDB(String name) async {
+    final dbPath = await getDatabasesPath();
+    talkerInfoDB("Delete DB $name");
+    final path = '$dbPath$name';
+    await deleteDatabase(path);
+  }
+
   Future<void> _createDB(Database db, int version) async {
+    talkerInfoDB("Create DB");
     await db.execute('''
       CREATE TABLE $tableCategories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        category_id INTEGER,
         name TEXT,
         business_id INTEGER,
         created_at TEXT,
@@ -135,7 +143,7 @@ class DBLocalDatasource {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('jagoposf8.db');
+    _database = await _initDB('ekypos.db');
     return _database!;
   }
 
@@ -264,7 +272,7 @@ class DBLocalDatasource {
   // save category
   Future<int> saveCategory(Category category) async {
     final db = await instance.database;
-    log("Save category: ${category.toMap()}");
+    talkerInfoDB("Save category: ${category.name}");
     return await db.insert(tableCategories, category.toMap());
   }
 
@@ -272,7 +280,7 @@ class DBLocalDatasource {
   Future<List<Category>> getAllCategory() async {
     final db = await instance.database;
     final result = await db.query(tableCategories);
-
+    talkerInfoDB("Get all category: ${result.length} total");
     return result.map((e) => Category.fromMap(e)).toList();
   }
 
@@ -291,25 +299,31 @@ class DBLocalDatasource {
   // get category by id
   Future<Category> getCategoryById(String categoryId) async {
     final db = await instance.database;
+    talkerInfoDB("Get category by id: $categoryId");
     final result = await db.query(tableCategories,
         where: 'category_id = ?', whereArgs: [categoryId]);
     return Category.fromMap(result[0]);
   }
 
   // update category
-  Future<int> updateCategory(Category category) async {
+  Future<int> updateCategory(int id, String name) async {
     final db = await instance.database;
+    talkerInfoDB("Update category: $name");
     return await db.update(
       tableCategories,
-      category.toMap(),
+      {
+        'name': name,
+        'updated_at': DateTime.now(),
+      },
       where: 'id = ?',
-      whereArgs: [category.id],
+      whereArgs: [id],
     );
   }
 
   // delete category
   Future<int> deleteCategory(int id) async {
     final db = await instance.database;
+    talkerInfoDB("Delete category: $id");
     return await db.delete(
       tableCategories,
       where: 'id = ?',

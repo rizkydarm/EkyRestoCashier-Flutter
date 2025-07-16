@@ -1,3 +1,4 @@
+import 'package:eky_pos/core/utils/talker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
@@ -35,10 +36,12 @@ import 'package:eky_pos/presentation/staff/bloc/staff/staff_bloc.dart';
 import 'package:eky_pos/presentation/tax_discount/bloc/business_setting/business_setting_bloc.dart';
 import 'package:eky_pos/presentation/tax_discount/bloc/business_setting_local/business_setting_local_bloc.dart';
 import 'package:eky_pos/presentation/transaction/blocs/sync_order/sync_order_bloc.dart';
+import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 
 import 'presentation/auth/bloc/register/register_bloc.dart';
 
 void main() {
+  Bloc.observer = TalkerBlocObserver(talker: talker);
   runApp(const MyApp());
 }
 
@@ -59,7 +62,7 @@ class MyApp extends StatelessWidget {
           create: (context) => LogoutBloc(AuthRemoteDataSource()),
         ),
         BlocProvider(
-          create: (context) => CategoryBloc(CategoryRemoteDataSource()),
+          create: (context) => CategoryBloc(),
         ),
         BlocProvider(
           create: (context) => ProductBloc(ProductRemoteDataSource()),
@@ -104,51 +107,46 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => TransactionOfflineBloc(),
         ),
-        BlocProvider(
-          create: (context) => SyncOrderBloc(
-              DBLocalDatasource.instance, OrderRemoteDatasource()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              BusinessSettingLocalBloc(BusinessSettingLocalDatasource()),
-        ),
+        // BlocProvider(
+        //   create: (context) => SyncOrderBloc(
+        //       DBLocalDatasource.instance, OrderRemoteDatasource()),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       BusinessSettingLocalBloc(BusinessSettingLocalDatasource()),
+        // ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Jago POS',
+        title: 'Eky POS',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
           useMaterial3: true,
-          // textTheme: GoogleFonts.quicksandTextTheme(
-          //   Theme.of(context).textTheme,
-          // ),
           appBarTheme: AppBarTheme(
-            color: AppColors.primary,
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.white,
             elevation: 0,
-            // titleTextStyle: GoogleFonts.quicksand(
-            //   color: AppColors.primary,
-            //   fontSize: 16.0,
-            //   fontWeight: FontWeight.w500,
-            // ),
-            iconTheme: const IconThemeData(
-              color: AppColors.primary,
+            titleTextStyle: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        home: FutureBuilder<AuthResponseModel?>(
-            future: AuthLocalDatasource().getUserData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data != null &&
-                    snapshot.data!.accessToken != null) {
-                  return const HomePage();
-                } else {
-                  return const SplashPage();
-                }
-              } else {
-                return const SplashPage();
-              }
-            }),
+        home: HomePage(),
+        // FutureBuilder<AuthResponseModel?>(
+        //     future: AuthLocalDatasource().getUserData(),
+        //     builder: (context, snapshot) {
+        //       if (snapshot.hasData) {
+        //         if (snapshot.data != null &&
+        //             snapshot.data!.accessToken != null) {
+        //           return const HomePage();
+        //         } else {
+        //           return const SplashPage();
+        //         }
+        //       } else {
+        //         return const SplashPage();
+        //       }
+        //     }),
       ),
     );
   }

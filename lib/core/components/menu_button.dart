@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eky_pos/core/extensions/build_context_ext.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../constants/colors.dart';
 import 'spaces.dart';
 
@@ -49,19 +47,19 @@ class MenuButton extends StatelessWidget {
         child: Column(
           children: [
             const SpaceHeight(8.0),
-            isImage
-                ? Image.asset(iconPath,
-                    width: size,
-                    height: size,
-                    fit: BoxFit.contain,
-                    color: isActive ? AppColors.white : AppColors.primary)
-                : SvgPicture.asset(
-                    iconPath,
-                    colorFilter: ColorFilter.mode(
-                      isActive ? AppColors.white : AppColors.primary,
-                      BlendMode.srcIn,
-                    ),
-                  ),
+            // isImage
+            //     ? Image.asset(iconPath,
+            //         width: size,
+            //         height: size,
+            //         fit: BoxFit.contain,
+            //         color: isActive ? AppColors.white : AppColors.primary)
+            //     : SvgPicture.asset(
+            //         iconPath,
+            //         colorFilter: ColorFilter.mode(
+            //           isActive ? AppColors.white : AppColors.primary,
+            //           BlendMode.srcIn,
+            //         ),
+            //       ),
             const SpaceHeight(8.0),
             Text(
               label,

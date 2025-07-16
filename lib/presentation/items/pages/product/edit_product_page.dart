@@ -343,7 +343,7 @@ class _EditProductPageState extends State<EditProductPage> {
                       await AuthLocalDatasource().getOutletData();
                   final data = ProductModel(
                     name: _nameController.text,
-                    categoryId: _selectedCategoryData!.id!,
+                    categoryId: 0,
                     price: _priceController.text.toIntegerFromText.toDouble(),
                     cost: _costController.text.toIntegerFromText.toDouble(),
                     stock: 0,

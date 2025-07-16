@@ -1,4 +1,4 @@
-import 'package:fl_chart/fl_chart.dart';
+// import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/components/spaces.dart';
@@ -312,44 +312,44 @@ class _SalesReportPageState extends State<SalesReportPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: LineChart(
-          LineChartData(
-            gridData: FlGridData(show: true),
-            titlesData: FlTitlesData(
-              leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 30,
-                getTitlesWidget: (value, meta) {
-                  return Text("Rp${value.toInt()}");
-                },
-              )),
-              bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 20,
-                getTitlesWidget: (value, meta) {
-                  return Text("${value.toInt()}:00");
-                },
-              )),
-            ),
-            borderData: FlBorderData(show: true),
-            lineBarsData: [
-              LineChartBarData(
-                spots: [
-                  FlSpot(0, 0),
-                  FlSpot(10, 0),
-                  FlSpot(20, 0)
-                ], // Data kosong
-                isCurved: true,
-                color: Colors.blue,
-                barWidth: 3,
-                isStrokeCapRound: true,
-                belowBarData: BarAreaData(show: false),
-              ),
-            ],
-          ),
-        ),
+        // child: LineChart(
+        //   LineChartData(
+        //     gridData: FlGridData(show: true),
+        //     titlesData: FlTitlesData(
+        //       leftTitles: AxisTitles(
+        //           sideTitles: SideTitles(
+        //         showTitles: true,
+        //         reservedSize: 30,
+        //         getTitlesWidget: (value, meta) {
+        //           return Text("Rp${value.toInt()}");
+        //         },
+        //       )),
+        //       bottomTitles: AxisTitles(
+        //           sideTitles: SideTitles(
+        //         showTitles: true,
+        //         reservedSize: 20,
+        //         getTitlesWidget: (value, meta) {
+        //           return Text("${value.toInt()}:00");
+        //         },
+        //       )),
+        //     ),
+        //     borderData: FlBorderData(show: true),
+        //     lineBarsData: [
+        //       LineChartBarData(
+        //         spots: [
+        //           FlSpot(0, 0),
+        //           FlSpot(10, 0),
+        //           FlSpot(20, 0)
+        //         ], // Data kosong
+        //         isCurved: true,
+        //         color: Colors.blue,
+        //         barWidth: 3,
+        //         isStrokeCapRound: true,
+        //         belowBarData: BarAreaData(show: false),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }

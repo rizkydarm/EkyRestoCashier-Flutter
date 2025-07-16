@@ -28,7 +28,6 @@ class CategoryResponseModel {
 
 class Category {
   final int? id;
-  final int? categoryId;
   final String? name;
   final int? businessId;
   final DateTime? createdAt;
@@ -36,7 +35,6 @@ class Category {
 
   Category({
     this.id,
-    this.categoryId,
     this.name,
     this.businessId,
     this.createdAt,
@@ -49,11 +47,8 @@ class Category {
 
   factory Category.fromMap(Map<String, dynamic> json) => Category(
         id: json["id"],
-        categoryId: json["category_id"],
         name: json["name"],
-        businessId: json["business_id"] is int
-            ? json["business_id"]
-            : int.parse(json["business_id"]),
+        businessId: json["business_id"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -63,7 +58,7 @@ class Category {
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
+        if (id != null) "id": id,
         "name": name,
         "business_id": businessId,
         "created_at": createdAt?.toIso8601String(),
@@ -71,7 +66,6 @@ class Category {
       };
 
   Map<String, dynamic> toBackUpMap() => {
-        "category_id": id,
         "name": name,
         "business_id": businessId,
         "created_at": createdAt?.toIso8601String(),

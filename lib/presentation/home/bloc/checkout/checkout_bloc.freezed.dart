@@ -519,7 +519,7 @@ extension CheckoutStatePatterns on CheckoutState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductQuantity> cart, double subtotal, double total,
-            int totalItems)?
+            int quantity)?
         success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -531,8 +531,7 @@ extension CheckoutStatePatterns on CheckoutState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(
-            _that.cart, _that.subtotal, _that.total, _that.totalItems);
+        return success(_that.cart, _that.subtotal, _that.total, _that.quantity);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -558,7 +557,7 @@ extension CheckoutStatePatterns on CheckoutState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductQuantity> cart, double subtotal,
-            double total, int totalItems)
+            double total, int quantity)
         success,
     required TResult Function(String message) error,
   }) {
@@ -569,8 +568,7 @@ extension CheckoutStatePatterns on CheckoutState {
       case _Loading():
         return loading();
       case _Success():
-        return success(
-            _that.cart, _that.subtotal, _that.total, _that.totalItems);
+        return success(_that.cart, _that.subtotal, _that.total, _that.quantity);
       case _Error():
         return error(_that.message);
       case _:
@@ -595,7 +593,7 @@ extension CheckoutStatePatterns on CheckoutState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductQuantity> cart, double subtotal, double total,
-            int totalItems)?
+            int quantity)?
         success,
     TResult? Function(String message)? error,
   }) {
@@ -606,8 +604,7 @@ extension CheckoutStatePatterns on CheckoutState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(
-            _that.cart, _that.subtotal, _that.total, _that.totalItems);
+        return success(_that.cart, _that.subtotal, _that.total, _that.quantity);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -660,7 +657,7 @@ class _Loading implements CheckoutState {
 
 class _Success implements CheckoutState {
   const _Success(final List<ProductQuantity> cart, this.subtotal, this.total,
-      this.totalItems)
+      this.quantity)
       : _cart = cart;
 
   final List<ProductQuantity> _cart;
@@ -674,7 +671,7 @@ class _Success implements CheckoutState {
 // double tax,
   final double subtotal;
   final double total;
-  final int totalItems;
+  final int quantity;
 
   /// Create a copy of CheckoutState
   /// with the given fields replaced by the non-null parameter values.
@@ -692,17 +689,17 @@ class _Success implements CheckoutState {
             (identical(other.subtotal, subtotal) ||
                 other.subtotal == subtotal) &&
             (identical(other.total, total) || other.total == total) &&
-            (identical(other.totalItems, totalItems) ||
-                other.totalItems == totalItems));
+            (identical(other.quantity, quantity) ||
+                other.quantity == quantity));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_cart), subtotal, total, totalItems);
+      const DeepCollectionEquality().hash(_cart), subtotal, total, quantity);
 
   @override
   String toString() {
-    return 'CheckoutState.success(cart: $cart, subtotal: $subtotal, total: $total, totalItems: $totalItems)';
+    return 'CheckoutState.success(cart: $cart, subtotal: $subtotal, total: $total, quantity: $quantity)';
   }
 }
 
@@ -716,7 +713,7 @@ abstract mixin class _$SuccessCopyWith<$Res>
       {List<ProductQuantity> cart,
       double subtotal,
       double total,
-      int totalItems});
+      int quantity});
 }
 
 /// @nodoc
@@ -733,7 +730,7 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
     Object? cart = null,
     Object? subtotal = null,
     Object? total = null,
-    Object? totalItems = null,
+    Object? quantity = null,
   }) {
     return _then(_Success(
       null == cart
@@ -748,9 +745,9 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
           ? _self.total
           : total // ignore: cast_nullable_to_non_nullable
               as double,
-      null == totalItems
-          ? _self.totalItems
-          : totalItems // ignore: cast_nullable_to_non_nullable
+      null == quantity
+          ? _self.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }

@@ -7,17 +7,18 @@ import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/data/dataoutputs/cwb_print.dart';
 import 'package:eky_pos/data/models/responses/transaction_response_model.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
+
 import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
 
 import '../../../core/components/spaces.dart';
 import '../../../core/constants/colors.dart';
 
-class InvoicePage extends StatefulWidget {
-  // final List<ProductQtyModel> orders;
+class InvoicePage extends StatelessWidget {
+  
   final double nominal;
   final double totalPrice;
-  final Transaction transaction;
+  final TransactionModel transaction;
 
   const InvoicePage({
     super.key,
@@ -27,99 +28,78 @@ class InvoicePage extends StatefulWidget {
   });
 
   @override
-  State<InvoicePage> createState() => _InvoicePageState();
-}
-
-class _InvoicePageState extends State<InvoicePage> {
-  // List<ProductQuantity> orders = [];
-  // double subtotal = 0;
-  // double tax = 0;
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Nota ${widget.transaction.orderNumber}',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: Text('Nota ${transaction.orderNumber}'),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            context.read<CheckoutBloc>().add(const CheckoutEvent.started());
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) {
-              return const HomePage();
-            }));
-          },
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-        ),
       ),
       body: Column(
         children: [
-          Container(
-            height: 80,
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.totalPrice.currencyFormatRp,
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                      ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(
+              height: 80,
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          totalPrice.currencyFormatRp,
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          'Payment Total',
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      'Total Pembayaran',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
+                  ),
+                  VerticalDivider(
+                    color: AppColors.grey,
+                    thickness: 1,
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${nominal - totalPrice}'
+                              .currencyFormatRpV3,
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          'Change',
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Container(
-                  height: 80,
-                  width: 1,
-                  color: AppColors.grey,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${widget.nominal - widget.totalPrice}'
-                          .currencyFormatRpV3,
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      'Kembalian',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
-          const Divider(),
+          const Divider(indent: 16, endIndent: 16),
           Expanded(
             child: BlocBuilder<CheckoutBloc, CheckoutState>(
               builder: (context, state) {
@@ -127,9 +107,8 @@ class _InvoicePageState extends State<InvoicePage> {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
-                }, success: (orders, subtotal, totalPayment, qty) {
+                }, success: (orders, subtotal, total, qty) {
                   return ListView.builder(
-                    // padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: orders.length,
                     itemBuilder: (context, index) {
                       return ListTile(
@@ -220,21 +199,18 @@ class _InvoicePageState extends State<InvoicePage> {
                         const SpaceHeight(16.0),
                         InkWell(
                           onTap: () async {
-                            // final printValue =
-                            //     await CwbPrint.instance.printOrderV2(
-                            //   cart,
-                            //   totalItems,
-                            //   total.toInt(),
-                            //   'Tunai',
-                            //   widget.nominal.toInt(),
-                            //   'Mawar',
-                            //   'Customer',
-                            //   tax,
-                            //   subtotal,
-                            //   widget.transaction.orderNumber ?? '',
-                            //   discount,
-                            //   false
-                            // );
+                            // final printValue = await CwbPrint.instance
+                            //     .printOrderV2(
+                            //         cart,
+                            //         totalItems,
+                            //         total.toInt(),
+                            //         'Tunai',
+                            //         widget.nominal.toInt(),
+                            //         'Mawar',
+                            //         'Customer',
+                            //         subtotal,
+                            //         widget.transaction.orderNumber ?? '',
+                            //         false);
                             // await PrintBluetoothThermal.writeBytes(printValue);
                           },
                           child: Container(

@@ -61,7 +61,7 @@ void main() {
       create: (context) => OrderBloc(),
     ),
     BlocProvider(
-      create: (context) => TransactionBloc(OrderRemoteDatasource()),
+      create: (context) => TransactionBloc(),
     ),
     BlocProvider(
       create: (context) => AccountBloc(AuthLocalDatasource()),

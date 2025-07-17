@@ -52,15 +52,24 @@ extension TransactionEventPatterns on TransactionEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
-    TResult Function(_GetTransactions value)? getTransactions,
+    TResult Function(_GetAllOrder value)? getAllOrder,
+    TResult Function(_GetAllOrderItem value)? getAllOrderItem,
+    TResult Function(_GetOrderByTransactionId value)? getOrderByTransactionId,
+    TResult Function(_GetItemsByTransactionId value)? getItemsByTransactionId,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started(_that);
-      case _GetTransactions() when getTransactions != null:
-        return getTransactions(_that);
+      case _GetAllOrder() when getAllOrder != null:
+        return getAllOrder(_that);
+      case _GetAllOrderItem() when getAllOrderItem != null:
+        return getAllOrderItem(_that);
+      case _GetOrderByTransactionId() when getOrderByTransactionId != null:
+        return getOrderByTransactionId(_that);
+      case _GetItemsByTransactionId() when getItemsByTransactionId != null:
+        return getItemsByTransactionId(_that);
       case _:
         return orElse();
     }
@@ -82,14 +91,25 @@ extension TransactionEventPatterns on TransactionEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
-    required TResult Function(_GetTransactions value) getTransactions,
+    required TResult Function(_GetAllOrder value) getAllOrder,
+    required TResult Function(_GetAllOrderItem value) getAllOrderItem,
+    required TResult Function(_GetOrderByTransactionId value)
+        getOrderByTransactionId,
+    required TResult Function(_GetItemsByTransactionId value)
+        getItemsByTransactionId,
   }) {
     final _that = this;
     switch (_that) {
       case _Started():
         return started(_that);
-      case _GetTransactions():
-        return getTransactions(_that);
+      case _GetAllOrder():
+        return getAllOrder(_that);
+      case _GetAllOrderItem():
+        return getAllOrderItem(_that);
+      case _GetOrderByTransactionId():
+        return getOrderByTransactionId(_that);
+      case _GetItemsByTransactionId():
+        return getItemsByTransactionId(_that);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -110,14 +130,23 @@ extension TransactionEventPatterns on TransactionEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
-    TResult? Function(_GetTransactions value)? getTransactions,
+    TResult? Function(_GetAllOrder value)? getAllOrder,
+    TResult? Function(_GetAllOrderItem value)? getAllOrderItem,
+    TResult? Function(_GetOrderByTransactionId value)? getOrderByTransactionId,
+    TResult? Function(_GetItemsByTransactionId value)? getItemsByTransactionId,
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started(_that);
-      case _GetTransactions() when getTransactions != null:
-        return getTransactions(_that);
+      case _GetAllOrder() when getAllOrder != null:
+        return getAllOrder(_that);
+      case _GetAllOrderItem() when getAllOrderItem != null:
+        return getAllOrderItem(_that);
+      case _GetOrderByTransactionId() when getOrderByTransactionId != null:
+        return getOrderByTransactionId(_that);
+      case _GetItemsByTransactionId() when getItemsByTransactionId != null:
+        return getItemsByTransactionId(_that);
       case _:
         return null;
     }
@@ -138,15 +167,24 @@ extension TransactionEventPatterns on TransactionEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function()? getTransactions,
+    TResult Function()? getAllOrder,
+    TResult Function()? getAllOrderItem,
+    TResult Function(String transactionId)? getOrderByTransactionId,
+    TResult Function(String transactionId)? getItemsByTransactionId,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started();
-      case _GetTransactions() when getTransactions != null:
-        return getTransactions();
+      case _GetAllOrder() when getAllOrder != null:
+        return getAllOrder();
+      case _GetAllOrderItem() when getAllOrderItem != null:
+        return getAllOrderItem();
+      case _GetOrderByTransactionId() when getOrderByTransactionId != null:
+        return getOrderByTransactionId(_that.transactionId);
+      case _GetItemsByTransactionId() when getItemsByTransactionId != null:
+        return getItemsByTransactionId(_that.transactionId);
       case _:
         return orElse();
     }
@@ -168,14 +206,23 @@ extension TransactionEventPatterns on TransactionEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function() getTransactions,
+    required TResult Function() getAllOrder,
+    required TResult Function() getAllOrderItem,
+    required TResult Function(String transactionId) getOrderByTransactionId,
+    required TResult Function(String transactionId) getItemsByTransactionId,
   }) {
     final _that = this;
     switch (_that) {
       case _Started():
         return started();
-      case _GetTransactions():
-        return getTransactions();
+      case _GetAllOrder():
+        return getAllOrder();
+      case _GetAllOrderItem():
+        return getAllOrderItem();
+      case _GetOrderByTransactionId():
+        return getOrderByTransactionId(_that.transactionId);
+      case _GetItemsByTransactionId():
+        return getItemsByTransactionId(_that.transactionId);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -196,14 +243,23 @@ extension TransactionEventPatterns on TransactionEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function()? getTransactions,
+    TResult? Function()? getAllOrder,
+    TResult? Function()? getAllOrderItem,
+    TResult? Function(String transactionId)? getOrderByTransactionId,
+    TResult? Function(String transactionId)? getItemsByTransactionId,
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started();
-      case _GetTransactions() when getTransactions != null:
-        return getTransactions();
+      case _GetAllOrder() when getAllOrder != null:
+        return getAllOrder();
+      case _GetAllOrderItem() when getAllOrderItem != null:
+        return getAllOrderItem();
+      case _GetOrderByTransactionId() when getOrderByTransactionId != null:
+        return getOrderByTransactionId(_that.transactionId);
+      case _GetItemsByTransactionId() when getItemsByTransactionId != null:
+        return getItemsByTransactionId(_that.transactionId);
       case _:
         return null;
     }
@@ -232,13 +288,13 @@ class _Started implements TransactionEvent {
 
 /// @nodoc
 
-class _GetTransactions implements TransactionEvent {
-  const _GetTransactions();
+class _GetAllOrder implements TransactionEvent {
+  const _GetAllOrder();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _GetTransactions);
+        (other.runtimeType == runtimeType && other is _GetAllOrder);
   }
 
   @override
@@ -246,7 +302,159 @@ class _GetTransactions implements TransactionEvent {
 
   @override
   String toString() {
-    return 'TransactionEvent.getTransactions()';
+    return 'TransactionEvent.getAllOrder()';
+  }
+}
+
+/// @nodoc
+
+class _GetAllOrderItem implements TransactionEvent {
+  const _GetAllOrderItem();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _GetAllOrderItem);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'TransactionEvent.getAllOrderItem()';
+  }
+}
+
+/// @nodoc
+
+class _GetOrderByTransactionId implements TransactionEvent {
+  const _GetOrderByTransactionId(this.transactionId);
+
+  final String transactionId;
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$GetOrderByTransactionIdCopyWith<_GetOrderByTransactionId> get copyWith =>
+      __$GetOrderByTransactionIdCopyWithImpl<_GetOrderByTransactionId>(
+          this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetOrderByTransactionId &&
+            (identical(other.transactionId, transactionId) ||
+                other.transactionId == transactionId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, transactionId);
+
+  @override
+  String toString() {
+    return 'TransactionEvent.getOrderByTransactionId(transactionId: $transactionId)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$GetOrderByTransactionIdCopyWith<$Res>
+    implements $TransactionEventCopyWith<$Res> {
+  factory _$GetOrderByTransactionIdCopyWith(_GetOrderByTransactionId value,
+          $Res Function(_GetOrderByTransactionId) _then) =
+      __$GetOrderByTransactionIdCopyWithImpl;
+  @useResult
+  $Res call({String transactionId});
+}
+
+/// @nodoc
+class __$GetOrderByTransactionIdCopyWithImpl<$Res>
+    implements _$GetOrderByTransactionIdCopyWith<$Res> {
+  __$GetOrderByTransactionIdCopyWithImpl(this._self, this._then);
+
+  final _GetOrderByTransactionId _self;
+  final $Res Function(_GetOrderByTransactionId) _then;
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? transactionId = null,
+  }) {
+    return _then(_GetOrderByTransactionId(
+      null == transactionId
+          ? _self.transactionId
+          : transactionId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _GetItemsByTransactionId implements TransactionEvent {
+  const _GetItemsByTransactionId(this.transactionId);
+
+  final String transactionId;
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$GetItemsByTransactionIdCopyWith<_GetItemsByTransactionId> get copyWith =>
+      __$GetItemsByTransactionIdCopyWithImpl<_GetItemsByTransactionId>(
+          this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetItemsByTransactionId &&
+            (identical(other.transactionId, transactionId) ||
+                other.transactionId == transactionId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, transactionId);
+
+  @override
+  String toString() {
+    return 'TransactionEvent.getItemsByTransactionId(transactionId: $transactionId)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$GetItemsByTransactionIdCopyWith<$Res>
+    implements $TransactionEventCopyWith<$Res> {
+  factory _$GetItemsByTransactionIdCopyWith(_GetItemsByTransactionId value,
+          $Res Function(_GetItemsByTransactionId) _then) =
+      __$GetItemsByTransactionIdCopyWithImpl;
+  @useResult
+  $Res call({String transactionId});
+}
+
+/// @nodoc
+class __$GetItemsByTransactionIdCopyWithImpl<$Res>
+    implements _$GetItemsByTransactionIdCopyWith<$Res> {
+  __$GetItemsByTransactionIdCopyWithImpl(this._self, this._then);
+
+  final _GetItemsByTransactionId _self;
+  final $Res Function(_GetItemsByTransactionId) _then;
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? transactionId = null,
+  }) {
+    return _then(_GetItemsByTransactionId(
+      null == transactionId
+          ? _self.transactionId
+          : transactionId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
   }
 }
 
@@ -395,7 +603,9 @@ extension TransactionStatePatterns on TransactionState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(TransactionResponseModel data)? success,
+    TResult Function(List<TransactionModel>? transactions, List<Item>? items,
+            TransactionModel? transaction)?
+        success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -406,7 +616,7 @@ extension TransactionStatePatterns on TransactionState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(_that.data);
+        return success(_that.transactions, _that.items, _that.transaction);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -431,7 +641,9 @@ extension TransactionStatePatterns on TransactionState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(TransactionResponseModel data) success,
+    required TResult Function(List<TransactionModel>? transactions,
+            List<Item>? items, TransactionModel? transaction)
+        success,
     required TResult Function(String message) error,
   }) {
     final _that = this;
@@ -441,7 +653,7 @@ extension TransactionStatePatterns on TransactionState {
       case _Loading():
         return loading();
       case _Success():
-        return success(_that.data);
+        return success(_that.transactions, _that.items, _that.transaction);
       case _Error():
         return error(_that.message);
       case _:
@@ -465,7 +677,9 @@ extension TransactionStatePatterns on TransactionState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(TransactionResponseModel data)? success,
+    TResult? Function(List<TransactionModel>? transactions, List<Item>? items,
+            TransactionModel? transaction)?
+        success,
     TResult? Function(String message)? error,
   }) {
     final _that = this;
@@ -475,7 +689,7 @@ extension TransactionStatePatterns on TransactionState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(_that.data);
+        return success(_that.transactions, _that.items, _that.transaction);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -527,9 +741,30 @@ class _Loading implements TransactionState {
 /// @nodoc
 
 class _Success implements TransactionState {
-  const _Success(this.data);
+  const _Success(final List<TransactionModel>? transactions,
+      final List<Item>? items, this.transaction)
+      : _transactions = transactions,
+        _items = items;
 
-  final TransactionResponseModel data;
+  final List<TransactionModel>? _transactions;
+  List<TransactionModel>? get transactions {
+    final value = _transactions;
+    if (value == null) return null;
+    if (_transactions is EqualUnmodifiableListView) return _transactions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<Item>? _items;
+  List<Item>? get items {
+    final value = _items;
+    if (value == null) return null;
+    if (_items is EqualUnmodifiableListView) return _items;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final TransactionModel? transaction;
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.
@@ -543,15 +778,23 @@ class _Success implements TransactionState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Success &&
-            (identical(other.data, data) || other.data == data));
+            const DeepCollectionEquality()
+                .equals(other._transactions, _transactions) &&
+            const DeepCollectionEquality().equals(other._items, _items) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, data);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_transactions),
+      const DeepCollectionEquality().hash(_items),
+      transaction);
 
   @override
   String toString() {
-    return 'TransactionState.success(data: $data)';
+    return 'TransactionState.success(transactions: $transactions, items: $items, transaction: $transaction)';
   }
 }
 
@@ -561,7 +804,10 @@ abstract mixin class _$SuccessCopyWith<$Res>
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
       __$SuccessCopyWithImpl;
   @useResult
-  $Res call({TransactionResponseModel data});
+  $Res call(
+      {List<TransactionModel>? transactions,
+      List<Item>? items,
+      TransactionModel? transaction});
 }
 
 /// @nodoc
@@ -575,13 +821,23 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? data = null,
+    Object? transactions = freezed,
+    Object? items = freezed,
+    Object? transaction = freezed,
   }) {
     return _then(_Success(
-      null == data
-          ? _self.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as TransactionResponseModel,
+      freezed == transactions
+          ? _self._transactions
+          : transactions // ignore: cast_nullable_to_non_nullable
+              as List<TransactionModel>?,
+      freezed == items
+          ? _self._items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<Item>?,
+      freezed == transaction
+          ? _self.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as TransactionModel?,
     ));
   }
 }

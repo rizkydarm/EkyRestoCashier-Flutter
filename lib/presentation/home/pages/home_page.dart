@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
     final scaffoldKey = GlobalKey<ScaffoldState>();
     context.read<ProductBloc>().add(ProductEvent.getProducts());
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
-    final searchValue = ValueNotifier<String?>(null);
+    final searchedTextNotifier = ValueNotifier<String?>(null);
     return Scaffold(
       key: scaffoldKey,
       drawer: DrawerWidget(),
@@ -72,7 +72,7 @@ class HomePage extends StatelessWidget {
                       return Center(child: Text("No Items"));
                     }
                     return ValueListenableBuilder(
-                      valueListenable: searchValue,
+                      valueListenable: searchedTextNotifier,
                       builder: (context, value, child) {
                         final filteredData = value == null ? products : products.where((product) {
                           final searchTerm = value.toLowerCase();
@@ -97,7 +97,7 @@ class HomePage extends StatelessWidget {
                                   shape: WidgetStateProperty.all(RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   )),
-                                  onChanged: (value) => searchValue.value = value,
+                                  onChanged: (value) => searchedTextNotifier.value = value,
                                 ),
                               );
                             }

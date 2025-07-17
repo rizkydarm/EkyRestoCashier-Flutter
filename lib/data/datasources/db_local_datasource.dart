@@ -194,8 +194,7 @@ class DBLocalDatasource {
     int id = await db.insert(tableTransactions, transactions.toMap());
     log("Save order: ${transactions.toMap()}");
     for (var orderItem in transactions.items!) {
-      await db.insert(
-          tableTransactionItems, orderItem.toMap3(transactions.transactionId!));
+      await db.insert(tableTransactionItems, orderItem.toMap3(transactions.transactionId!));
     }
     return id;
   }

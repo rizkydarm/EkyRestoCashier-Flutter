@@ -10,7 +10,7 @@ import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import '../../../data/dataoutputs/cwb_print.dart';
 
 class DetailTransactionPage extends StatefulWidget {
-  final Transaction transaction;
+  final TransactionModel transaction;
   const DetailTransactionPage({
     super.key,
     required this.transaction,
@@ -25,17 +25,7 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-        ),
-        title: const Text('Detail Transaksi',
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.white)),
+        title: const Text('Detail Transaksi'),
         centerTitle: true,
       ),
       body: Padding(

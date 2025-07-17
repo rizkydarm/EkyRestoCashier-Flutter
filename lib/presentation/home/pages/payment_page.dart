@@ -1,3 +1,4 @@
+import 'package:eky_pos/presentation/home/pages/qris_payment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/extensions/int_ext.dart';
@@ -8,7 +9,7 @@ import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/order/order_bloc.dart';
 
 import 'package:eky_pos/presentation/home/models/product_quantity.dart';
-import 'package:eky_pos/presentation/home/pages/invoice_offline_page.dart';
+import 'package:eky_pos/presentation/home/pages/invoice_page.dart';
 import 'package:eky_pos/presentation/home/pages/invoice_page.dart';
 
 import '../../../core/components/spaces.dart';
@@ -33,8 +34,8 @@ class PaymentPage extends StatelessWidget {
     });
     bool isCash = true;
     bool sameNominal = false;
-    final totalPaymentListener = ValueNotifier<double>(0);
-    totalPaymentListener.value = context.read<CheckoutBloc>().state.maybeWhen(
+    final totalPaymentNotifier = ValueNotifier<double>(0);
+    totalPaymentNotifier.value = context.read<CheckoutBloc>().state.maybeWhen(
       orElse: () => 0,
       success: (orders, subtotal, totalPayment, qty) {
         return totalPayment;
@@ -58,7 +59,7 @@ class PaymentPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ValueListenableBuilder(
-                      valueListenable: totalPaymentListener,
+                      valueListenable: totalPaymentNotifier,
                       builder: (context, totalPayment, child) {
                         return Text(
                           totalPayment.currencyFormatRp,
@@ -145,7 +146,7 @@ class PaymentPage extends StatelessWidget {
                           clipBehavior: Clip.antiAlias,
                           child: InkWell(
                           onTap: () {
-                            nominalController.text = totalPaymentListener.value.currencyFormatRp;
+                            nominalController.text = totalPaymentNotifier.value.currencyFormatRp;
                             setState(() => isCash = false);
                           },
                             child: Padding(
@@ -222,7 +223,7 @@ class PaymentPage extends StatelessWidget {
                         Row(
                           children: [
                             ValueListenableBuilder(
-                              valueListenable: totalPaymentListener,
+                              valueListenable: totalPaymentNotifier,
                               builder: (context, totalPayment, child) {
                                 return Switch(
                                   value: sameNominal,
@@ -284,15 +285,30 @@ class PaymentPage extends StatelessWidget {
                   listener: (context, state) {
                     state.maybeWhen(
                       orElse: () {},
-                      success: (trx) => Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (context) => InvoiceOfflinePage(
-                            nominal: totalPaymentListener.value,
-                            totalPrice: double.parse(trx.totalPrice ?? '0'),
-                            transaction: trx,
-                          ),
-                        ),
-                      ),
+                      success: (trx) {
+                        if (isCash) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InvoicePage(
+                                nominal: totalPaymentNotifier.value,
+                                totalPrice: double.parse(trx.totalPrice ?? '0'),
+                                transaction: trx,
+                              )
+                            ),
+                            (route) => false,
+                          );
+                        } else {
+                          Navigator.push(context, 
+                            MaterialPageRoute(
+                              builder: (context) => QRISPaymentPage(
+                                totalPrice: double.parse(trx.totalPrice ?? '0'),
+                                transaction: trx,
+                              ),
+                            ),
+                          );  
+                        }
+                      },
                       error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(msg),

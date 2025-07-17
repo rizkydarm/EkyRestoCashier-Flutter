@@ -8,9 +8,9 @@ import 'package:eky_pos/presentation/transaction/pages/detail_transaction_page.d
 import '../../../core/constants/colors.dart';
 
 class TransactionGroupWidget extends StatelessWidget {
-  final TransactionGroup group;
+  final List<TransactionModel> transactions;
 
-  const TransactionGroupWidget(this.group, {super.key});
+  const TransactionGroupWidget(this.transactions, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class TransactionGroupWidget extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: Text(
-            group.date,
+            'Date',
             style: TextStyle(
               color: AppColors.black,
               fontWeight: FontWeight.bold,
@@ -28,7 +28,7 @@ class TransactionGroupWidget extends StatelessWidget {
             ),
           ),
         ),
-        ...group.items
+        ...transactions
             .map((transaction) => TransactionItemWidget(transaction))
             ,
         Divider(),
@@ -38,7 +38,7 @@ class TransactionGroupWidget extends StatelessWidget {
 }
 
 class TransactionItemWidget extends StatelessWidget {
-  final Transaction transaction;
+  final TransactionModel transaction;
 
   const TransactionItemWidget(this.transaction, {super.key});
 
@@ -46,13 +46,13 @@ class TransactionItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                DetailTransactionPage(transaction: transaction),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) =>
+        //         DetailTransactionPage(transaction: transaction),
+        //   ),
+        // );
       },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

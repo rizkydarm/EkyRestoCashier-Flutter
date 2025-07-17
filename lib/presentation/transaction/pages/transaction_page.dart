@@ -1,104 +1,71 @@
+import 'package:eky_pos/core/extensions/date_time_ext.dart';
+import 'package:eky_pos/core/extensions/string_ext.dart';
+import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
+import 'package:eky_pos/presentation/transaction/pages/detail_transaction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eky_pos/core/extensions/date_time_ext.dart';
 import 'package:eky_pos/presentation/home/bloc/transaction/transaction_bloc.dart';
 
-import 'package:eky_pos/presentation/home/models/product_model.dart';
-import 'package:eky_pos/presentation/transaction/widgets/transaction_group_widget.dart';
-
-
-class TransactionPage extends StatefulWidget {
-  // final List<ProductQtyModel> orders;
+class TransactionPage extends StatelessWidget {
   const TransactionPage({
     super.key,
-    // required this.orders,
   });
 
   @override
-  State<TransactionPage> createState() => _TransactionPageState();
-}
-
-class _TransactionPageState extends State<TransactionPage> {
-  //global key
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    context
-        .read<TransactionBloc>()
-        .add(const TransactionEvent.getTransactions());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    context.read<TransactionBloc>().add(const TransactionEvent.getAllOrder());
+    final scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: _scaffoldKey,
-      // drawer: DrawerWidget(),
-      // appBar: AppBar(
-      //   title: const Text(
-      //     'Transaksi',
-      //     style: TextStyle(
-      //       color: AppColors.white,
-      //       fontSize: 18,
-      //       fontWeight: FontWeight.w700,
-      //     ),
-      //   ),
-      //   centerTitle: true,
-      //   leading: IconButton(
-      //       onPressed: () {
-      //         _scaffoldKey.currentState?.openDrawer();
-      //       },
-      //       icon: Icon(Icons.menu, color: AppColors.white)),
-      // ),
+      key: scaffoldKey,
+      drawer: DrawerWidget(),
+      appBar: AppBar(
+        title: const Text('Transactions'),
+        centerTitle: true,
+      ),
       body: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {
-          return state.maybeWhen(orElse: () {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }, loading: () {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }, error: (message) {
-            return Center(
-              child: Text(message),
-            );
-          }, success: (transactions) {
-            if (transactions.data!.isEmpty) {
+          return state.maybeWhen(
+            orElse: () => const Center(child: Text('No Transactions')),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (message) => Center(child: Text(message)),
+            success: (transactions, items, transaction) {
+            if (transactions?.isEmpty ?? true) {
               return const Center(
-                child: Text('Tidak ada transaksi'),
+                child: Text('No Transactions'),
               );
             }
-            //transactions.data to list transactionGroup
-            List<TransactionGroup> transactionGroups = [];
-            for (var transaction in transactions.data!) {
-              //cek apakah transactionGroup sudah ada
-              if (transactionGroups
-                  .where((element) =>
-                      element.date ==
-                      transaction.createdAt!.toFormattedDateOnly())
-                  .isEmpty) {
-                //jika belum ada, maka buat transactionGroup baru
-                transactionGroups.add(TransactionGroup(
-                    date: transaction.createdAt!.toFormattedDateOnly(),
-                    items: [transaction]));
-              } else {
-                //jika sudah ada, maka tambahkan transaction ke transactionGroup yang sudah ada
-                transactionGroups
-                    .where((element) =>
-                        element.date ==
-                        transaction.createdAt!.toFormattedDateOnly())
-                    .first
-                    .items
-                    .add(transaction);
-              }
-            }
+            print(transactions?.length);
+            print(items?.length);
             return ListView.builder(
-              itemCount: transactionGroups.length,
+              itemCount: transactions?.length ?? 0,
               itemBuilder: (context, index) {
-                return TransactionGroupWidget(transactionGroups[index]);
+                return ListTile(
+                  onTap:  () {
+                    if ((transactions[index].items?.length ?? -1) > 0) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailTransactionPage(
+                            transaction: transactions[index],
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  leading: Text((transactions![index].items?.length ?? -1).toString()),
+                  title: Text(transactions[index].totalPrice!.currencyFormatRpV3,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(transactions[index].createdAt!.toLocal().toFormattedDateOnly()),
+                  trailing: Text(transactions[index].orderNumber!,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                );
               },
             );
           });

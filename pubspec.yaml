@@ -31,6 +31,8 @@ dependencies:
   uuid: ^4.5.1
   talker: ^4.9.2
   talker_bloc_logger: ^4.9.2
+  qr: ^3.0.2
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +48,7 @@ flutter:
 
   assets:
     - assets/images/products/
+    - assets/icons/qris_logo.png
 
 flutter_launcher_icons:
   android: "launcher_icon"

@@ -196,84 +196,50 @@ class InvoicePage extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SpaceHeight(16.0),
-                        InkWell(
-                          onTap: () async {
-                            // final printValue = await CwbPrint.instance
-                            //     .printOrderV2(
-                            //         cart,
-                            //         totalItems,
-                            //         total.toInt(),
-                            //         'Tunai',
-                            //         widget.nominal.toInt(),
-                            //         'Mawar',
-                            //         'Customer',
-                            //         subtotal,
-                            //         widget.transaction.orderNumber ?? '',
-                            //         false);
-                            // await PrintBluetoothThermal.writeBytes(printValue);
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.print,
-                                    color: AppColors.black,
-                                  ),
-                                  const SpaceWidth(16),
-                                  Text(
-                                    'CETAK NOTA',
-                                    style: TextStyle(
-                                      color: AppColors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey.shade300,
+                            foregroundColor: AppColors.black,
+                            minimumSize: const Size(double.infinity, 56),
                           ),
+                          onPressed: () async {
+                            final printValue = await CwbPrint.instance
+                              .printOrderV2(
+                                cart,
+                                totalItems,
+                                total.toInt(),
+                                'Tunai',
+                                nominal.toInt(),
+                                'Mawar',
+                                'Customer',
+                                10000, //tax
+                                totalPrice,
+                                'Nota: 101001', // No.nota
+                                0, // discount
+                                false
+                              );
+                            await PrintBluetoothThermal.writeBytes(printValue);
+                          },
+                          icon: Icon(Icons.print),
+                          label: Text('Print Invoice'),
                         ),
                         SpaceHeight(16),
-                        InkWell(
-                          onTap: () {
-                            context
-                                .read<CheckoutBloc>()
-                                .add(const CheckoutEvent.started());
-                            context
-                                .read<ProductBloc>()
-                                .add(const ProductEvent.getProducts());
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.white,
+                            minimumSize: const Size(double.infinity, 56),
+                          ),
+                          onPressed: () {
+                            context.read<CheckoutBloc>().add(const CheckoutEvent.started());
+                            context.read<ProductBloc>().add(const ProductEvent.getProducts());
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               return const HomePage();
                             }));
                           },
-                          child: Container(
-                            width: double.infinity,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'SELESAI',
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
+                          icon: Icon(Icons.check_circle),
+                          label: Text('Finish'),
                         ),
                       ],
                     ),

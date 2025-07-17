@@ -73,7 +73,7 @@ void main() {
       create: (context) => StaffBloc(StaffRemoteDatasource()),
     ),
     BlocProvider(
-      create: (context) => PrinterBloc(PrinterRemoteDatasource()),
+      create: (context) => PrinterBloc(),
     ),
     BlocProvider(
       create: (context) => BusinessSettingBloc(BusinessSettingRemoteDatasource()),

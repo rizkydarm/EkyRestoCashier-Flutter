@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
+import 'package:eky_pos/data/datasources/db_local_datasource.dart';
+import 'package:eky_pos/data/models/responses/printer_response_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:eky_pos/data/datasources/printer_remote_datasource.dart';
@@ -10,42 +12,46 @@ part 'printer_event.dart';
 part 'printer_state.dart';
 
 class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
-  final PrinterRemoteDatasource printerRemoteDatasource;
-  PrinterBloc(
-    this.printerRemoteDatasource,
-  ) : super(_Initial()) {
+  
+  PrinterBloc() : super(_Initial()) {
+
+    final dbLocalDatasource = DBLocalDatasource.instance;
+
     on<_GetPrinters>((event, emit) async {
       emit(_Loading());
-      final response = await printerRemoteDatasource.getPrinters();
-      response.fold(
-        (l) => emit(_Error('Failed')),
-        (r) {
-          if (r.data.isNotEmpty) {
-            AuthLocalDatasource().savePrinter(r.data.firstWhere(
-                (element) => element.isDefault,
-                orElse: () => r.data.first));
+      final printer = PrinterResponseModel.fromMap({
+        'data': [
+          {
+            'name': 'Printer 1',
+            'connection_type': 'Bluetooth',
+            'ip_address': '192.168.1.1',
+            'mac_address': '00:1A:7D:DA:71:13',
+            'paper_width': 58,
+            'outlet_id': 0,
+            'default': true,
+          },
+          {
+            'name': 'Printer 2',
+            'connection_type': 'Bluetooth',
+            'ip_address': '192.168.1.1',
+            'mac_address': '00:1A:7D:DA:71:13',
+            'paper_width': 58,
+            'outlet_id': 0,
+            'default': false,
           }
-          emit(_Loaded(r.data));
-        },
-      );
+        ],
+      });
+      emit(_Loaded(printer.data));
     });
 
     on<_AddPrinter>((event, emit) async {
       emit(_Loading());
-      final response = await printerRemoteDatasource.addPrinter(event.data);
-      response.fold(
-        (l) => emit(_Error('Failed')),
-        (r) => add(_GetPrinters()),
-      );
+      
     });
 
     on<_DeletePrinter>((event, emit) async {
       emit(_Loading());
-      final response = await printerRemoteDatasource.deletePrinter(event.id);
-      response.fold(
-        (l) => emit(_Error('Failed')),
-        (r) => add(_GetPrinters()),
-      );
+     
     });
   }
 }

@@ -57,103 +57,149 @@ class HomePage extends StatelessWidget {
           },
         ),
       ),
-      body: BlocBuilder<CategoryBloc, CategoryState>(
-        builder: (context, categoryState) {
-          return categoryState.maybeWhen(
-            orElse: () => Center(child: Text("No Items")),
-            loading: () => Center(child: CircularProgressIndicator()),
-            success: (categories) => BlocBuilder<ProductBloc, ProductState>(
-              builder: (context, productState) {
-                return productState.maybeWhen(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: SearchBar(
+              leading: const Icon(Icons.search),
+              hintText: 'Search product or category',
+              elevation: WidgetStateProperty.all(1),
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              )),
+              onChanged: (value) => searchedTextNotifier.value = value,
+            ),
+          ),
+          Expanded(
+            child: BlocBuilder<CategoryBloc, CategoryState>(
+              builder: (context, categoryState) {
+                return categoryState.maybeWhen(
                   orElse: () => Center(child: Text("No Items")),
                   loading: () => Center(child: CircularProgressIndicator()),
-                  success: (products) {
-                    if (products.isEmpty) {
-                      return Center(child: Text("No Items"));
-                    }
-                    return ValueListenableBuilder(
-                      valueListenable: searchedTextNotifier,
-                      builder: (context, value, child) {
-                        final filteredData = value == null ? products : products.where((product) {
-                          final searchTerm = value.toLowerCase();
-                          final isName = product.name!.toLowerCase().contains(searchTerm);
-                          final productCategory = categories.firstWhere(
-                            (cat) => cat.id == product.categoryId,
-                            orElse: () => Category(id: -1, name: '-'),
-                          );                    
-                          final isCategory = productCategory.name!.toLowerCase().contains(searchTerm);
-                          return isName || isCategory;
-                        }).toList();
-                        return ListView.builder(
-                          itemCount: filteredData.length+1,
-                          itemBuilder: (context, i) {
-                            if (i == 0) {
+                  success: (categories) => BlocBuilder<ProductBloc, ProductState>(
+                    builder: (context, productState) {
+                      return productState.maybeWhen(
+                        orElse: () => Center(child: Text("No Items")),
+                        loading: () => Center(child: CircularProgressIndicator()),
+                        success: (products) {
+                          if (products.isEmpty) {
+                            return Center(child: Text("No Items"));
+                          }
+                          return ValueListenableBuilder(
+                            valueListenable: searchedTextNotifier,
+                            builder: (context, value, child) {
+                              final filteredData = value == null ? products : products.where((product) {
+                                final searchTerm = value.toLowerCase();
+                                final isName = product.name!.toLowerCase().contains(searchTerm);
+                                final productCategory = categories.firstWhere(
+                                  (cat) => cat.id == product.categoryId,
+                                  orElse: () => Category(id: -1, name: '-'),
+                                );                    
+                                final isCategory = productCategory.name!.toLowerCase().contains(searchTerm);
+                                return isName || isCategory;
+                              }).toList();
                               return Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: SearchBar(
-                                  leading: const Icon(Icons.search),
-                                  hintText: 'Search product or category',
-                                  elevation: WidgetStateProperty.all(1),
-                                  shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  )),
-                                  onChanged: (value) => searchedTextNotifier.value = value,
-                                ),
-                              );
-                            }
-                            final index = i-1;
-                            return BlocBuilder<CheckoutBloc, CheckoutState>(
-                              builder: (context, state) {
-                                return state.maybeWhen(
-                                  orElse: () => const SizedBox(),
-                                  success: (cart, subtotal, total, qty) {
-                                    final selectedProduct = cart.any((element) => element.product.id == filteredData[index].id);
-                                    final categoryName = categories.firstWhere((element) => element.id == filteredData[index].categoryId).name ?? '-';
-                                    return ListTile(
-                                      selected: selectedProduct,
-                                      selectedTileColor: AppColors.primary.withValues(alpha: 0.4),
-                                      title: Text(filteredData[index].name ?? "-"),
-                                      subtitle: Text(categoryName),
-                                      trailing: Text(filteredData[index].price?.currencyFormatRpV3 ?? "-"),
-                                      leading: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 50,
-                                            height: 50,
-                                            child: DecoratedBox(
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(12),
-                                                color: changeStringtoColor(filteredData[index].color ?? "#000000"),
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: GridView.builder(
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 0.8,
+                                    crossAxisSpacing: 8,
+                                    mainAxisSpacing: 8,
+                                  ),
+                                  itemCount: filteredData.length,
+                                  itemBuilder: (context, index) {
+                                    final product = filteredData[index];
+                                    return BlocBuilder<CheckoutBloc, CheckoutState>(
+                                      builder: (context, state) {
+                                        return state.maybeWhen(
+                                          orElse: () => const SizedBox(),
+                                          success: (cart, subtotal, total, qty) {
+                                            final selectedProduct = cart.any((element) => element.product.id == product.id);
+                                            final categoryName = categories.firstWhere((element) => element.id == product.categoryId).name ?? '-';
+                                            return Card(
+                                              elevation: selectedProduct ? 0 : 1,
+                                              clipBehavior: Clip.antiAlias,
+                                              color: selectedProduct ? AppColors.card : AppColors.white,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  if (selectedProduct) {
+                                                    context.read<CheckoutBloc>().add(CheckoutEvent.removeFromCart(product: filteredData[index]));
+                                                  } else {
+                                                    context.read<CheckoutBloc>().add(CheckoutEvent.addToCart(product: filteredData[index]));
+                                                  }
+                                                },
+                                                child: Stack(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          SizedBox(
+                                                            width: double.infinity,
+                                                            height: 100,
+                                                            child: DecoratedBox(
+                                                              decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(8),
+                                                                color: changeStringtoColor(product.color ?? "#000000"),
+                                                              ),
+                                                              child: selectedProduct ? Icon(
+                                                                Icons.check_circle, 
+                                                                size: 30, 
+                                                                color: AppColors.white
+                                                              ) : null,
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 8),
+                                                          Text(
+                                                            product.name ?? "-",
+                                                            textAlign: TextAlign.left,
+                                                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                            maxLines: 2,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                          Text(
+                                                            categoryName,
+                                                            style: Theme.of(context).textTheme.bodyMedium,
+                                                          ),
+                                                          Spacer(),
+                                                          Text(
+                                                            product.price?.currencyFormatRpV3 ?? "-",
+                                                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          if (selectedProduct)
-                                            Icon(Icons.check_circle, size: 30, color: AppColors.white),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        if (selectedProduct) {
-                                          context.read<CheckoutBloc>().add(CheckoutEvent.removeFromCart(product: filteredData[index]));
-                                        } else {
-                                          context.read<CheckoutBloc>().add(CheckoutEvent.addToCart(product: filteredData[index]));
-                                        }
+                                            );
+                                          },
+                                        );
                                       },
                                     );
                                   },
-                                );
-                              },
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                  )
                 );
-              },
-            )
-          );
-        }
+              }
+            ),
+          ),
+        ],
       ),
     );
   }

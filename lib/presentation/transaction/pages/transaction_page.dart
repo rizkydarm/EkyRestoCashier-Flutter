@@ -34,8 +34,7 @@ class TransactionPage extends StatelessWidget {
                 child: Text('No Transactions'),
               );
             }
-            print(transactions?.length);
-            print(items?.length);
+            
             return ListView.builder(
               itemCount: transactions?.length ?? 0,
               itemBuilder: (context, index) {

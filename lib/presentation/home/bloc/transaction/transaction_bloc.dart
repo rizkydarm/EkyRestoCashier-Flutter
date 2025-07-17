@@ -15,7 +15,8 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     on<_GetAllOrder>((event, emit) async {
       emit(TransactionState.loading());
       final result = await dbLocalDatasource.getAllOrder();
-      emit(TransactionState.success(result, null, null));
+      final resultItem = await dbLocalDatasource.getAllOrderItem();
+      emit(TransactionState.success(result, resultItem, null));
     });
 
     on<_GetAllOrderItem>((event, emit) async {

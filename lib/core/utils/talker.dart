@@ -1,6 +1,8 @@
 import 'package:talker/talker.dart';
 
-final talker = Talker();
+final talker = Talker(settings: TalkerSettings(
+  enabled: false
+));
 
 void talkerInfoDB(String message) {
   talker.logCustom(TalkerLog(

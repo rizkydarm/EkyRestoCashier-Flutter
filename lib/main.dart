@@ -38,7 +38,66 @@ import 'package:eky_pos/presentation/tax_discount/bloc/business_setting/business
 import 'presentation/auth/bloc/register/register_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  final providers = [
+    BlocProvider(
+      create: (context) => RegisterBloc(AuthRemoteDataSource()),
+    ),
+    BlocProvider(
+      create: (context) => LoginBloc(AuthRemoteDataSource()),
+    ),
+    BlocProvider(
+      create: (context) => LogoutBloc(AuthRemoteDataSource()),
+    ),
+    BlocProvider(
+      create: (context) => CategoryBloc(),
+    ),
+    BlocProvider(
+      create: (context) => ProductBloc(),
+    ),
+    BlocProvider(
+      create: (context) => CheckoutBloc(),
+    ),
+    BlocProvider(
+      create: (context) => OrderBloc(),
+    ),
+    BlocProvider(
+      create: (context) => TransactionBloc(OrderRemoteDatasource()),
+    ),
+    BlocProvider(
+      create: (context) => AccountBloc(AuthLocalDatasource()),
+    ),
+    BlocProvider(
+      create: (context) => OutletBloc(OutletRemoteDatasource()),
+    ),
+    BlocProvider(
+      create: (context) => StaffBloc(StaffRemoteDatasource()),
+    ),
+    BlocProvider(
+      create: (context) => PrinterBloc(PrinterRemoteDatasource()),
+    ),
+    BlocProvider(
+      create: (context) => BusinessSettingBloc(BusinessSettingRemoteDatasource()),
+    ),
+    BlocProvider(
+      create: (context) => SalesReportBloc(SalesReportRemoteDatasource()),
+    ),
+    BlocProvider(
+      create: (context) => GetQrcodeBloc(),
+    ),
+    BlocProvider(
+      create: (context) => OnlineCheckerBloc(),
+    ),
+    BlocProvider(
+      create: (context) => OrderOfflineBloc(),
+    ),
+    BlocProvider(
+      create: (context) => TransactionOfflineBloc(),
+    ),
+  ];
+  runApp(MultiBlocProvider(
+    providers: providers,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -46,104 +105,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => RegisterBloc(AuthRemoteDataSource()),
-        ),
-        BlocProvider(
-          create: (context) => LoginBloc(AuthRemoteDataSource()),
-        ),
-        BlocProvider(
-          create: (context) => LogoutBloc(AuthRemoteDataSource()),
-        ),
-        BlocProvider(
-          create: (context) => CategoryBloc(),
-        ),
-        BlocProvider(
-          create: (context) => ProductBloc(),
-        ),
-        BlocProvider(
-          create: (context) => CheckoutBloc(),
-        ),
-        BlocProvider(
-          create: (context) => OrderBloc(OrderRemoteDatasource()),
-        ),
-        BlocProvider(
-          create: (context) => TransactionBloc(OrderRemoteDatasource()),
-        ),
-        BlocProvider(
-          create: (context) => AccountBloc(AuthLocalDatasource()),
-        ),
-        BlocProvider(
-          create: (context) => OutletBloc(OutletRemoteDatasource()),
-        ),
-        BlocProvider(
-          create: (context) => StaffBloc(StaffRemoteDatasource()),
-        ),
-        BlocProvider(
-          create: (context) => PrinterBloc(PrinterRemoteDatasource()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              BusinessSettingBloc(BusinessSettingRemoteDatasource()),
-        ),
-        BlocProvider(
-          create: (context) => SalesReportBloc(SalesReportRemoteDatasource()),
-        ),
-        BlocProvider(
-          create: (context) => GetQrcodeBloc(),
-        ),
-        BlocProvider(
-          create: (context) => OnlineCheckerBloc(),
-        ),
-        BlocProvider(
-          create: (context) => OrderOfflineBloc(),
-        ),
-        BlocProvider(
-          create: (context) => TransactionOfflineBloc(),
-        ),
-        // BlocProvider(
-        //   create: (context) => SyncOrderBloc(
-        //       DBLocalDatasource.instance, OrderRemoteDatasource()),
-        // ),
-        // BlocProvider(
-        //   create: (context) =>
-        //       BusinessSettingLocalBloc(BusinessSettingLocalDatasource()),
-        // ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Eky POS',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-          useMaterial3: true,
-          appBarTheme: AppBarTheme(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.white,
-            elevation: 0,
-            titleTextStyle: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Eky POS',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+        useMaterial3: true,
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.white,
+          elevation: 0,
+          titleTextStyle: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        home: HomePage(),
-        // FutureBuilder<AuthResponseModel?>(
-        //     future: AuthLocalDatasource().getUserData(),
-        //     builder: (context, snapshot) {
-        //       if (snapshot.hasData) {
-        //         if (snapshot.data != null &&
-        //             snapshot.data!.accessToken != null) {
-        //           return const HomePage();
-        //         } else {
-        //           return const SplashPage();
-        //         }
-        //       } else {
-        //         return const SplashPage();
-        //       }
-        //     }),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            textStyle: WidgetStatePropertyAll(TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            )),
+          ),
+        ),
       ),
+      home: HomePage(),
     );
   }
 }

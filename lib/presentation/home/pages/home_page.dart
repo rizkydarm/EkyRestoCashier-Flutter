@@ -20,7 +20,6 @@ class HomePage extends StatelessWidget {
     final scaffoldKey = GlobalKey<ScaffoldState>();
     context.read<ProductBloc>().add(ProductEvent.getProducts());
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
-    // final selectedProductsValue = ValueNotifier<IList<int>>(ilist([]));
     final searchValue = ValueNotifier<String?>(null);
     return Scaffold(
       key: scaffoldKey,
@@ -40,6 +39,10 @@ class HomePage extends StatelessWidget {
               orElse: () => const SizedBox(),
               loading: () => const Center(child: CircularProgressIndicator()),
               success: (cart, subtotal, total, qty) => ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.white,
+                ),
                 onPressed: cart.isEmpty ? null : () {
                   Navigator.push(
                     context, MaterialPageRoute(

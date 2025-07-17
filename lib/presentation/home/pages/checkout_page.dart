@@ -1,6 +1,5 @@
 import 'package:eky_pos/core/components/spaces.dart';
 import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/data/models/responses/product_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/extensions/int_ext.dart';
@@ -22,7 +21,13 @@ class CheckoutPage extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         child: ElevatedButton.icon(
-          onPressed: () => Navigator.push(context,MaterialPageRoute(builder: (_) => const PaymentPage()),),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.white,
+          ),
+          onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const PaymentPage()),
+          ),
           icon: const Icon(Icons.payment),
           label: const Text('Pay'),
         )
@@ -36,7 +41,9 @@ class CheckoutPage extends StatelessWidget {
                 ListView.builder(
                   itemCount: cart.length,
                   itemBuilder: (_, i) => ListTile(
-                    leading: Text(cart[i].quantity.toString()),
+                    leading: Text(cart[i].quantity.toString(),
+                      style: const TextStyle(fontSize: 16),
+                    ),
                     title: Text(
                       '${cart[i].product.name}',
                       maxLines: 2,
@@ -44,12 +51,11 @@ class CheckoutPage extends StatelessWidget {
                     ),
                     subtitle: Text(
                       (cart[i].product.price!.toDouble * cart[i].quantity).currencyFormatRp,
-                      style: const TextStyle(fontSize: 16),
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 8,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.add),
@@ -113,15 +119,17 @@ class CheckoutPage extends StatelessWidget {
             success: (orders, subtotal, total, qty) => Column(
               children: [
                 const Divider(thickness: 1),
-                _line('Jumlah Item', qty.toString()),
                 const SpaceHeight(8),
-                _line('Subtotal', subtotal.currencyFormatRp),
+                _line('Jumlah Item', qty.toString()),
+                // const SpaceHeight(8),
+                // _line('Subtotal', subtotal.currencyFormatRp),
                 const SpaceHeight(8),
                 _line(
                   'Total',
                   total.currencyFormatRp,
                   bold: true,
                 ),
+                const SpaceHeight(8),
               ],
             ),
             orElse: () => const SizedBox(),

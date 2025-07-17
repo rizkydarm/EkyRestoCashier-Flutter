@@ -22,12 +22,8 @@ class OrderOfflineBloc extends Bloc<OrderOfflineEvent, OrderOfflineState> {
   OrderOfflineBloc() : super(_Initial()) {
     on<_CreateOfflineOrder>((event, emit) async {
       emit(const OrderOfflineState.loading());
-      final userData = await AuthLocalDatasource().getUserData();
       try {
-        // create transactionId unik
         final transactionId = _generateTransactionId();
-
-        // create model transaksi
         final transaction = TransactionModel(
           transactionId: transactionId,
           orderNumber: transactionId.substring(0, 8).toUpperCase(),
@@ -35,11 +31,10 @@ class OrderOfflineBloc extends Bloc<OrderOfflineEvent, OrderOfflineState> {
           subTotal: event.orderRequestModel.subtotal.toString(),
           totalPrice: event.orderRequestModel.totalPrice.toString(),
           totalItems: event.orderRequestModel.totalItems,
-          // tax: event.orderRequestModel.tax.toString(),
           discount: event.orderRequestModel.discount.toString(),
           paymentMethod: event.orderRequestModel.paymentMethod,
           status: 'pending',
-          cashierId: userData?.data?.id ?? 0,
+          cashierId: 0,
           createdAt: DateTime.now(),
           items: event.orderRequestModel.items.map((p) {
             return Item(
@@ -51,7 +46,6 @@ class OrderOfflineBloc extends Bloc<OrderOfflineEvent, OrderOfflineState> {
             );
           }).toList(),
         );
-
         await DBLocalDatasource.instance.saveOrder(transaction);
         emit(OrderOfflineState.success(transaction));
       } catch (e) {

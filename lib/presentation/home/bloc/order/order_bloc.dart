@@ -10,19 +10,17 @@ part 'order_event.dart';
 part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  final OrderRemoteDatasource orderRemoteDatasource;
-  OrderBloc(
-    this.orderRemoteDatasource,
-  ) : super(_Initial()) {
+  OrderBloc() : super(_Initial()) {
+    
     on<_CreateOrder>((event, emit) async {
       emit(OrderState.loading());
-      final result = await orderRemoteDatasource.createOrder(
-        orderRequestModel: event.orderRequestModel,
-      );
-      result.fold(
-        (l) => emit(_Error(l)),
-        (r) => emit(_Success(r)),
-      );
+      // final result = await orderRemoteDatasource.createOrder(
+      //   orderRequestModel: event.orderRequestModel,
+      // );
+      // result.fold(
+      //   (l) => emit(_Error(l)),
+      //   (r) => emit(_Success(r)),
+      // );
     });
   }
 }

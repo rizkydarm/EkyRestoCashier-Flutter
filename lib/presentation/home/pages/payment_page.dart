@@ -79,11 +79,10 @@ class PaymentPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SpaceHeight(16.0),
             Row(
               children: [
                 Text(
-                  'Nominal Payment',
+                  'Payment Method',
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16,
@@ -96,9 +95,96 @@ class PaymentPage extends StatelessWidget {
             StatefulBuilder(
               builder: (context, setState) {
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Card(
+                          color: isCash ? AppColors.primary : AppColors.white,
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                          onTap: () => setState(() => isCash = true),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: isCash ? AppColors.white : AppColors.primary,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(Icons.money,
+                                        color: isCash ? AppColors.primary : AppColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SpaceWidth(16),
+                                  Text('Cash',
+                                    style: TextStyle(
+                                      color: isCash ? AppColors.white : AppColors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    )
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SpaceWidth(16),
+                        Card(
+                          color: !isCash ? AppColors.primary : AppColors.white,
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                          onTap: () => setState(() => isCash = false),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: !isCash ? AppColors.white : AppColors.primary,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(Icons.qr_code,
+                                        color: !isCash ? AppColors.primary : AppColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SpaceWidth(16),
+                                  Text('QRIS',
+                                    style: TextStyle(
+                                      color: !isCash ? AppColors.white : AppColors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    )
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SpaceHeight(16.0),
+                    Text(
+                      'Nominal Payment',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SpaceHeight(16.0),
                     TextField(
-                      enabled: !sameNominal,
+                      enabled: isCash ? !sameNominal : false,
                       controller: nominalController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
@@ -127,104 +213,10 @@ class PaymentPage extends StatelessWidget {
                       children: [
                         Switch(
                           value: sameNominal,
-                          onChanged: (value) => setState(() => sameNominal = !sameNominal),
+                          onChanged: isCash ? (value) => setState(() => sameNominal = !sameNominal) : null,
                         ),
                         const Text('Same Nominal'),
                       ],
-                    ),
-                  ],
-                );
-              }
-            ),
-            const SpaceHeight(16.0),
-            Row(
-              children: [
-                Text(
-                  'Payment Method',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-            const SpaceHeight(16.0),
-            StatefulBuilder(
-              builder: (context, setState) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Card(
-                      color: isCash ? AppColors.primary : AppColors.white,
-                      clipBehavior: Clip.antiAlias,
-                      child: InkWell(
-                      onTap: () => setState(() => isCash = true),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: isCash ? AppColors.white : AppColors.primary,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(Icons.money,
-                                    color: isCash ? AppColors.primary : AppColors.white,
-                                  ),
-                                ),
-                              ),
-                              const SpaceWidth(16),
-                              Text('Cash',
-                                style: TextStyle(
-                                  color: isCash ? AppColors.white : AppColors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                )
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SpaceWidth(16),
-                    Card(
-                      color: !isCash ? AppColors.primary : AppColors.white,
-                      clipBehavior: Clip.antiAlias,
-                      child: InkWell(
-                      onTap: () => setState(() => isCash = false),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: !isCash ? AppColors.white : AppColors.primary,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(Icons.qr_code,
-                                    color: !isCash ? AppColors.primary : AppColors.white,
-                                  ),
-                                ),
-                              ),
-                              const SpaceWidth(16),
-                              Text('QRIS',
-                                style: TextStyle(
-                                  color: !isCash ? AppColors.white : AppColors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                )
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 );
@@ -252,22 +244,13 @@ class PaymentPage extends StatelessWidget {
                   success: (orders, subtotal, totalPayment, qty) {
                     return qty;
                   },
-                );
-                    
-                // double tax = state.maybeWhen(
-                //   orElse: () => 0,
-                //   success: (orders, subtotal, totalPayment, qty) {
-                //     return tax;
-                //   },
-                // );
-                    
+                );                    
                 double discount = state.maybeWhen(
                   orElse: () => 0,
                   success: (orders, subtotal, totalPayment, qty) {
                     return 0;
                   },
                 );
-                    
                 List<ProductQuantity> items = state.maybeWhen(
                   orElse: () => [],
                   success: (orders, subtotal, totalPayment, qty) {
@@ -305,54 +288,47 @@ class PaymentPage extends StatelessWidget {
                         );
                       },
                     ),
-                    BlocListener<OrderOfflineBloc, OrderOfflineState>(
-                      listener: (context, state) {
-                        state.maybeWhen(
-                          success: (trx) => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => InvoiceOfflinePage(
-                                nominal: nominalController
-                                    .text.toIntegerFromText
-                                    .toDouble(),
-                                totalPrice: double.parse(trx.totalPrice ?? '0'),
-                                transaction: trx, // TransactionModel lokal
-                              ),
-                            ),
-                          ),
-                          error: (msg) =>
-                              ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text(msg),
-                                backgroundColor: AppColors.error),
-                          ),
-                          orElse: () {},
-                        );
-                      },
-                    ),
+                    // BlocListener<OrderOfflineBloc, OrderOfflineState>(
+                    //   listener: (context, state) {
+                    //     state.maybeWhen(
+                    //       success: (trx) => Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (_) => InvoiceOfflinePage(
+                    //             nominal: nominalController
+                    //               .text.toIntegerFromText
+                    //               .toDouble(),
+                    //             totalPrice: double.parse(trx.totalPrice ?? '0'),
+                    //             transaction: trx,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
+                    //         SnackBar(
+                    //           content: Text(msg),
+                    //           backgroundColor: AppColors.error,
+                    //         ),
+                    //       ),
+                    //       orElse: () {},
+                    //     );
+                    //   },
+                    // ),
                   ],
                   child: ElevatedButton(
-                    onPressed: () async {
-                      final outlet =
-                          await AuthLocalDatasource().getOutletData();
-                    
+                    onPressed: () {
                       final request = OrderRequestModel(
-                        outletId: outlet.id!,
+                        outletId: 0,
                         subtotal: subtotal,
                         totalPrice: totalPrice,
                         totalItems: totalItems,
-                        // tax: tax,
                         discount: discount,
                         paymentMethod: isCash ? 'Cash' : 'QRIS',
                         items: items,
                       );
-                    
-                      await _submitPayment(
-                        context: context,
-                        request: request,
-                        nominal:
-                            nominalController.text.toIntegerFromText.toDouble(),
-                        totalPrice: totalPrice,
+                      context.read<OrderOfflineBloc>().add(
+                        OrderOfflineEvent.createOfflineOrder(
+                          orderRequestModel: request,
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -369,43 +345,6 @@ class PaymentPage extends StatelessWidget {
                     ),
                     child: const Text('Bayar'),
                   ),
-                    
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     final outletData =
-                  //         await AuthLocalDatasource().getOutletData();
-                    
-                  //     final data = OrderRequestModel(
-                  //       outletId: outletData.id!,
-                  //       subtotal: subtotal,
-                  //       totalPrice: totalPrice,
-                  //       totalItems: totalItems,
-                  //       tax: tax,
-                  //       discount: discount,
-                  //       paymentMethod: paymentMethod,
-                  //       items: items,
-                  //     );
-                    
-                  //     context
-                  //         .read<OrderBloc>()
-                  //         .add(OrderEvent.createOrder(data));
-                  //   },
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: AppColors.primary,
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //     padding: const EdgeInsets.symmetric(vertical: 16),
-                  //   ),
-                  //   child: Text(
-                  //     'Bayar',
-                  //     style: TextStyle(
-                  //       color: AppColors.white,
-                  //       fontSize: 18,
-                  //       fontWeight: FontWeight.w700,
-                  //     ),
-                  //   ),
-                  // ),
                 );
               },
             ),
@@ -413,30 +352,5 @@ class PaymentPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _submitPayment({
-    required BuildContext context,
-    required OrderRequestModel request,
-    required double nominal,
-    required double totalPrice,
-  }) async {
-    // Apakah perangkat sedang online?
-    final bool isOnline = context
-        .read<OnlineCheckerBloc>()
-        .state
-        .maybeWhen(online: () => true, orElse: () => false);
-
-    if (isOnline) {
-      // Kirim langsung ke server.
-      context.read<OrderBloc>().add(OrderEvent.createOrder(request));
-    } else {
-      // Simpan lokal (offline).
-      context.read<OrderOfflineBloc>().add(
-            OrderOfflineEvent.createOfflineOrder(
-              orderRequestModel: request,
-            ),
-          );
-    }
   }
 }

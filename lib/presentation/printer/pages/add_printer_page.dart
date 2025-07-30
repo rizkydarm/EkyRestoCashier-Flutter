@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/components/spaces.dart';
 import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
+// import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
 import 'package:eky_pos/data/models/requests/printer_request_model.dart';
 import 'package:eky_pos/presentation/printer/bloc/printer/printer_bloc.dart';
 import 'package:eky_pos/presentation/printer/pages/dialog_search_printer.dart';
@@ -212,15 +212,15 @@ class _AddPrinterPageState extends State<AddPrinterPage> {
                           ),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              final outletData =
-                                  await AuthLocalDatasource().getOutletData();
+                              // final outletData =
+                              //     await AuthLocalDatasource().getOutletData();
                               final data = PrinterModel(
                                 name: _nameController.text,
                                 connectionType: _connectionType,
                                 ipAddress: _ipAddressController.text,
                                 macAddress: _macAddressController.text,
                                 paperWidth: _paperWidth,
-                                outletId: outletData.id!,
+                                outletId: 0,
                                 isDefault: _isDefault,
                               );
 

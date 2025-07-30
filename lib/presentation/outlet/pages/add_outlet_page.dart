@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
+// import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
 import 'package:eky_pos/data/models/requests/outlet_request_model.dart';
 import 'package:eky_pos/presentation/outlet/bloc/outlet/outlet_bloc.dart';
 
@@ -145,15 +145,15 @@ class _AddOutletPageState extends State<AddOutletPage> {
                           ),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              final authData =
-                                  await AuthLocalDatasource().getUserData();
-                              final businessId = authData?.data?.businessId;
+                              // final authData =
+                              //     await AuthLocalDatasource().getUserData();
+                              final businessId = 0;
                               final data = OutletRequestModel(
                                 name: _outletNameController.text,
                                 address: _outletAddressController.text,
                                 phone: _outletPhoneController.text,
                                 description: _outletDescController.text,
-                                businessId: businessId!,
+                                businessId: businessId,
                               );
 
                               context.read<OutletBloc>().add(

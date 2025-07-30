@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../data/datasources/db_local_datasource.dart';
-import '../../../../data/datasources/order_remote_datasource.dart';
+// import '../../../../data/datasources/order_remote_datasource.dart';
 import '../../../../data/models/requests/order_request_model.dart';
 import '../../../../data/models/responses/product_response_model.dart';
 import '../../../home/models/product_quantity.dart';
@@ -16,10 +16,10 @@ part 'sync_order_state.dart';
 
 class SyncOrderBloc extends Bloc<SyncOrderEvent, SyncOrderState> {
   final DBLocalDatasource local;
-  final OrderRemoteDatasource remote;
+  // final OrderRemoteDatasource remote;
   SyncOrderBloc(
     this.local,
-    this.remote,
+    // this.remote,
   ) : super(_Initial()) {
     on<_SyncAll>((event, emit) async {
       emit(const SyncOrderState.loading());
@@ -98,11 +98,11 @@ class SyncOrderBloc extends Bloc<SyncOrderEvent, SyncOrderState> {
           // );
 
           try {
-            final res = await remote.createOrder(orderRequestModel: req);
-            res.fold(
-              (l) => log('API error: $l'),
-              (_) => log('Success send ${localTrx.transactionId}'),
-            );
+            // final res = await remote.createOrder(orderRequestModel: req);
+            // res.fold(
+            //   (l) => log('API error: $l'),
+            //   (_) => log('Success send ${localTrx.transactionId}'),
+            // );
           } catch (e) {
             log('Exception: $e');
           } finally {

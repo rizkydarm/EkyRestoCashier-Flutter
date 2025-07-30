@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/components/spaces.dart';
 import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
+// import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
 import 'package:eky_pos/data/models/requests/staff_request_model.dart';
 import 'package:eky_pos/presentation/outlet/bloc/outlet/outlet_bloc.dart';
 import 'package:eky_pos/presentation/staff/bloc/staff/staff_bloc.dart';
@@ -189,9 +189,9 @@ class _AddStaffPageState extends State<AddStaffPage> {
                         ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            final authData =
-                                await AuthLocalDatasource().getUserData();
-                            int businessId = authData?.data?.businessId ?? 0;
+                            // final authData =
+                            //     await AuthLocalDatasource().getUserData();
+                            int businessId = 0;
                             final data = StaffRequestModel(
                               name: _nameController.text,
                               email: _emailController.text,

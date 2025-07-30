@@ -7,7 +7,7 @@ import 'package:eky_pos/core/extensions/int_ext.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/core/utils/helper_pdf_service.dart';
 import 'package:eky_pos/core/utils/permession.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
+// import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
 import 'package:eky_pos/data/models/responses/sales_report_response_model.dart';
 import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
 import 'package:eky_pos/presentation/sales_report/bloc/sales_report/sales_report_bloc.dart';
@@ -111,21 +111,21 @@ class _SalesReportPageState extends State<SalesReportPage> {
                               width: 50,
                               child: GestureDetector(
                                 onTap: () async {
-                                  final outlet = await AuthLocalDatasource()
-                                      .getOutletData();
+                                  // final outlet = await AuthLocalDatasource()
+                                  //     .getOutletData();
                                   if (salesReport != null) {
                                     final date = DateFormat('yyyy-MM-dd')
                                         .format(selectedDate);
                                     final status = await PermessionHelper()
                                         .checkPermissionStorege();
                                     if (status.isGranted) {
-                                      final pdfFile =
-                                          await SalesInvoiceWidget.generate(
-                                        date,
-                                        salesReport!,
-                                        outlet,
-                                      );
-                                      HelperPdfService.openFile(pdfFile);
+                                      // final pdfFile =
+                                      //     await SalesInvoiceWidget.generate(
+                                      //   date,
+                                      //   salesReport!,
+                                      //   outlet,
+                                      // );
+                                      // HelperPdfService.openFile(pdfFile);
                                     }
                                   }
                                 },

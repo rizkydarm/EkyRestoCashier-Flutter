@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
+// import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
 import 'package:eky_pos/data/datasources/db_local_datasource.dart';
 import 'package:eky_pos/data/models/responses/printer_response_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:eky_pos/data/datasources/printer_remote_datasource.dart';
+// import 'package:eky_pos/data/datasources/printer_remote_datasource.dart';
 import 'package:eky_pos/data/models/requests/printer_request_model.dart';
 
 part 'printer_bloc.freezed.dart';

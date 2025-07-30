@@ -2,7 +2,6 @@ import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:eky_pos/core/extensions/int_ext.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
 import 'package:eky_pos/presentation/home/models/product_quantity.dart';
 
 import 'package:intl/intl.dart';
@@ -53,20 +52,16 @@ class CwbPrint {
     //   bytes += generator.feed(2);
     // }
 
-    final outletData = await AuthLocalDatasource().getOutletData();
+    // bytes += generator.text('${outletData.name}',
+    //     styles: const PosStyles(
+    //       bold: true,
+    //       align: PosAlign.center,
+    //       height: PosTextSize.size1,
+    //       width: PosTextSize.size1,
+    //     ));
 
-    final authData = await AuthLocalDatasource().getUserData();
-
-    bytes += generator.text('${outletData.name}',
-        styles: const PosStyles(
-          bold: true,
-          align: PosAlign.center,
-          height: PosTextSize.size1,
-          width: PosTextSize.size1,
-        ));
-
-    bytes += generator.text('${outletData.address}',
-        styles: const PosStyles(bold: false, align: PosAlign.center));
+    // bytes += generator.text('${outletData.address}',
+    //     styles: const PosStyles(bold: false, align: PosAlign.center));
 
     // bytes += generator.feed(1);
     //58 mm
@@ -119,7 +114,7 @@ class CwbPrint {
         styles: const PosStyles(align: PosAlign.left),
       ),
       PosColumn(
-        text: '${authData?.data!.name}',
+        text: 'Nama Kasir',
         width: 6,
         styles: const PosStyles(align: PosAlign.left),
       ),

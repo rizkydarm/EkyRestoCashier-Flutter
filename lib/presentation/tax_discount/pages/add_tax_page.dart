@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
+// import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
 import 'package:eky_pos/data/models/requests/business_setting_request_model.dart';
 import 'package:eky_pos/presentation/tax_discount/bloc/business_setting/business_setting_bloc.dart';
 
@@ -149,15 +149,15 @@ class _AddTaxPageState extends State<AddTaxPage> {
                         ),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            final authData =
-                                await AuthLocalDatasource().getUserData();
+                            // final authData =
+                            //     await AuthLocalDatasource().getUserData();
                             //add tax
                             final data = BusinessSettingRequestModel(
                               nameController.text,
                               chargeType,
                               type,
                               valueController.text,
-                              authData!.data!.businessId!,
+                              0,
                               null
                             );
 

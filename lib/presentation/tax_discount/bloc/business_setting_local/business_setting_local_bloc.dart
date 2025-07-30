@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../data/datasources/business_setting_local_datasource.dart';
+// import '../../../../data/datasources/business_setting_local_datasource.dart';
 import '../../../../data/models/responses/tax_discount_model.dart';
 
 part 'business_setting_local_bloc.freezed.dart';
@@ -10,19 +10,19 @@ part 'business_setting_local_state.dart';
 
 class BusinessSettingLocalBloc
     extends Bloc<BusinessSettingLocalEvent, BusinessSettingLocalState> {
-  final BusinessSettingLocalDatasource datasource;
+  // final BusinessSettingLocalDatasource datasource;
   BusinessSettingLocalBloc(
-    this.datasource,
+    // this.datasource,
   ) : super(_Initial()) {
     // Ambil semua data
     on<_GetBusinessSetting>((event, emit) async {
-      emit(const _Loading());
-      try {
-        final data = await datasource.getBusinessSetting();
-        emit(_Loaded(data));
-      } catch (e) {
-        emit(_Error(e.toString()));
-      }
+      // emit(const _Loading());
+      // try {
+      //   final data = await datasource.getBusinessSetting();
+      //   emit(_Loaded(data));
+      // } catch (e) {
+      //   emit(_Error(e.toString()));
+      // }
     });
 
     // // Tambah

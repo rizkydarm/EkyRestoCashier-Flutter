@@ -2,23 +2,7 @@ import 'package:eky_pos/core/utils/talker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
-import 'package:eky_pos/data/datasources/auth_remote_datasource.dart';
-import 'package:eky_pos/data/datasources/business_setting_local_datasource.dart';
-import 'package:eky_pos/data/datasources/business_setting_remote_datasource.dart';
-import 'package:eky_pos/data/datasources/category_remote_datasource.dart';
 import 'package:eky_pos/data/datasources/db_local_datasource.dart';
-import 'package:eky_pos/data/datasources/order_remote_datasource.dart';
-import 'package:eky_pos/data/datasources/outlet_remote_datasource.dart';
-import 'package:eky_pos/data/datasources/printer_remote_datasource.dart';
-import 'package:eky_pos/data/datasources/product_remote_datasource.dart';
-import 'package:eky_pos/data/datasources/sales_report_remote_datasource.dart';
-import 'package:eky_pos/data/datasources/staff_remote_datasource.dart';
-import 'package:eky_pos/data/models/responses/auth_response_model.dart';
-import 'package:eky_pos/presentation/auth/bloc/account/account_bloc.dart';
-import 'package:eky_pos/presentation/auth/bloc/login/login_bloc.dart';
-import 'package:eky_pos/presentation/auth/bloc/logout/logout_bloc.dart';
-import 'package:eky_pos/presentation/auth/pages/splash_page.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/online_checker/online_checker_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/order/order_bloc.dart';
@@ -39,15 +23,15 @@ import 'presentation/auth/bloc/register/register_bloc.dart';
 
 void main() {
   final providers = [
-    BlocProvider(
-      create: (context) => RegisterBloc(AuthRemoteDataSource()),
-    ),
-    BlocProvider(
-      create: (context) => LoginBloc(AuthRemoteDataSource()),
-    ),
-    BlocProvider(
-      create: (context) => LogoutBloc(AuthRemoteDataSource()),
-    ),
+    // BlocProvider(
+    //   create: (context) => RegisterBloc(AuthRemoteDataSource()),
+    // ),
+    // BlocProvider(
+    //   create: (context) => LoginBloc(AuthRemoteDataSource()),
+    // ),
+    // BlocProvider(
+    //   create: (context) => LogoutBloc(AuthRemoteDataSource()),
+    // ),
     BlocProvider(
       create: (context) => CategoryBloc(),
     ),
@@ -63,24 +47,24 @@ void main() {
     BlocProvider(
       create: (context) => TransactionBloc(),
     ),
-    BlocProvider(
-      create: (context) => AccountBloc(AuthLocalDatasource()),
-    ),
-    BlocProvider(
-      create: (context) => OutletBloc(OutletRemoteDatasource()),
-    ),
-    BlocProvider(
-      create: (context) => StaffBloc(StaffRemoteDatasource()),
-    ),
+    // BlocProvider(
+    //   create: (context) => AccountBloc(AuthLocalDatasource()),
+    // ),
+    // BlocProvider(
+    //   create: (context) => OutletBloc(OutletRemoteDatasource()),
+    // ),
+    // BlocProvider(
+    //   create: (context) => StaffBloc(StaffRemoteDatasource()),
+    // ),
     BlocProvider(
       create: (context) => PrinterBloc(),
     ),
-    BlocProvider(
-      create: (context) => BusinessSettingBloc(BusinessSettingRemoteDatasource()),
-    ),
-    BlocProvider(
-      create: (context) => SalesReportBloc(SalesReportRemoteDatasource()),
-    ),
+    // BlocProvider(
+    //   create: (context) => BusinessSettingBloc(BusinessSettingRemoteDatasource()),
+    // ),
+    // BlocProvider(
+    //   create: (context) => SalesReportBloc(SalesReportRemoteDatasource()),
+    // ),
     BlocProvider(
       create: (context) => GetQrcodeBloc(),
     ),

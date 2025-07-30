@@ -21,20 +21,43 @@ class CheckoutPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Checkout'),
         centerTitle: true,
-        automaticallyImplyLeading: sizingInformation.deviceScreenType == DeviceScreenType.mobile,
+        automaticallyImplyLeading: sizingInformation.isMobile,
       ),
       bottomNavigationBar: BottomAppBar(
-        child: ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.white,
-          ),
-          onPressed: () => Navigator.push(context,
-            MaterialPageRoute(builder: (_) => const PaymentPage()),
-          ),
-          icon: const Icon(Icons.payment),
-          label: const Text('Pay'),
-        )
+        child: BlocBuilder<CheckoutBloc, CheckoutState>(
+          builder: (context, state) {
+            return state.maybeWhen(
+              orElse: () => const SizedBox.shrink(),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              success: (cart, subtotal, total, qty) => ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.white,
+                ),
+                onPressed: cart.isEmpty ? null : sizingInformation.isMobile ? () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const PaymentPage()),
+                ) : () => showDialog(
+                  context: context,
+                  useRootNavigator: true,
+                  builder: (context) => Dialog(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: SizedBox(
+                      // height: MediaQuery.of(context).size.height * 0.99,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: PaymentPage(),
+                    ),
+                  ),
+                ),
+                icon: const Icon(Icons.payment),
+                label: const Text('Pay'),
+              )
+            );
+          },
+        ),
+        
       ),
       body: Column(
         children: [
@@ -65,14 +88,14 @@ class CheckoutPage extends StatelessWidget {
                           icon: const Icon(Icons.add),
                           color: AppColors.green,
                           onPressed: () {
-                            context.read<CheckoutBloc>().add(CheckoutEvent.addToCart(product: cart[i].product));
+                            context.read<CheckoutBloc>().add(CheckoutEvent.incrementProduct(product: cart[i].product));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.remove),
                           color: AppColors.red,
                           onPressed: () {
-                            context.read<CheckoutBloc>().add(CheckoutEvent.removeFromCart(product: cart[i].product));
+                            context.read<CheckoutBloc>().add(CheckoutEvent.decrementProduct(product: cart[i].product));
                           },
                         ),
                       ],

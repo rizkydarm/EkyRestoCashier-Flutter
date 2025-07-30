@@ -22,29 +22,37 @@ class HomePage extends StatelessWidget {
     context.read<ProductBloc>().add(ProductEvent.getProducts());
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
 
-    return ResponsiveBuilder(
-      builder: (context, sizingInformation) {
-        switch (sizingInformation.deviceScreenType) {
-          case DeviceScreenType.desktop:
-          case DeviceScreenType.tablet:
-            return Row(
-              children: [ 
-                Expanded(
-                  flex: 3,
-                  child: HomePageMobile(sizingInformation: sizingInformation)
-                ),
-                Expanded(
-                  flex: 2,
-                  child: CheckoutPage(sizingInformation: sizingInformation)
-                ),
-              ],
-            );
-          case DeviceScreenType.mobile:
-            return HomePageMobile(sizingInformation: sizingInformation);
-          default:
-            return const SizedBox();
-        }
-      },
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return ResponsiveBuilder(
+          builder: (context, sizingInformation) {
+            switch (sizingInformation.deviceScreenType) {
+              case DeviceScreenType.desktop:
+              case DeviceScreenType.tablet:
+              if (orientation == Orientation.landscape) {
+                return Row(
+                  children: [ 
+                    Expanded(
+                      flex: 2,
+                      child: HomePageMobile(sizingInformation: sizingInformation)
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: CheckoutPage(sizingInformation: sizingInformation)
+                    ),
+                  ],
+                );
+              } else {
+                return HomePageMobile(sizingInformation: sizingInformation);
+              }
+              case DeviceScreenType.mobile:
+                return HomePageMobile(sizingInformation: sizingInformation);
+              default:
+                return const SizedBox();
+            }
+          },
+        );
+      }
     );
   }
 }
@@ -62,6 +70,7 @@ class HomePageMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     final searchedTextNotifier = ValueNotifier<String?>(null);
     final scaffoldKey = GlobalKey<ScaffoldState>();
+    final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       key: scaffoldKey,
       drawer: DrawerWidget(),
@@ -73,11 +82,11 @@ class HomePageMobile extends StatelessWidget {
           onPressed: () => scaffoldKey.currentState?.openDrawer(),
         ),
       ),
-      bottomNavigationBar: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? BottomAppBar(
+      bottomNavigationBar: orientation == Orientation.portrait || sizingInformation.isMobile ? BottomAppBar(
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
           builder: (context, state) {
             return state.maybeWhen(
-              orElse: () => const SizedBox(),
+              orElse: () => const SizedBox.shrink(),
               loading: () => const Center(child: CircularProgressIndicator()),
               success: (cart, subtotal, total, qty) => ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
@@ -145,7 +154,7 @@ class HomePageMobile extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(horizontal: 16),
                                 child: GridView.builder(
                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
+                                    crossAxisCount: sizingInformation.isMobile ? 2 : 3,
                                     childAspectRatio: 0.8,
                                     crossAxisSpacing: 8,
                                     mainAxisSpacing: 8,
@@ -182,7 +191,7 @@ class HomePageMobile extends StatelessWidget {
                                                         children: [
                                                           SizedBox(
                                                             width: double.infinity,
-                                                            height: 100,
+                                                            height: sizingInformation.isMobile ? 100 : 150,
                                                             child: DecoratedBox(
                                                               decoration: BoxDecoration(
                                                                 borderRadius: BorderRadius.circular(8),

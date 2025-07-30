@@ -3,15 +3,22 @@ part of 'checkout_bloc.dart';
 @freezed
 class CheckoutEvent with _$CheckoutEvent {
   const factory CheckoutEvent.started() = _Started;
-  //add to product
+  
   const factory CheckoutEvent.addToCart({
     required Product product,
   }) = _AddToCart;
 
-  //remove from cart
   const factory CheckoutEvent.removeFromCart({
     required Product product,
   }) = _RemoveFromCart;
+
+  const factory CheckoutEvent.incrementProduct({
+    required Product product,
+  }) = _IncrementProduct;
+
+  const factory CheckoutEvent.decrementProduct({
+    required Product product,
+  }) = _DecrementProduct;
 
   //addDiscount
   // const factory CheckoutEvent.addDiscount({

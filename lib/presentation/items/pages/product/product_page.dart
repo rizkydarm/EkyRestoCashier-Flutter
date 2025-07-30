@@ -14,65 +14,12 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ProductBloc>().add(ProductEvent.getProducts());
-    context.read<CategoryBloc>().add(CategoryEvent.getCategories());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
         centerTitle: true
       ),
-      body: BlocBuilder<ProductBloc, ProductState>(
-        builder: (context, state) {
-          return state.maybeWhen(
-            orElse: () => Center(child: Text("No Items")),
-            loading: () => Center(child: CircularProgressIndicator()),
-            error: (message) => Center(child: Text(message)),
-            success: (data) {
-              if (data.isEmpty) {
-                return Center(child: Text("No Items"));
-              }
-              return ListView.separated(
-                itemCount: data.length,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) {
-                  final product = data[index];
-                  return ListTile(
-                    leading: product.image != null ? ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        '${Variables.baseUrl}${product.image!}',
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ) : Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: changeStringtoColor(product.color ?? ""),
-                      ),
-                    ),
-                    title: Text(product.name ?? "-"),
-                    subtitle: BlocBuilder<CategoryBloc, CategoryState>(
-                      builder: (context, state) {
-                        final categories = state.maybeWhen(
-                          orElse: () => [],
-                          success: (data) => data,
-                        );
-                        final categoryName = categories.firstWhere((element) => element.id == product.categoryId)?.name ?? "-";
-                        return Text("Category: $categoryName");
-                      }
-                    ),
-                    trailing: Text(product.price!.currencyFormatRpV3, style: TextStyle(fontSize: 14)),
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProductPage(data: product))),
-                  );
-                },
-              );
-            },
-          );
-        },
-      ),
+      body: ProductBlocListView(),
       floatingActionButton: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {
           final categories = state.maybeWhen(
@@ -93,6 +40,68 @@ class ProductPage extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class ProductBlocListView extends StatelessWidget {
+  const ProductBlocListView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProductBloc, ProductState>(
+      builder: (context, state) {
+        return state.maybeWhen(
+          orElse: () => Center(child: Text("No Items")),
+          loading: () => Center(child: CircularProgressIndicator()),
+          error: (message) => Center(child: Text(message)),
+          success: (data) {
+            if (data.isEmpty) {
+              return Center(child: Text("No Items"));
+            }
+            return ListView.separated(
+              itemCount: data.length,
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) {
+                final product = data[index];
+                return ListTile(
+                  leading: product.image != null ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      '${Variables.baseUrl}${product.image!}',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
+                  ) : Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: changeStringtoColor(product.color ?? ""),
+                    ),
+                  ),
+                  title: Text(product.name ?? "-"),
+                  subtitle: BlocBuilder<CategoryBloc, CategoryState>(
+                    builder: (context, state) {
+                      final categories = state.maybeWhen(
+                        orElse: () => [],
+                        success: (data) => data,
+                      );
+                      final categoryName = categories.firstWhere((element) => element.id == product.categoryId)?.name ?? "-";
+                      return Text("Category: $categoryName");
+                    }
+                  ),
+                  trailing: Text(product.price!.currencyFormatRpV3, style: TextStyle(fontSize: 14)),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProductPage(data: product))),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

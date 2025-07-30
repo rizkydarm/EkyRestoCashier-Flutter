@@ -7,50 +7,12 @@ class CategoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<CategoryBloc>().add(CategoryEvent.getCategories());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Categories'),
         centerTitle: true,
       ),
-      body: BlocBuilder<CategoryBloc, CategoryState>(
-        builder: (context, state) {
-          return state.maybeWhen(
-            orElse: () {
-              return const Text("No Items");
-            },
-            loading: () {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-            error: (message) {
-              return Center(child: Text(message));
-            },
-            success: (data) {
-              if (data.isEmpty) {
-                return const Center(
-                  child: Text('No Items'),
-                );
-              }
-              return ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(data[index].name ?? '-'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        context.read<CategoryBloc>().add(CategoryEvent.deleteCategory(id: data[index].id!));
-                      },
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
-      ),
+      body: CategoryBlocListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           String? name;
@@ -109,6 +71,44 @@ class CategoryPage extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class CategoryBlocListView extends StatelessWidget {
+  const CategoryBlocListView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CategoryBloc, CategoryState>(
+      builder: (context, state) {
+        return state.maybeWhen(
+          orElse: () => const Text("No Items"),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (message) => Center(child: Text(message)),
+          success: (data) {
+            if (data.isEmpty) {
+              return const Center(child: Text('No Items'));
+            }
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(data[index].name ?? '-'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      context.read<CategoryBloc>().add(CategoryEvent.deleteCategory(id: data[index].id!));
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

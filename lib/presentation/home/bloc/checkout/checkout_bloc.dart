@@ -21,13 +21,11 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       final index = cart.indexWhere((element) => element.product.id == product.id);
       if (index == -1) {
         cart.add(ProductQuantity(product: product, quantity: 1));
-      } else {
-        cart[index].quantity++;
       }
-      final total = cart.fold(0, (previousValue, element) => previousValue + element.product.price!.toDouble.toInt() * element.quantity);
+      final totalPrice = cart.fold(0, (previousValue, element) => previousValue + element.product.price!.toDouble.toInt() * element.quantity);
       final totalQuantity = cart.fold(0, (previousValue, element) => previousValue + element.quantity);
 
-      emit(_Success(cart, 0, total.toDouble(), totalQuantity));
+      emit(_Success(cart, 0, totalPrice.toDouble(), totalQuantity));
     });
 
     on<_RemoveFromCart>((event, emit) {
@@ -35,20 +33,43 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       final state = this.state as _Success;
       final cart = <ProductQuantity>[];
       cart.addAll(state.cart);
-      final index =
-          cart.indexWhere((element) => element.product.id == product.id);
-      if (index == -1) {
-        cart.add(ProductQuantity(product: product, quantity: 1));
-      } else {
+      final index = cart.indexWhere((element) => element.product.id == product.id);
+      if (index != -1) {
+        cart.removeWhere((element) => element.product.id == product.id);
+      }
+      final totalPrice = cart.fold(0, (previousValue, element) => previousValue + element.product.price!.toDouble.toInt() * element.quantity);
+      final totalQuantity = cart.fold(0, (previousValue, element) => previousValue + element.quantity);
+      emit(_Success(cart, 0, totalPrice.toDouble(), totalQuantity));
+    });
+
+    on<_IncrementProduct>((event, emit) {
+      final product = event.product;
+      final state = this.state as _Success;
+      final cart = <ProductQuantity>[];
+      cart.addAll(state.cart);
+      final index = cart.indexWhere((element) => element.product.id == product.id);
+      if (index != -1) {
+        cart[index].quantity++;
+      }
+      final totalPrice = cart.fold(0, (previousValue, element) => previousValue + element.product.price!.toDouble.toInt() * element.quantity);
+      final totalQuantity = cart.fold(0, (previousValue, element) => previousValue + element.quantity);
+      emit(_Success(cart, 0, totalPrice.toDouble(), totalQuantity));
+    });
+
+    on<_DecrementProduct>((event, emit) {
+      final product = event.product;
+      final state = this.state as _Success;
+      final cart = <ProductQuantity>[];
+      cart.addAll(state.cart);
+      final index = cart.indexWhere((element) => element.product.id == product.id);
+      if (index != -1) {
         if (cart[index].quantity > 1) {
           cart[index].quantity--;
-        } else {
-          cart.removeAt(index);
         }
       }
-      final total = cart.fold(0, (previousValue, element) => previousValue + element.product.price!.toDouble.toInt() * element.quantity);
+      final totalPrice = cart.fold(0, (previousValue, element) => previousValue + element.product.price!.toDouble.toInt() * element.quantity);
       final totalQuantity = cart.fold(0, (previousValue, element) => previousValue + element.quantity);
-      emit(_Success(cart, 0, total.toDouble(), totalQuantity));
+      emit(_Success(cart, 0, totalPrice.toDouble(), totalQuantity));
     });
 
     on<_Started>((event, emit) {

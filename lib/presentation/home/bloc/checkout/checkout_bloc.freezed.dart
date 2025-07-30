@@ -53,6 +53,8 @@ extension CheckoutEventPatterns on CheckoutEvent {
     TResult Function(_Started value)? started,
     TResult Function(_AddToCart value)? addToCart,
     TResult Function(_RemoveFromCart value)? removeFromCart,
+    TResult Function(_IncrementProduct value)? incrementProduct,
+    TResult Function(_DecrementProduct value)? decrementProduct,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -63,6 +65,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that);
       case _RemoveFromCart() when removeFromCart != null:
         return removeFromCart(_that);
+      case _IncrementProduct() when incrementProduct != null:
+        return incrementProduct(_that);
+      case _DecrementProduct() when decrementProduct != null:
+        return decrementProduct(_that);
       case _:
         return orElse();
     }
@@ -86,6 +92,8 @@ extension CheckoutEventPatterns on CheckoutEvent {
     required TResult Function(_Started value) started,
     required TResult Function(_AddToCart value) addToCart,
     required TResult Function(_RemoveFromCart value) removeFromCart,
+    required TResult Function(_IncrementProduct value) incrementProduct,
+    required TResult Function(_DecrementProduct value) decrementProduct,
   }) {
     final _that = this;
     switch (_that) {
@@ -95,6 +103,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that);
       case _RemoveFromCart():
         return removeFromCart(_that);
+      case _IncrementProduct():
+        return incrementProduct(_that);
+      case _DecrementProduct():
+        return decrementProduct(_that);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -117,6 +129,8 @@ extension CheckoutEventPatterns on CheckoutEvent {
     TResult? Function(_Started value)? started,
     TResult? Function(_AddToCart value)? addToCart,
     TResult? Function(_RemoveFromCart value)? removeFromCart,
+    TResult? Function(_IncrementProduct value)? incrementProduct,
+    TResult? Function(_DecrementProduct value)? decrementProduct,
   }) {
     final _that = this;
     switch (_that) {
@@ -126,6 +140,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that);
       case _RemoveFromCart() when removeFromCart != null:
         return removeFromCart(_that);
+      case _IncrementProduct() when incrementProduct != null:
+        return incrementProduct(_that);
+      case _DecrementProduct() when decrementProduct != null:
+        return decrementProduct(_that);
       case _:
         return null;
     }
@@ -148,6 +166,8 @@ extension CheckoutEventPatterns on CheckoutEvent {
     TResult Function()? started,
     TResult Function(Product product)? addToCart,
     TResult Function(Product product)? removeFromCart,
+    TResult Function(Product product)? incrementProduct,
+    TResult Function(Product product)? decrementProduct,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -158,6 +178,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that.product);
       case _RemoveFromCart() when removeFromCart != null:
         return removeFromCart(_that.product);
+      case _IncrementProduct() when incrementProduct != null:
+        return incrementProduct(_that.product);
+      case _DecrementProduct() when decrementProduct != null:
+        return decrementProduct(_that.product);
       case _:
         return orElse();
     }
@@ -181,6 +205,8 @@ extension CheckoutEventPatterns on CheckoutEvent {
     required TResult Function() started,
     required TResult Function(Product product) addToCart,
     required TResult Function(Product product) removeFromCart,
+    required TResult Function(Product product) incrementProduct,
+    required TResult Function(Product product) decrementProduct,
   }) {
     final _that = this;
     switch (_that) {
@@ -190,6 +216,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that.product);
       case _RemoveFromCart():
         return removeFromCart(_that.product);
+      case _IncrementProduct():
+        return incrementProduct(_that.product);
+      case _DecrementProduct():
+        return decrementProduct(_that.product);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -212,6 +242,8 @@ extension CheckoutEventPatterns on CheckoutEvent {
     TResult? Function()? started,
     TResult? Function(Product product)? addToCart,
     TResult? Function(Product product)? removeFromCart,
+    TResult? Function(Product product)? incrementProduct,
+    TResult? Function(Product product)? decrementProduct,
   }) {
     final _that = this;
     switch (_that) {
@@ -221,6 +253,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
         return addToCart(_that.product);
       case _RemoveFromCart() when removeFromCart != null:
         return removeFromCart(_that.product);
+      case _IncrementProduct() when incrementProduct != null:
+        return incrementProduct(_that.product);
+      case _DecrementProduct() when decrementProduct != null:
+        return decrementProduct(_that.product);
       case _:
         return null;
     }
@@ -366,6 +402,134 @@ class __$RemoveFromCartCopyWithImpl<$Res>
     Object? product = null,
   }) {
     return _then(_RemoveFromCart(
+      product: null == product
+          ? _self.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as Product,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _IncrementProduct implements CheckoutEvent {
+  const _IncrementProduct({required this.product});
+
+  final Product product;
+
+  /// Create a copy of CheckoutEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$IncrementProductCopyWith<_IncrementProduct> get copyWith =>
+      __$IncrementProductCopyWithImpl<_IncrementProduct>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _IncrementProduct &&
+            (identical(other.product, product) || other.product == product));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, product);
+
+  @override
+  String toString() {
+    return 'CheckoutEvent.incrementProduct(product: $product)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$IncrementProductCopyWith<$Res>
+    implements $CheckoutEventCopyWith<$Res> {
+  factory _$IncrementProductCopyWith(
+          _IncrementProduct value, $Res Function(_IncrementProduct) _then) =
+      __$IncrementProductCopyWithImpl;
+  @useResult
+  $Res call({Product product});
+}
+
+/// @nodoc
+class __$IncrementProductCopyWithImpl<$Res>
+    implements _$IncrementProductCopyWith<$Res> {
+  __$IncrementProductCopyWithImpl(this._self, this._then);
+
+  final _IncrementProduct _self;
+  final $Res Function(_IncrementProduct) _then;
+
+  /// Create a copy of CheckoutEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? product = null,
+  }) {
+    return _then(_IncrementProduct(
+      product: null == product
+          ? _self.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as Product,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _DecrementProduct implements CheckoutEvent {
+  const _DecrementProduct({required this.product});
+
+  final Product product;
+
+  /// Create a copy of CheckoutEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$DecrementProductCopyWith<_DecrementProduct> get copyWith =>
+      __$DecrementProductCopyWithImpl<_DecrementProduct>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _DecrementProduct &&
+            (identical(other.product, product) || other.product == product));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, product);
+
+  @override
+  String toString() {
+    return 'CheckoutEvent.decrementProduct(product: $product)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$DecrementProductCopyWith<$Res>
+    implements $CheckoutEventCopyWith<$Res> {
+  factory _$DecrementProductCopyWith(
+          _DecrementProduct value, $Res Function(_DecrementProduct) _then) =
+      __$DecrementProductCopyWithImpl;
+  @useResult
+  $Res call({Product product});
+}
+
+/// @nodoc
+class __$DecrementProductCopyWithImpl<$Res>
+    implements _$DecrementProductCopyWith<$Res> {
+  __$DecrementProductCopyWithImpl(this._self, this._then);
+
+  final _DecrementProduct _self;
+  final $Res Function(_DecrementProduct) _then;
+
+  /// Create a copy of CheckoutEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? product = null,
+  }) {
+    return _then(_DecrementProduct(
       product: null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable

@@ -119,7 +119,7 @@ class Product {
       };
 
   Map<String, dynamic> toLocalMap() => {
-        "product_id": id,
+        "id": id,
         "name": name,
         "category_id": categoryId,
         "business_id": businessId,

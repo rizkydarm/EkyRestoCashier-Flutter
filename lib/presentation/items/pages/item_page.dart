@@ -18,20 +18,10 @@ class ItemPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Items',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () => scaffoldKey.currentState?.openDrawer(),
-          icon: Icon(Icons.menu, color: AppColors.white)
-        ),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
         children: [
           ListTile(
             leading: Icon(Icons.list),
@@ -49,14 +39,14 @@ class ItemPage extends StatelessWidget {
             })),
           ),
           Divider(),
-          ListTile(
-            leading: Icon(Icons.inventory),
-            title: Text("Stocks"),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return StockPage();
-            })),
-          ),
-          Divider(),
+          // ListTile(
+          //   leading: Icon(Icons.inventory),
+          //   title: Text("Stocks"),
+          //   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //     return StockPage();
+          //   })),
+          // ),
+          // Divider(),
         ],
       ),
     );

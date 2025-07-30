@@ -6,11 +6,14 @@ import 'package:eky_pos/core/extensions/int_ext.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:eky_pos/presentation/home/pages/payment_page.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 
 class CheckoutPage extends StatelessWidget {
 
-  const CheckoutPage({super.key});
+  const CheckoutPage({super.key, required this.sizingInformation});
+
+  final SizingInformation sizingInformation;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +21,7 @@ class CheckoutPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Checkout'),
         centerTitle: true,
+        automaticallyImplyLeading: sizingInformation.deviceScreenType == DeviceScreenType.mobile,
       ),
       bottomNavigationBar: BottomAppBar(
         child: ElevatedButton.icon(

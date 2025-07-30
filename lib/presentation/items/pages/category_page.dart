@@ -57,17 +57,17 @@ class CategoryPage extends StatelessWidget {
           final formKey = GlobalKey<FormState>();
           showModalBottomSheet(context: context,
             showDragHandle: true,
-            isScrollControlled: true,
-            useRootNavigator: true,
             useSafeArea: true,
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24)
+            ),
+            constraints: const BoxConstraints(
+              maxWidth: 600,
             ),
             builder: (context) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Form(

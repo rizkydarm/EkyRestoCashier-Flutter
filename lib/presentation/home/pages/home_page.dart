@@ -10,6 +10,7 @@ import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/presentation/home/pages/checkout_page.dart';
 import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
 import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 
 class HomePage extends StatelessWidget {
@@ -17,10 +18,50 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scaffoldKey = GlobalKey<ScaffoldState>();
+    
     context.read<ProductBloc>().add(ProductEvent.getProducts());
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
+
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) {
+        switch (sizingInformation.deviceScreenType) {
+          case DeviceScreenType.desktop:
+          case DeviceScreenType.tablet:
+            return Row(
+              children: [ 
+                Expanded(
+                  flex: 3,
+                  child: HomePageMobile(sizingInformation: sizingInformation)
+                ),
+                Expanded(
+                  flex: 2,
+                  child: CheckoutPage(sizingInformation: sizingInformation)
+                ),
+              ],
+            );
+          case DeviceScreenType.mobile:
+            return HomePageMobile(sizingInformation: sizingInformation);
+          default:
+            return const SizedBox();
+        }
+      },
+    );
+  }
+}
+
+class HomePageMobile extends StatelessWidget {
+  
+  const HomePageMobile({
+    super.key,
+    required this.sizingInformation,
+  });   
+
+  final SizingInformation sizingInformation;
+
+  @override
+  Widget build(BuildContext context) {
     final searchedTextNotifier = ValueNotifier<String?>(null);
+    final scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldKey,
       drawer: DrawerWidget(),
@@ -32,7 +73,7 @@ class HomePage extends StatelessWidget {
           onPressed: () => scaffoldKey.currentState?.openDrawer(),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: sizingInformation.deviceScreenType == DeviceScreenType.mobile ? BottomAppBar(
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
           builder: (context, state) {
             return state.maybeWhen(
@@ -46,7 +87,7 @@ class HomePage extends StatelessWidget {
                 onPressed: cart.isEmpty ? null : () {
                   Navigator.push(
                     context, MaterialPageRoute(
-                      builder: (context) => CheckoutPage()
+                      builder: (context) => CheckoutPage(sizingInformation: sizingInformation)
                     )
                   );
                 },
@@ -56,7 +97,7 @@ class HomePage extends StatelessWidget {
             );
           },
         ),
-      ),
+      ) : const SizedBox.shrink(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

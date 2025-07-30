@@ -79,12 +79,6 @@ class AddProductPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios, color: AppColors.white)
-        ),
       ),
       body: Form(
         key: formKey,

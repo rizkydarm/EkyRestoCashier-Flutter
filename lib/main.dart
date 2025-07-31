@@ -1,4 +1,5 @@
 import 'package:eky_pos/core/utils/talker.dart';
+import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
@@ -9,7 +10,7 @@ import 'package:eky_pos/presentation/home/bloc/order/order_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/order_offline/order_offline_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/transaction/transaction_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/transaction_offline/transaction_offline_bloc.dart';
-import 'package:eky_pos/presentation/home/pages/home_page.dart';
+import 'package:eky_pos/presentation/home/pages/sales_page.dart';
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
 import 'package:eky_pos/presentation/outlet/bloc/outlet/outlet_bloc.dart';

@@ -7,7 +7,8 @@ class RegisterEvent with _$RegisterEvent {
   const factory RegisterEvent.register({
     required String email,
     required String password,
-    required String businessName,
-    required String businessAddress,
+    required String name,
+    required String phone,
+    required String role,
   }) = _Register;
 }

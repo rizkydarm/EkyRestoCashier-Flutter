@@ -137,8 +137,8 @@ extension RegisterEventPatterns on RegisterEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(String email, String password, String businessName,
-            String businessAddress)?
+    TResult Function(String email, String password, String name, String phone,
+            String role)?
         register,
     required TResult orElse(),
   }) {
@@ -147,8 +147,8 @@ extension RegisterEventPatterns on RegisterEvent {
       case _Started() when started != null:
         return started();
       case _Register() when register != null:
-        return register(_that.email, _that.password, _that.businessName,
-            _that.businessAddress);
+        return register(
+            _that.email, _that.password, _that.name, _that.phone, _that.role);
       case _:
         return orElse();
     }
@@ -170,8 +170,8 @@ extension RegisterEventPatterns on RegisterEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(String email, String password,
-            String businessName, String businessAddress)
+    required TResult Function(String email, String password, String name,
+            String phone, String role)
         register,
   }) {
     final _that = this;
@@ -179,8 +179,8 @@ extension RegisterEventPatterns on RegisterEvent {
       case _Started():
         return started();
       case _Register():
-        return register(_that.email, _that.password, _that.businessName,
-            _that.businessAddress);
+        return register(
+            _that.email, _that.password, _that.name, _that.phone, _that.role);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -201,8 +201,8 @@ extension RegisterEventPatterns on RegisterEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(String email, String password, String businessName,
-            String businessAddress)?
+    TResult? Function(String email, String password, String name, String phone,
+            String role)?
         register,
   }) {
     final _that = this;
@@ -210,8 +210,8 @@ extension RegisterEventPatterns on RegisterEvent {
       case _Started() when started != null:
         return started();
       case _Register() when register != null:
-        return register(_that.email, _that.password, _that.businessName,
-            _that.businessAddress);
+        return register(
+            _that.email, _that.password, _that.name, _that.phone, _that.role);
       case _:
         return null;
     }
@@ -244,13 +244,15 @@ class _Register implements RegisterEvent {
   const _Register(
       {required this.email,
       required this.password,
-      required this.businessName,
-      required this.businessAddress});
+      required this.name,
+      required this.phone,
+      required this.role});
 
   final String email;
   final String password;
-  final String businessName;
-  final String businessAddress;
+  final String name;
+  final String phone;
+  final String role;
 
   /// Create a copy of RegisterEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -267,19 +269,18 @@ class _Register implements RegisterEvent {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
-            (identical(other.businessName, businessName) ||
-                other.businessName == businessName) &&
-            (identical(other.businessAddress, businessAddress) ||
-                other.businessAddress == businessAddress));
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.role, role) || other.role == role));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, email, password, businessName, businessAddress);
+      Object.hash(runtimeType, email, password, name, phone, role);
 
   @override
   String toString() {
-    return 'RegisterEvent.register(email: $email, password: $password, businessName: $businessName, businessAddress: $businessAddress)';
+    return 'RegisterEvent.register(email: $email, password: $password, name: $name, phone: $phone, role: $role)';
   }
 }
 
@@ -290,10 +291,7 @@ abstract mixin class _$RegisterCopyWith<$Res>
       __$RegisterCopyWithImpl;
   @useResult
   $Res call(
-      {String email,
-      String password,
-      String businessName,
-      String businessAddress});
+      {String email, String password, String name, String phone, String role});
 }
 
 /// @nodoc
@@ -309,8 +307,9 @@ class __$RegisterCopyWithImpl<$Res> implements _$RegisterCopyWith<$Res> {
   $Res call({
     Object? email = null,
     Object? password = null,
-    Object? businessName = null,
-    Object? businessAddress = null,
+    Object? name = null,
+    Object? phone = null,
+    Object? role = null,
   }) {
     return _then(_Register(
       email: null == email
@@ -321,13 +320,17 @@ class __$RegisterCopyWithImpl<$Res> implements _$RegisterCopyWith<$Res> {
           ? _self.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
-      businessName: null == businessName
-          ? _self.businessName
-          : businessName // ignore: cast_nullable_to_non_nullable
+      name: null == name
+          ? _self.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
-      businessAddress: null == businessAddress
-          ? _self.businessAddress
-          : businessAddress // ignore: cast_nullable_to_non_nullable
+      phone: null == phone
+          ? _self.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String,
+      role: null == role
+          ? _self.role
+          : role // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -477,7 +480,7 @@ extension RegisterStatePatterns on RegisterState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(UserModel? user)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -488,7 +491,7 @@ extension RegisterStatePatterns on RegisterState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success();
+        return success(_that.user);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -513,7 +516,7 @@ extension RegisterStatePatterns on RegisterState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(UserModel? user) success,
     required TResult Function(String message) error,
   }) {
     final _that = this;
@@ -523,7 +526,7 @@ extension RegisterStatePatterns on RegisterState {
       case _Loading():
         return loading();
       case _Success():
-        return success();
+        return success(_that.user);
       case _Error():
         return error(_that.message);
       case _:
@@ -547,7 +550,7 @@ extension RegisterStatePatterns on RegisterState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(UserModel? user)? success,
     TResult? Function(String message)? error,
   }) {
     final _that = this;
@@ -557,7 +560,7 @@ extension RegisterStatePatterns on RegisterState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success();
+        return success(_that.user);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -609,20 +612,62 @@ class _Loading implements RegisterState {
 /// @nodoc
 
 class _Success implements RegisterState {
-  const _Success();
+  const _Success(this.user);
+
+  final UserModel? user;
+
+  /// Create a copy of RegisterState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$SuccessCopyWith<_Success> get copyWith =>
+      __$SuccessCopyWithImpl<_Success>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Success);
+        (other.runtimeType == runtimeType &&
+            other is _Success &&
+            (identical(other.user, user) || other.user == user));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, user);
 
   @override
   String toString() {
-    return 'RegisterState.success()';
+    return 'RegisterState.success(user: $user)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$SuccessCopyWith<$Res>
+    implements $RegisterStateCopyWith<$Res> {
+  factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
+      __$SuccessCopyWithImpl;
+  @useResult
+  $Res call({UserModel? user});
+}
+
+/// @nodoc
+class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
+  __$SuccessCopyWithImpl(this._self, this._then);
+
+  final _Success _self;
+  final $Res Function(_Success) _then;
+
+  /// Create a copy of RegisterState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? user = freezed,
+  }) {
+    return _then(_Success(
+      freezed == user
+          ? _self.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
+    ));
   }
 }
 

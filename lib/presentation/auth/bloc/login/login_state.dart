@@ -4,6 +4,6 @@ part of 'login_bloc.dart';
 class LoginState with _$LoginState {
   const factory LoginState.initial() = _Initial;
   const factory LoginState.loading() = _Loading;
-  const factory LoginState.success(AuthResponseModel data) = _Success;
+  const factory LoginState.success(UserModel user) = _Success;
   const factory LoginState.error(String message) = _Error;
 }

@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
 import 'package:eky_pos/presentation/items/pages/category_page.dart';
 import 'package:eky_pos/presentation/items/pages/product/product_page.dart';
-import 'package:eky_pos/presentation/items/pages/stock/stock_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
-import '../../../core/constants/colors.dart';
 
 class ItemPage extends StatelessWidget {
   const ItemPage({super.key});
@@ -18,9 +15,10 @@ class ItemPage extends StatelessWidget {
     final scaffoldKey = GlobalKey<ScaffoldState>();
     context.read<ProductBloc>().add(ProductEvent.getProducts());
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
+    final deviceType = getDeviceType(MediaQuery.of(context).size);
     return Scaffold(
       key: scaffoldKey,
-      drawer: DrawerWidget(),
+      drawer: deviceType == DeviceScreenType.mobile ? DrawerWidget() : null,
       appBar: AppBar(
         title: const Text(
           'Items',

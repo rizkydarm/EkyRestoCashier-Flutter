@@ -443,7 +443,7 @@ extension LoginStatePatterns on LoginState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(AuthResponseModel data)? success,
+    TResult Function(UserModel user)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -454,7 +454,7 @@ extension LoginStatePatterns on LoginState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(_that.data);
+        return success(_that.user);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -479,7 +479,7 @@ extension LoginStatePatterns on LoginState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(AuthResponseModel data) success,
+    required TResult Function(UserModel user) success,
     required TResult Function(String message) error,
   }) {
     final _that = this;
@@ -489,7 +489,7 @@ extension LoginStatePatterns on LoginState {
       case _Loading():
         return loading();
       case _Success():
-        return success(_that.data);
+        return success(_that.user);
       case _Error():
         return error(_that.message);
       case _:
@@ -513,7 +513,7 @@ extension LoginStatePatterns on LoginState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(AuthResponseModel data)? success,
+    TResult? Function(UserModel user)? success,
     TResult? Function(String message)? error,
   }) {
     final _that = this;
@@ -523,7 +523,7 @@ extension LoginStatePatterns on LoginState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(_that.data);
+        return success(_that.user);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -575,9 +575,9 @@ class _Loading implements LoginState {
 /// @nodoc
 
 class _Success implements LoginState {
-  const _Success(this.data);
+  const _Success(this.user);
 
-  final AuthResponseModel data;
+  final UserModel user;
 
   /// Create a copy of LoginState
   /// with the given fields replaced by the non-null parameter values.
@@ -591,15 +591,16 @@ class _Success implements LoginState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Success &&
-            (identical(other.data, data) || other.data == data));
+            const DeepCollectionEquality().equals(other.user, user));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, data);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(user));
 
   @override
   String toString() {
-    return 'LoginState.success(data: $data)';
+    return 'LoginState.success(user: $user)';
   }
 }
 
@@ -609,7 +610,7 @@ abstract mixin class _$SuccessCopyWith<$Res>
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
       __$SuccessCopyWithImpl;
   @useResult
-  $Res call({AuthResponseModel data});
+  $Res call({UserModel user});
 }
 
 /// @nodoc
@@ -623,13 +624,13 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? data = null,
+    Object? user = freezed,
   }) {
     return _then(_Success(
-      null == data
-          ? _self.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as AuthResponseModel,
+      freezed == user
+          ? _self.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
     ));
   }
 }

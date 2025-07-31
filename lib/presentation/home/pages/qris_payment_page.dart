@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:eky_pos/core/components/spaces.dart';
 import 'package:eky_pos/core/constants/colors.dart';
 import 'package:eky_pos/data/models/responses/transaction_response_model.dart';
-import 'package:eky_pos/presentation/home/pages/home_page.dart';
+import 'package:eky_pos/presentation/home/pages/sales_page.dart';
 import 'package:eky_pos/presentation/home/pages/invoice_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

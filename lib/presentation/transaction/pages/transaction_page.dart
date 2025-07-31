@@ -5,6 +5,7 @@ import 'package:eky_pos/presentation/transaction/pages/detail_transaction_page.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/transaction/transaction_bloc.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class TransactionPage extends StatelessWidget {
   const TransactionPage({
@@ -15,9 +16,10 @@ class TransactionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<TransactionBloc>().add(const TransactionEvent.getAllOrder());
     final scaffoldKey = GlobalKey<ScaffoldState>();
+    final deviceType = getDeviceType(MediaQuery.of(context).size);
     return Scaffold(
       key: scaffoldKey,
-      drawer: DrawerWidget(),
+      drawer: deviceType == DeviceScreenType.mobile ? DrawerWidget() : null,
       appBar: AppBar(
         title: const Text('Transactions'),
         centerTitle: true,

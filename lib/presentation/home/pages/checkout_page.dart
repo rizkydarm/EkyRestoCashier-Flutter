@@ -11,17 +11,16 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 class CheckoutPage extends StatelessWidget {
 
-  const CheckoutPage({super.key, required this.sizingInformation});
-
-  final SizingInformation sizingInformation;
+  const CheckoutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final deviceType = getDeviceType(MediaQuery.of(context).size);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
         centerTitle: true,
-        automaticallyImplyLeading: sizingInformation.isMobile,
+        automaticallyImplyLeading: deviceType == DeviceScreenType.mobile,
       ),
       bottomNavigationBar: BottomAppBar(
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
@@ -34,7 +33,7 @@ class CheckoutPage extends StatelessWidget {
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.white,
                 ),
-                onPressed: cart.isEmpty ? null : sizingInformation.isMobile ? () => Navigator.push(context,
+                onPressed: cart.isEmpty ? null : deviceType == DeviceScreenType.mobile ? () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const PaymentPage()),
                 ) : () => showDialog(
                   context: context,
@@ -45,7 +44,6 @@ class CheckoutPage extends StatelessWidget {
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: SizedBox(
-                      // height: MediaQuery.of(context).size.height * 0.99,
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: PaymentPage(),
                     ),

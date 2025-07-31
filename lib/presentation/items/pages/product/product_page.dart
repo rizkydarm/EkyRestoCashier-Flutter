@@ -6,6 +6,7 @@ import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:eky_pos/presentation/items/pages/product/add_product_page.dart';
 import 'package:eky_pos/presentation/items/pages/product/detail_product_page.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../bloc/product/product_bloc.dart';
 
@@ -14,6 +15,7 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),

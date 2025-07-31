@@ -56,7 +56,7 @@ class _EditStockPageState extends State<EditStockPage> {
             ),
             ListTile(
               title: const Text('Outlet'),
-              subtitle: Text(widget.data.outlet?.name ?? ''),
+              subtitle: Text('-'),
             ),
             //input type stock
             Padding(

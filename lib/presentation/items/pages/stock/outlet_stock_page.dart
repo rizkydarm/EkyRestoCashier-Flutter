@@ -42,7 +42,7 @@ class _OutletStockPageState extends State<OutletStockPage> {
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
-                  title: Text(widget.data[index].outlet?.name ?? ''),
+                  title: Text('-'),
                   subtitle: Text('Stock: ${widget.data[index].quantity}'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                   onTap: () {

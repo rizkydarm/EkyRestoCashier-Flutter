@@ -4,6 +4,7 @@ import 'package:eky_pos/core/utils/talker.dart';
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/data/models/responses/product_response_model.dart';
 import 'package:eky_pos/data/models/responses/user_model.dart';
+import 'package:eky_pos/presentation/auth/models/user_model.dart';
 import 'package:eky_pos/presentation/items/models/product_model.dart';
 import 'package:sqflite/sqflite.dart';
 

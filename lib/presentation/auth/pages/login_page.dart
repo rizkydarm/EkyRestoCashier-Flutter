@@ -1,7 +1,8 @@
+import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/presentation/auth/bloc/login/login_bloc.dart';
-import 'package:eky_pos/presentation/home/pages/home_page.dart';
+import 'package:eky_pos/presentation/home/pages/sales_page.dart';
 
 import '../../../core/constants/colors.dart';
 

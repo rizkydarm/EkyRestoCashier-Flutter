@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:eky_pos/presentation/auth/models/user_model.dart';
+import 'package:eky_pos/presentation/auth/repo/user_repo.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 // import 'package:dartz/dartz.dart';
 import 'package:eky_pos/data/models/responses/auth_response_model.dart';
@@ -8,17 +10,14 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(_Initial()) {
+
+  final UserRepository userRepository;
+
+  LoginBloc({required this.userRepository}) : super(_Initial()) {
     on<_Login>((event, emit) async {
-      // emit(LoginState.loading());
-      // final result = await authRemoteDataSource.login(
-      //   event.email,
-      //   event.password,
-      // );
-      // result.fold(
-      //   (l) => emit(_Error(l)),
-      //   (r) => emit(_Success(r)),
-      // );
+      emit(LoginState.loading());
+      final user = await userRepository.getUser(event.email);
+      emit(LoginState.success(user));
     });
   }
 }

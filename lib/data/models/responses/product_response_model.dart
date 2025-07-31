@@ -144,7 +144,7 @@ class Stock {
   final int? quantity;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final Outlet? outlet;
+  // final Outlet? outlet;
   final Product? product;
 
   Stock({
@@ -155,7 +155,7 @@ class Stock {
     this.quantity,
     this.createdAt,
     this.updatedAt,
-    this.outlet,
+    // this.outlet,
     this.product,
   });
 
@@ -181,7 +181,7 @@ class Stock {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        outlet: json["outlet"] == null ? null : Outlet.fromMap(json["outlet"]),
+        // outlet: json["outlet"] == null ? null : Outlet.fromMap(json["outlet"]),
         product:
             json["product"] == null ? null : Product.fromMap(json["product"]),
       );
@@ -193,7 +193,7 @@ class Stock {
         "quantity": quantity,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        "outlet": outlet?.toMap(),
+        // "outlet": outlet?.toMap(),
       };
 
   Map<String, dynamic> toBackUpMap() => {
@@ -203,6 +203,6 @@ class Stock {
         "quantity": quantity,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        "outlet": outlet?.toMap(),
+        // "outlet": outlet?.toMap(),
       };
 }

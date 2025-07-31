@@ -1,3 +1,4 @@
+import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
@@ -8,7 +9,7 @@ import 'package:eky_pos/data/dataoutputs/cwb_print.dart';
 import 'package:eky_pos/data/models/responses/transaction_response_model.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 
-import 'package:eky_pos/presentation/home/pages/home_page.dart';
+import 'package:eky_pos/presentation/home/pages/sales_page.dart';
 import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
 
 import '../../../core/components/spaces.dart';

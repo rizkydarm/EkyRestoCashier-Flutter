@@ -30,10 +30,11 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formKey.currentState!.validate()) {
       if (_isAgree) {
         context.read<RegisterBloc>().add(RegisterEvent.register(
-              businessName: _businessNameController.text,
-              businessAddress: _businessAddressController.text,
               email: _emailController.text,
               password: _passwordController.text,
+              name: _businessNameController.text,
+              phone: _businessAddressController.text,
+              role: 'user',
             ));
       }
     }
@@ -181,7 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     BlocConsumer<RegisterBloc, RegisterState>(
                       listener: (context, state) {
                         state.maybeWhen(
-                          success: () {
+                          success: (user) {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               return const LoginPage();

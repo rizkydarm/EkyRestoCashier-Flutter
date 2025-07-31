@@ -137,7 +137,7 @@ extension AccountEventPatterns on AccountEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function()? getAccount,
+    TResult Function(String email)? getAccount,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -145,7 +145,7 @@ extension AccountEventPatterns on AccountEvent {
       case _Started() when started != null:
         return started();
       case _GetAccount() when getAccount != null:
-        return getAccount();
+        return getAccount(_that.email);
       case _:
         return orElse();
     }
@@ -167,14 +167,14 @@ extension AccountEventPatterns on AccountEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function() getAccount,
+    required TResult Function(String email) getAccount,
   }) {
     final _that = this;
     switch (_that) {
       case _Started():
         return started();
       case _GetAccount():
-        return getAccount();
+        return getAccount(_that.email);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -195,14 +195,14 @@ extension AccountEventPatterns on AccountEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function()? getAccount,
+    TResult? Function(String email)? getAccount,
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started();
       case _GetAccount() when getAccount != null:
-        return getAccount();
+        return getAccount(_that.email);
       case _:
         return null;
     }
@@ -232,20 +232,63 @@ class _Started implements AccountEvent {
 /// @nodoc
 
 class _GetAccount implements AccountEvent {
-  const _GetAccount();
+  const _GetAccount(this.email);
+
+  final String email;
+
+  /// Create a copy of AccountEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$GetAccountCopyWith<_GetAccount> get copyWith =>
+      __$GetAccountCopyWithImpl<_GetAccount>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _GetAccount);
+        (other.runtimeType == runtimeType &&
+            other is _GetAccount &&
+            (identical(other.email, email) || other.email == email));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, email);
 
   @override
   String toString() {
-    return 'AccountEvent.getAccount()';
+    return 'AccountEvent.getAccount(email: $email)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$GetAccountCopyWith<$Res>
+    implements $AccountEventCopyWith<$Res> {
+  factory _$GetAccountCopyWith(
+          _GetAccount value, $Res Function(_GetAccount) _then) =
+      __$GetAccountCopyWithImpl;
+  @useResult
+  $Res call({String email});
+}
+
+/// @nodoc
+class __$GetAccountCopyWithImpl<$Res> implements _$GetAccountCopyWith<$Res> {
+  __$GetAccountCopyWithImpl(this._self, this._then);
+
+  final _GetAccount _self;
+  final $Res Function(_GetAccount) _then;
+
+  /// Create a copy of AccountEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? email = null,
+  }) {
+    return _then(_GetAccount(
+      null == email
+          ? _self.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
   }
 }
 
@@ -393,7 +436,7 @@ extension AccountStatePatterns on AccountState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(AuthResponseModel authData, Outlet outlet)? loaded,
+    TResult Function(UserModel user)? loaded,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -404,7 +447,7 @@ extension AccountStatePatterns on AccountState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.authData, _that.outlet);
+        return loaded(_that.user);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -429,7 +472,7 @@ extension AccountStatePatterns on AccountState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(AuthResponseModel authData, Outlet outlet) loaded,
+    required TResult Function(UserModel user) loaded,
     required TResult Function(String message) error,
   }) {
     final _that = this;
@@ -439,7 +482,7 @@ extension AccountStatePatterns on AccountState {
       case _Loading():
         return loading();
       case _Loaded():
-        return loaded(_that.authData, _that.outlet);
+        return loaded(_that.user);
       case _Error():
         return error(_that.message);
       case _:
@@ -463,7 +506,7 @@ extension AccountStatePatterns on AccountState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(AuthResponseModel authData, Outlet outlet)? loaded,
+    TResult? Function(UserModel user)? loaded,
     TResult? Function(String message)? error,
   }) {
     final _that = this;
@@ -473,7 +516,7 @@ extension AccountStatePatterns on AccountState {
       case _Loading() when loading != null:
         return loading();
       case _Loaded() when loaded != null:
-        return loaded(_that.authData, _that.outlet);
+        return loaded(_that.user);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -525,10 +568,9 @@ class _Loading implements AccountState {
 /// @nodoc
 
 class _Loaded implements AccountState {
-  const _Loaded(this.authData, this.outlet);
+  const _Loaded(this.user);
 
-  final AuthResponseModel authData;
-  final Outlet outlet;
+  final UserModel user;
 
   /// Create a copy of AccountState
   /// with the given fields replaced by the non-null parameter values.
@@ -542,17 +584,15 @@ class _Loaded implements AccountState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            (identical(other.authData, authData) ||
-                other.authData == authData) &&
-            (identical(other.outlet, outlet) || other.outlet == outlet));
+            (identical(other.user, user) || other.user == user));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, authData, outlet);
+  int get hashCode => Object.hash(runtimeType, user);
 
   @override
   String toString() {
-    return 'AccountState.loaded(authData: $authData, outlet: $outlet)';
+    return 'AccountState.loaded(user: $user)';
   }
 }
 
@@ -562,7 +602,7 @@ abstract mixin class _$LoadedCopyWith<$Res>
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) =
       __$LoadedCopyWithImpl;
   @useResult
-  $Res call({AuthResponseModel authData, Outlet outlet});
+  $Res call({UserModel user});
 }
 
 /// @nodoc
@@ -576,18 +616,13 @@ class __$LoadedCopyWithImpl<$Res> implements _$LoadedCopyWith<$Res> {
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? authData = null,
-    Object? outlet = null,
+    Object? user = null,
   }) {
     return _then(_Loaded(
-      null == authData
-          ? _self.authData
-          : authData // ignore: cast_nullable_to_non_nullable
-              as AuthResponseModel,
-      null == outlet
-          ? _self.outlet
-          : outlet // ignore: cast_nullable_to_non_nullable
-              as Outlet,
+      null == user
+          ? _self.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
     ));
   }
 }

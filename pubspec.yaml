@@ -33,6 +33,8 @@ dependencies:
   qr: ^3.0.2
   qr_flutter: ^4.1.0
   responsive_builder: ^0.7.1
+  http: ^1.4.0
+  easy_sidemenu: ^0.7.1
 
 dev_dependencies:
   flutter_test:

@@ -12,9 +12,12 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 
 class SalesPage extends StatelessWidget {
+
+  final ValueNotifier<bool>? toggleSideMenuNotifier;
   
   const SalesPage({
     super.key,
+    this.toggleSideMenuNotifier,
   });   
 
   @override
@@ -32,10 +35,10 @@ class SalesPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Sales'),
         centerTitle: true,
-        // leading: isLargeScreen ? null : IconButton(
-        //   icon: const Icon(Icons.menu),
-        //   onPressed: () => scaffoldKey.currentState?.openDrawer(),
-        // ),
+        leading: toggleSideMenuNotifier != null ? IconButton(
+          icon: const Icon(Icons.menu_open),
+          onPressed: () => toggleSideMenuNotifier!.value = !toggleSideMenuNotifier!.value,
+        ) : null,
       ),
       bottomNavigationBar: isSmallScreen ? BottomAppBar(
         child: BlocBuilder<CheckoutBloc, CheckoutState>(

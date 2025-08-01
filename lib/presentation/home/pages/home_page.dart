@@ -4,6 +4,7 @@ import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/data/models/responses/product_response_model.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:eky_pos/presentation/home/pages/sales_page.dart';
+import 'package:eky_pos/presentation/home/widgets/fade_page_view.dart';
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:eky_pos/presentation/items/pages/item_page.dart';
 import 'package:eky_pos/presentation/printer/pages/printer_page.dart';
@@ -29,16 +30,19 @@ class HomePage extends StatelessWidget {
     context.read<ProductBloc>().add(ProductEvent.getProducts());
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
 
-    final pageController = PageController();
+    final fadePageController = FadePageViewController();
     final sideMenuController = SideMenuController();
 
     sideMenuController.addListener((index) {
-      pageController.jumpToPage(index);
+      fadePageController.changePage(index);
     });
 
+    final toggleSideMenuNotifier = ValueNotifier<bool>(false);
 
     final pages = [
-      SalesAndCheckoutPages(),
+      SalesAndCheckoutPages(
+        toggleSideMenuNotifier: toggleSideMenuNotifier
+      ),
       TransactionPage(),
       ItemPage(),
       PrinterPage(),
@@ -51,35 +55,35 @@ class HomePage extends StatelessWidget {
           controller.changePage(index);
         },
         title: 'Sales',
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.food_bank),
       ),
       SideMenuItem(
         onTap: (index, controller) {
           controller.changePage(index);
         },
         title: 'Transactions',
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.receipt),
       ),
       SideMenuItem(
         onTap: (index, controller) {
           controller.changePage(index);
         },
         title: 'Items',
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.list),
       ),
       SideMenuItem(
         onTap: (index, controller) {
           controller.changePage(index);
         },
         title: 'Printer',
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.print),
       ),
       SideMenuItem(
         onTap: (index, controller) {
           controller.changePage(index);
         },
         title: 'Tax & Discount',
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.percent),
       ),
     ];
 
@@ -93,20 +97,46 @@ class HomePage extends StatelessWidget {
               if (orientation == Orientation.landscape) {
                 return Row(
                   children: [ 
-                    SideMenu(
-                      controller: sideMenuController,
-                      items: sideMenuItems,
-                      
+                    ValueListenableBuilder(
+                      valueListenable: toggleSideMenuNotifier,
+                      builder: (context, isResized, child) {
+                        return isResized ? const SizedBox.shrink() : child ?? const SizedBox.shrink();
+                      },
+                      child: Material(
+                        child: SideMenu(
+                          controller: sideMenuController,
+                          style: SideMenuStyle(
+                            displayMode: SideMenuDisplayMode.auto,
+                            openSideMenuWidth: 200,
+                            compactSideMenuWidth: 70,
+                            itemOuterPadding: EdgeInsets.zero,
+                            itemBorderRadius: BorderRadius.zero,
+                          ),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              ColoredBox(
+                                color: AppColors.primary, 
+                                child: SizedBox(
+                                  height: kToolbarHeight,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 100,
+                                child: Center(
+                                  child: Image.asset('assets/icons/ekycashier_outline.png', height: 50),
+                                )
+                              ),
+                            ],
+                          ),
+                          items: sideMenuItems,
+                        ),
+                      ),
                     ),
                     Expanded(
-                      child: PageView.builder(
-                        controller: pageController,
-                        allowImplicitScrolling: false,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: pages.length,
-                        itemBuilder: (context, index) {
-                          return pages[index];
-                        }
+                      child: FadePageView(
+                        controller: fadePageController,
+                        pages: pages,
                       ),
                     ),
                   ],
@@ -127,8 +157,12 @@ class HomePage extends StatelessWidget {
 }
 
 class SalesAndCheckoutPages extends StatelessWidget {
+  
+  final ValueNotifier<bool>? toggleSideMenuNotifier;
+
   const SalesAndCheckoutPages({
     super.key,
+    this.toggleSideMenuNotifier,
   });
 
   @override
@@ -137,7 +171,7 @@ class SalesAndCheckoutPages extends StatelessWidget {
       children: [
         Expanded(
           flex: 2,
-          child: SalesPage()
+          child: SalesPage(toggleSideMenuNotifier: toggleSideMenuNotifier)
         ),
         Expanded(
           flex: 1,

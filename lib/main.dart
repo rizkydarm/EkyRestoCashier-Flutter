@@ -1,5 +1,6 @@
 import 'package:eky_pos/core/utils/talker.dart';
 import 'package:eky_pos/presentation/home/pages/home_page.dart';
+import 'package:eky_pos/presentation/table_management/widgets/table_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
@@ -19,6 +20,7 @@ import 'package:eky_pos/presentation/sales_report/bloc/sales_report/sales_report
 import 'package:eky_pos/presentation/scanner/blocs/get_qrcode/get_qrcode_bloc.dart';
 import 'package:eky_pos/presentation/staff/bloc/staff/staff_bloc.dart';
 import 'package:eky_pos/presentation/tax_discount/bloc/business_setting/business_setting_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'presentation/auth/bloc/register/register_bloc.dart';
 
@@ -77,6 +79,9 @@ void main() {
     ),
     BlocProvider(
       create: (context) => TransactionOfflineBloc(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => TableManagementProvider(),
     ),
   ];
   runApp(MultiBlocProvider(

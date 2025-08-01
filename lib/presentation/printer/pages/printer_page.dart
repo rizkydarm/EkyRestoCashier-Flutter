@@ -30,14 +30,7 @@ class _PrinterPageState extends State<PrinterPage> {
       key: _scaffoldKey,
       drawer: DrawerWidget(),
       appBar: AppBar(
-        title: const Text(
-          'Printers',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: const Text('Printers'),
         centerTitle: true,
         leading: widget.toggleSideMenuNotifier != null ? IconButton(
           icon: const Icon(Icons.menu_open),

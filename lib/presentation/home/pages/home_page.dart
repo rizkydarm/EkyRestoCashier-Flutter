@@ -8,6 +8,7 @@ import 'package:eky_pos/presentation/home/widgets/fade_page_view.dart';
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:eky_pos/presentation/items/pages/item_page.dart';
 import 'package:eky_pos/presentation/printer/pages/printer_page.dart';
+import 'package:eky_pos/presentation/table_management/pages/table_management_page.dart';
 import 'package:eky_pos/presentation/tax_discount/pages/tax_discount_page.dart';
 import 'package:eky_pos/presentation/transaction/pages/transaction_page.dart';
 import 'package:flutter/gestures.dart';
@@ -52,6 +53,9 @@ class HomePage extends StatelessWidget {
       PrinterPage(
         toggleSideMenuNotifier: toggleSideMenuNotifier,
       ),
+      TableManagementPage(
+        toggleSideMenuNotifier: toggleSideMenuNotifier,
+      ),
       TaxDiscountPage(
         toggleSideMenuNotifier: toggleSideMenuNotifier,
       ),
@@ -85,6 +89,13 @@ class HomePage extends StatelessWidget {
         },
         title: 'Printer',
         icon: Icon(Icons.print),
+      ),
+      SideMenuItem(
+        onTap: (index, controller) {
+          controller.changePage(index);
+        },
+        title: 'Table Management',
+        icon: Icon(Icons.table_bar),
       ),
       SideMenuItem(
         onTap: (index, controller) {

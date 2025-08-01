@@ -8,8 +8,11 @@ import 'package:eky_pos/presentation/home/bloc/transaction/transaction_bloc.dart
 import 'package:responsive_builder/responsive_builder.dart';
 
 class TransactionPage extends StatelessWidget {
+  final ValueNotifier<bool>? toggleSideMenuNotifier;
+  
   const TransactionPage({
     super.key,
+    this.toggleSideMenuNotifier,
   });
 
   @override
@@ -23,6 +26,10 @@ class TransactionPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Transactions'),
         centerTitle: true,
+        leading: toggleSideMenuNotifier != null ? IconButton(
+          icon: const Icon(Icons.menu_open),
+          onPressed: () => toggleSideMenuNotifier!.value = !toggleSideMenuNotifier!.value,
+        ) : null,
       ),
       body: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {

@@ -1,3 +1,5 @@
+import 'package:eky_pos/presentation/home/pages/home_page.dart';
+import 'package:eky_pos/presentation/staff/pages/staff_page.dart';
 import 'package:eky_pos/presentation/transaction/pages/transaction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eky_pos/core/constants/colors.dart';
@@ -52,8 +54,8 @@ class DrawerWidget extends StatelessWidget {
             onPressed: () {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const SalesPage()),
-                (route) => route.isFirst,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+                (route) => false,
               );
             },
           ),
@@ -64,7 +66,7 @@ class DrawerWidget extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const TransactionPage()),
-                (route) => route.isFirst,
+                (route) => false,
               );
             },
           ),
@@ -75,7 +77,7 @@ class DrawerWidget extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const ItemPage()),
-                (route) => route.isFirst,
+                (route) => false,
               );
             },
           ),
@@ -86,22 +88,22 @@ class DrawerWidget extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const PrinterPage()),
-                (route) => route.isFirst,
+                (route) => false,
               );
             },
           ),
-          // Divider(),
-          // ListTile(
-          //   leading: Icon(Icons.people),
-          //   title: Text('Staff Management'),
-          //   onTap: () {
-          //     Navigator.pushAndRemoveUntil(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => const StaffPage()),
-          //       (route) => route.isFirst,
-          //     );
-          //   },
-          // ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.people),
+            title: Text('Staff Management'),
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const StaffPage()),
+                (route) => false,
+              );
+            },
+          ),
           DrawerMenuItem(
             title: 'Taxes & Discounts',
             icon: Icons.percent,
@@ -109,7 +111,7 @@ class DrawerWidget extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const TaxDiscountPage()),
-                (route) => route.isFirst,
+                (route) => false,
               );
             },
           ),

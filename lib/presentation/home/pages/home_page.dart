@@ -43,10 +43,18 @@ class HomePage extends StatelessWidget {
       SalesAndCheckoutPages(
         toggleSideMenuNotifier: toggleSideMenuNotifier
       ),
-      TransactionPage(),
-      ItemPage(),
-      PrinterPage(),
-      TaxDiscountPage(),
+      TransactionPage(
+        toggleSideMenuNotifier: toggleSideMenuNotifier,
+      ),
+      ItemPage(
+        toggleSideMenuNotifier: toggleSideMenuNotifier,
+      ),
+      PrinterPage(
+        toggleSideMenuNotifier: toggleSideMenuNotifier,
+      ),
+      TaxDiscountPage(
+        toggleSideMenuNotifier: toggleSideMenuNotifier,
+      ),
     ];
 
     final sideMenuItems = [

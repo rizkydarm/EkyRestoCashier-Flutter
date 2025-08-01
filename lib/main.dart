@@ -60,9 +60,9 @@ void main() {
     BlocProvider(
       create: (context) => PrinterBloc(),
     ),
-    // BlocProvider(
-    //   create: (context) => BusinessSettingBloc(BusinessSettingRemoteDatasource()),
-    // ),
+    BlocProvider(
+      create: (context) => BusinessSettingBloc(),
+    ),
     // BlocProvider(
     //   create: (context) => SalesReportBloc(SalesReportRemoteDatasource()),
     // ),

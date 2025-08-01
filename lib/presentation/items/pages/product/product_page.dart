@@ -22,26 +22,37 @@ class ProductPage extends StatelessWidget {
         centerTitle: true
       ),
       body: ProductBlocListView(),
-      floatingActionButton: BlocBuilder<CategoryBloc, CategoryState>(
-        builder: (context, state) {
-          final categories = state.maybeWhen(
-            orElse: () => [],
-            success: (data) => data,
-          );
-          return FloatingActionButton(
-            onPressed: () {
-              if (categories.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Please add category first"),
-                ));
-                return;
-              }
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductPage()));
-            },
-            child: const Icon(Icons.add),
-          );
-        },
-      ),
+      floatingActionButton: ProductFab(),
+    );
+  }
+}
+
+class ProductFab extends StatelessWidget {
+  const ProductFab({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CategoryBloc, CategoryState>(
+      builder: (context, state) {
+        final categories = state.maybeWhen(
+          orElse: () => [],
+          success: (data) => data,
+        );
+        return FloatingActionButton(
+          onPressed: () {
+            if (categories.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Please add category first"),
+              ));
+              return;
+            }
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductPage()));
+          },
+          child: const Icon(Icons.add),
+        );
+      },
     );
   }
 }

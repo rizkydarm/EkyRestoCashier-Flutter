@@ -7,7 +7,9 @@ import 'package:eky_pos/presentation/printer/pages/add_printer_page.dart';
 import 'package:eky_pos/presentation/printer/pages/detail_printer_page.dart';
 
 class PrinterPage extends StatefulWidget {
-  const PrinterPage({super.key});
+  final ValueNotifier<bool>? toggleSideMenuNotifier;
+  
+  const PrinterPage({super.key, this.toggleSideMenuNotifier});
 
   @override
   State<PrinterPage> createState() => _PrinterPageState();
@@ -37,11 +39,10 @@ class _PrinterPageState extends State<PrinterPage> {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer();
-            },
-            icon: Icon(Icons.menu, color: AppColors.white)),
+        leading: widget.toggleSideMenuNotifier != null ? IconButton(
+          icon: const Icon(Icons.menu_open),
+          onPressed: () => widget.toggleSideMenuNotifier!.value = !widget.toggleSideMenuNotifier!.value,
+        ) : null,
       ),
       body: BlocBuilder<PrinterBloc, PrinterState>(
         builder: (context, state) {

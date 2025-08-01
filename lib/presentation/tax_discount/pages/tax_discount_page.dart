@@ -7,43 +7,22 @@ import 'package:eky_pos/presentation/tax_discount/bloc/business_setting/business
 import 'package:eky_pos/presentation/tax_discount/pages/add_tax_page.dart';
 import 'package:eky_pos/presentation/tax_discount/pages/detail_tax_page.dart';
 
-class TaxDiscountPage extends StatefulWidget {
-  const TaxDiscountPage({super.key});
-
-  @override
-  State<TaxDiscountPage> createState() => _TaxDiscountPageState();
-}
-
-class _TaxDiscountPageState extends State<TaxDiscountPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  @override
-  void initState() {
-    context
-        .read<BusinessSettingBloc>()
-        .add(const BusinessSettingEvent.getBusinessSetting());
-    super.initState();
-  }
+class TaxDiscountPage extends StatelessWidget {
+  final ValueNotifier<bool>? toggleSideMenuNotifier;
+  
+  const TaxDiscountPage({super.key, this.toggleSideMenuNotifier});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       drawer: DrawerWidget(),
       appBar: AppBar(
-        title: const Text(
-          'Tax & Discount',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: const Text('Tax & Discount'),
         centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer();
-            },
-            icon: Icon(Icons.menu, color: AppColors.white)),
+        leading: toggleSideMenuNotifier != null ? IconButton(
+          icon: const Icon(Icons.menu_open),
+          onPressed: () => toggleSideMenuNotifier!.value = !toggleSideMenuNotifier!.value,
+        ) : null,
       ),
       body: BlocBuilder<BusinessSettingBloc, BusinessSettingState>(
         builder: (context, state) {
@@ -99,33 +78,6 @@ class _TaxDiscountPageState extends State<TaxDiscountPage> {
               },
             );
           });
-          // return ListView(
-          //   padding: EdgeInsets.all(16),
-          //   children: [
-          //     ListTile(
-          //       leading: CircleAvatar(
-          //         backgroundColor: AppColors.primary,
-          //         child: Icon(Icons.percent, color: AppColors.white),
-          //       ),
-          //       title: Text("Pajak Restaurant",
-          //           style: TextStyle(fontWeight: FontWeight.bold)),
-          //       subtitle: Text("10%"),
-          //       trailing: Icon(Icons.arrow_forward_ios, color: AppColors.black),
-          //     ),
-          //     Divider(),
-          //     ListTile(
-          //       leading: CircleAvatar(
-          //         backgroundColor: AppColors.primary,
-          //         child: Icon(Icons.discount, color: AppColors.white),
-          //       ),
-          //       title: Text("Diskon 15%",
-          //           style: TextStyle(fontWeight: FontWeight.bold)),
-          //       subtitle: Text("15%"),
-          //       trailing: Icon(Icons.arrow_forward_ios, color: AppColors.black),
-          //     ),
-          //     Divider(),
-          //   ],
-          // );
         },
       ),
       floatingActionButton: FloatingActionButton(

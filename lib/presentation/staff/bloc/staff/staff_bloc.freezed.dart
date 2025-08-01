@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'login_bloc.dart';
+part of 'staff_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,11 +13,11 @@ part of 'login_bloc.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$LoginEvent {
+mixin _$StaffEvent {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is LoginEvent);
+        (other.runtimeType == runtimeType && other is StaffEvent);
   }
 
   @override
@@ -25,17 +25,17 @@ mixin _$LoginEvent {
 
   @override
   String toString() {
-    return 'LoginEvent()';
+    return 'StaffEvent()';
   }
 }
 
 /// @nodoc
-class $LoginEventCopyWith<$Res> {
-  $LoginEventCopyWith(LoginEvent _, $Res Function(LoginEvent) __);
+class $StaffEventCopyWith<$Res> {
+  $StaffEventCopyWith(StaffEvent _, $Res Function(StaffEvent) __);
 }
 
-/// Adds pattern-matching-related methods to [LoginEvent].
-extension LoginEventPatterns on LoginEvent {
+/// Adds pattern-matching-related methods to [StaffEvent].
+extension StaffEventPatterns on StaffEvent {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -51,15 +51,21 @@ extension LoginEventPatterns on LoginEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
-    TResult Function(_Login value)? login,
+    TResult Function(_GetStaffs value)? getStaffs,
+    TResult Function(_AddStaff value)? addStaff,
+    TResult Function(_EditStaff value)? editStaff,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started(_that);
-      case _Login() when login != null:
-        return login(_that);
+      case _GetStaffs() when getStaffs != null:
+        return getStaffs(_that);
+      case _AddStaff() when addStaff != null:
+        return addStaff(_that);
+      case _EditStaff() when editStaff != null:
+        return editStaff(_that);
       case _:
         return orElse();
     }
@@ -81,14 +87,20 @@ extension LoginEventPatterns on LoginEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
-    required TResult Function(_Login value) login,
+    required TResult Function(_GetStaffs value) getStaffs,
+    required TResult Function(_AddStaff value) addStaff,
+    required TResult Function(_EditStaff value) editStaff,
   }) {
     final _that = this;
     switch (_that) {
       case _Started():
         return started(_that);
-      case _Login():
-        return login(_that);
+      case _GetStaffs():
+        return getStaffs(_that);
+      case _AddStaff():
+        return addStaff(_that);
+      case _EditStaff():
+        return editStaff(_that);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -109,14 +121,20 @@ extension LoginEventPatterns on LoginEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
-    TResult? Function(_Login value)? login,
+    TResult? Function(_GetStaffs value)? getStaffs,
+    TResult? Function(_AddStaff value)? addStaff,
+    TResult? Function(_EditStaff value)? editStaff,
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started(_that);
-      case _Login() when login != null:
-        return login(_that);
+      case _GetStaffs() when getStaffs != null:
+        return getStaffs(_that);
+      case _AddStaff() when addStaff != null:
+        return addStaff(_that);
+      case _EditStaff() when editStaff != null:
+        return editStaff(_that);
       case _:
         return null;
     }
@@ -137,15 +155,21 @@ extension LoginEventPatterns on LoginEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(String email, String password)? login,
+    TResult Function()? getStaffs,
+    TResult Function(StaffRequestModel data)? addStaff,
+    TResult Function(StaffRequestModel data, int id)? editStaff,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started();
-      case _Login() when login != null:
-        return login(_that.email, _that.password);
+      case _GetStaffs() when getStaffs != null:
+        return getStaffs();
+      case _AddStaff() when addStaff != null:
+        return addStaff(_that.data);
+      case _EditStaff() when editStaff != null:
+        return editStaff(_that.data, _that.id);
       case _:
         return orElse();
     }
@@ -167,14 +191,20 @@ extension LoginEventPatterns on LoginEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(String email, String password) login,
+    required TResult Function() getStaffs,
+    required TResult Function(StaffRequestModel data) addStaff,
+    required TResult Function(StaffRequestModel data, int id) editStaff,
   }) {
     final _that = this;
     switch (_that) {
       case _Started():
         return started();
-      case _Login():
-        return login(_that.email, _that.password);
+      case _GetStaffs():
+        return getStaffs();
+      case _AddStaff():
+        return addStaff(_that.data);
+      case _EditStaff():
+        return editStaff(_that.data, _that.id);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -195,14 +225,20 @@ extension LoginEventPatterns on LoginEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(String email, String password)? login,
+    TResult? Function()? getStaffs,
+    TResult? Function(StaffRequestModel data)? addStaff,
+    TResult? Function(StaffRequestModel data, int id)? editStaff,
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started();
-      case _Login() when login != null:
-        return login(_that.email, _that.password);
+      case _GetStaffs() when getStaffs != null:
+        return getStaffs();
+      case _AddStaff() when addStaff != null:
+        return addStaff(_that.data);
+      case _EditStaff() when editStaff != null:
+        return editStaff(_that.data, _that.id);
       case _:
         return null;
     }
@@ -211,7 +247,7 @@ extension LoginEventPatterns on LoginEvent {
 
 /// @nodoc
 
-class _Started implements LoginEvent {
+class _Started implements StaffEvent {
   const _Started();
 
   @override
@@ -225,86 +261,19 @@ class _Started implements LoginEvent {
 
   @override
   String toString() {
-    return 'LoginEvent.started()';
+    return 'StaffEvent.started()';
   }
 }
 
 /// @nodoc
 
-class _Login implements LoginEvent {
-  const _Login({required this.email, required this.password});
-
-  final String email;
-  final String password;
-
-  /// Create a copy of LoginEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$LoginCopyWith<_Login> get copyWith =>
-      __$LoginCopyWithImpl<_Login>(this, _$identity);
+class _GetStaffs implements StaffEvent {
+  const _GetStaffs();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Login &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.password, password) ||
-                other.password == password));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, email, password);
-
-  @override
-  String toString() {
-    return 'LoginEvent.login(email: $email, password: $password)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$LoginCopyWith<$Res>
-    implements $LoginEventCopyWith<$Res> {
-  factory _$LoginCopyWith(_Login value, $Res Function(_Login) _then) =
-      __$LoginCopyWithImpl;
-  @useResult
-  $Res call({String email, String password});
-}
-
-/// @nodoc
-class __$LoginCopyWithImpl<$Res> implements _$LoginCopyWith<$Res> {
-  __$LoginCopyWithImpl(this._self, this._then);
-
-  final _Login _self;
-  final $Res Function(_Login) _then;
-
-  /// Create a copy of LoginEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? email = null,
-    Object? password = null,
-  }) {
-    return _then(_Login(
-      email: null == email
-          ? _self.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _self.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-mixin _$LoginState {
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is LoginState);
+        (other.runtimeType == runtimeType && other is _GetStaffs);
   }
 
   @override
@@ -312,17 +281,166 @@ mixin _$LoginState {
 
   @override
   String toString() {
-    return 'LoginState()';
+    return 'StaffEvent.getStaffs()';
   }
 }
 
 /// @nodoc
-class $LoginStateCopyWith<$Res> {
-  $LoginStateCopyWith(LoginState _, $Res Function(LoginState) __);
+
+class _AddStaff implements StaffEvent {
+  const _AddStaff(this.data);
+
+  final StaffRequestModel data;
+
+  /// Create a copy of StaffEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$AddStaffCopyWith<_AddStaff> get copyWith =>
+      __$AddStaffCopyWithImpl<_AddStaff>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _AddStaff &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  @override
+  String toString() {
+    return 'StaffEvent.addStaff(data: $data)';
+  }
 }
 
-/// Adds pattern-matching-related methods to [LoginState].
-extension LoginStatePatterns on LoginState {
+/// @nodoc
+abstract mixin class _$AddStaffCopyWith<$Res>
+    implements $StaffEventCopyWith<$Res> {
+  factory _$AddStaffCopyWith(_AddStaff value, $Res Function(_AddStaff) _then) =
+      __$AddStaffCopyWithImpl;
+  @useResult
+  $Res call({StaffRequestModel data});
+}
+
+/// @nodoc
+class __$AddStaffCopyWithImpl<$Res> implements _$AddStaffCopyWith<$Res> {
+  __$AddStaffCopyWithImpl(this._self, this._then);
+
+  final _AddStaff _self;
+  final $Res Function(_AddStaff) _then;
+
+  /// Create a copy of StaffEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_AddStaff(
+      null == data
+          ? _self.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as StaffRequestModel,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _EditStaff implements StaffEvent {
+  const _EditStaff(this.data, this.id);
+
+  final StaffRequestModel data;
+  final int id;
+
+  /// Create a copy of StaffEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$EditStaffCopyWith<_EditStaff> get copyWith =>
+      __$EditStaffCopyWithImpl<_EditStaff>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _EditStaff &&
+            (identical(other.data, data) || other.data == data) &&
+            (identical(other.id, id) || other.id == id));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, data, id);
+
+  @override
+  String toString() {
+    return 'StaffEvent.editStaff(data: $data, id: $id)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$EditStaffCopyWith<$Res>
+    implements $StaffEventCopyWith<$Res> {
+  factory _$EditStaffCopyWith(
+          _EditStaff value, $Res Function(_EditStaff) _then) =
+      __$EditStaffCopyWithImpl;
+  @useResult
+  $Res call({StaffRequestModel data, int id});
+}
+
+/// @nodoc
+class __$EditStaffCopyWithImpl<$Res> implements _$EditStaffCopyWith<$Res> {
+  __$EditStaffCopyWithImpl(this._self, this._then);
+
+  final _EditStaff _self;
+  final $Res Function(_EditStaff) _then;
+
+  /// Create a copy of StaffEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? data = null,
+    Object? id = null,
+  }) {
+    return _then(_EditStaff(
+      null == data
+          ? _self.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as StaffRequestModel,
+      null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+mixin _$StaffState {
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is StaffState);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'StaffState()';
+  }
+}
+
+/// @nodoc
+class $StaffStateCopyWith<$Res> {
+  $StaffStateCopyWith(StaffState _, $Res Function(StaffState) __);
+}
+
+/// Adds pattern-matching-related methods to [StaffState].
+extension StaffStatePatterns on StaffState {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -339,8 +457,8 @@ extension LoginStatePatterns on LoginState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
-    TResult Function(_Success value)? success,
     TResult Function(_Error value)? error,
+    TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -349,10 +467,10 @@ extension LoginStatePatterns on LoginState {
         return initial(_that);
       case _Loading() when loading != null:
         return loading(_that);
-      case _Success() when success != null:
-        return success(_that);
       case _Error() when error != null:
         return error(_that);
+      case _Loaded() when loaded != null:
+        return loaded(_that);
       case _:
         return orElse();
     }
@@ -375,8 +493,8 @@ extension LoginStatePatterns on LoginState {
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
-    required TResult Function(_Success value) success,
     required TResult Function(_Error value) error,
+    required TResult Function(_Loaded value) loaded,
   }) {
     final _that = this;
     switch (_that) {
@@ -384,10 +502,10 @@ extension LoginStatePatterns on LoginState {
         return initial(_that);
       case _Loading():
         return loading(_that);
-      case _Success():
-        return success(_that);
       case _Error():
         return error(_that);
+      case _Loaded():
+        return loaded(_that);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -409,8 +527,8 @@ extension LoginStatePatterns on LoginState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Initial value)? initial,
     TResult? Function(_Loading value)? loading,
-    TResult? Function(_Success value)? success,
     TResult? Function(_Error value)? error,
+    TResult? Function(_Loaded value)? loaded,
   }) {
     final _that = this;
     switch (_that) {
@@ -418,10 +536,10 @@ extension LoginStatePatterns on LoginState {
         return initial(_that);
       case _Loading() when loading != null:
         return loading(_that);
-      case _Success() when success != null:
-        return success(_that);
       case _Error() when error != null:
         return error(_that);
+      case _Loaded() when loaded != null:
+        return loaded(_that);
       case _:
         return null;
     }
@@ -443,8 +561,8 @@ extension LoginStatePatterns on LoginState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserModel user)? success,
     TResult Function(String message)? error,
+    TResult Function(List<UserModel> data)? loaded,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -453,10 +571,10 @@ extension LoginStatePatterns on LoginState {
         return initial();
       case _Loading() when loading != null:
         return loading();
-      case _Success() when success != null:
-        return success(_that.user);
       case _Error() when error != null:
         return error(_that.message);
+      case _Loaded() when loaded != null:
+        return loaded(_that.data);
       case _:
         return orElse();
     }
@@ -479,8 +597,8 @@ extension LoginStatePatterns on LoginState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserModel user) success,
     required TResult Function(String message) error,
+    required TResult Function(List<UserModel> data) loaded,
   }) {
     final _that = this;
     switch (_that) {
@@ -488,10 +606,10 @@ extension LoginStatePatterns on LoginState {
         return initial();
       case _Loading():
         return loading();
-      case _Success():
-        return success(_that.user);
       case _Error():
         return error(_that.message);
+      case _Loaded():
+        return loaded(_that.data);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -513,8 +631,8 @@ extension LoginStatePatterns on LoginState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserModel user)? success,
     TResult? Function(String message)? error,
+    TResult? Function(List<UserModel> data)? loaded,
   }) {
     final _that = this;
     switch (_that) {
@@ -522,10 +640,10 @@ extension LoginStatePatterns on LoginState {
         return initial();
       case _Loading() when loading != null:
         return loading();
-      case _Success() when success != null:
-        return success(_that.user);
       case _Error() when error != null:
         return error(_that.message);
+      case _Loaded() when loaded != null:
+        return loaded(_that.data);
       case _:
         return null;
     }
@@ -534,7 +652,7 @@ extension LoginStatePatterns on LoginState {
 
 /// @nodoc
 
-class _Initial implements LoginState {
+class _Initial implements StaffState {
   const _Initial();
 
   @override
@@ -548,13 +666,13 @@ class _Initial implements LoginState {
 
   @override
   String toString() {
-    return 'LoginState.initial()';
+    return 'StaffState.initial()';
   }
 }
 
 /// @nodoc
 
-class _Loading implements LoginState {
+class _Loading implements StaffState {
   const _Loading();
 
   @override
@@ -568,80 +686,18 @@ class _Loading implements LoginState {
 
   @override
   String toString() {
-    return 'LoginState.loading()';
+    return 'StaffState.loading()';
   }
 }
 
 /// @nodoc
 
-class _Success implements LoginState {
-  const _Success(this.user);
-
-  final UserModel user;
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$SuccessCopyWith<_Success> get copyWith =>
-      __$SuccessCopyWithImpl<_Success>(this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Success &&
-            (identical(other.user, user) || other.user == user));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, user);
-
-  @override
-  String toString() {
-    return 'LoginState.success(user: $user)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$SuccessCopyWith<$Res>
-    implements $LoginStateCopyWith<$Res> {
-  factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
-      __$SuccessCopyWithImpl;
-  @useResult
-  $Res call({UserModel user});
-}
-
-/// @nodoc
-class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
-  __$SuccessCopyWithImpl(this._self, this._then);
-
-  final _Success _self;
-  final $Res Function(_Success) _then;
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? user = null,
-  }) {
-    return _then(_Success(
-      null == user
-          ? _self.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as UserModel,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _Error implements LoginState {
+class _Error implements StaffState {
   const _Error(this.message);
 
   final String message;
 
-  /// Create a copy of LoginState
+  /// Create a copy of StaffState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -661,13 +717,13 @@ class _Error implements LoginState {
 
   @override
   String toString() {
-    return 'LoginState.error(message: $message)';
+    return 'StaffState.error(message: $message)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$ErrorCopyWith<$Res>
-    implements $LoginStateCopyWith<$Res> {
+    implements $StaffStateCopyWith<$Res> {
   factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) =
       __$ErrorCopyWithImpl;
   @useResult
@@ -681,7 +737,7 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
   final _Error _self;
   final $Res Function(_Error) _then;
 
-  /// Create a copy of LoginState
+  /// Create a copy of StaffState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
@@ -692,6 +748,74 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _Loaded implements StaffState {
+  const _Loaded(final List<UserModel> data) : _data = data;
+
+  final List<UserModel> _data;
+  List<UserModel> get data {
+    if (_data is EqualUnmodifiableListView) return _data;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_data);
+  }
+
+  /// Create a copy of StaffState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$LoadedCopyWith<_Loaded> get copyWith =>
+      __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _Loaded &&
+            const DeepCollectionEquality().equals(other._data, _data));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
+
+  @override
+  String toString() {
+    return 'StaffState.loaded(data: $data)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$LoadedCopyWith<$Res>
+    implements $StaffStateCopyWith<$Res> {
+  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) =
+      __$LoadedCopyWithImpl;
+  @useResult
+  $Res call({List<UserModel> data});
+}
+
+/// @nodoc
+class __$LoadedCopyWithImpl<$Res> implements _$LoadedCopyWith<$Res> {
+  __$LoadedCopyWithImpl(this._self, this._then);
+
+  final _Loaded _self;
+  final $Res Function(_Loaded) _then;
+
+  /// Create a copy of StaffState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_Loaded(
+      null == data
+          ? _self._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
     ));
   }
 }

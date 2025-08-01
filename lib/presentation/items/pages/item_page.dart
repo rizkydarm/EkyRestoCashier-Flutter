@@ -1,5 +1,6 @@
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
+import 'package:eky_pos/presentation/items/pages/product/add_product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
 import 'package:eky_pos/presentation/items/pages/category_page.dart';
@@ -8,7 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class ItemPage extends StatelessWidget {
-  const ItemPage({super.key});
+  final ValueNotifier<bool>? toggleSideMenuNotifier;
+  
+  const ItemPage({super.key, this.toggleSideMenuNotifier});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +19,7 @@ class ItemPage extends StatelessWidget {
     context.read<ProductBloc>().add(ProductEvent.getProducts());
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
     final deviceType = getDeviceType(MediaQuery.of(context).size);
+    var tabIndex = 0;
     return Scaffold(
       key: scaffoldKey,
       drawer: deviceType == DeviceScreenType.mobile ? DrawerWidget() : null,
@@ -24,6 +28,10 @@ class ItemPage extends StatelessWidget {
           'Items',
         ),
         centerTitle: true,
+        leading: toggleSideMenuNotifier != null ? IconButton(
+          icon: const Icon(Icons.menu_open),
+          onPressed: () => toggleSideMenuNotifier!.value = !toggleSideMenuNotifier!.value,
+        ) : null,
       ),
       body: ResponsiveBuilder(
         builder: (context, sizingInformation) {
@@ -35,16 +43,41 @@ class ItemPage extends StatelessWidget {
                 child: Column(
                   children: [
                     TabBar(
+                      onTap: (index) {
+                        tabIndex = index;
+                      },
                       tabs: const [
                         Tab(text: "Products"),
                         Tab(text: "Categories"),
                       ],
                     ),
                     Expanded(
-                      child: TabBarView(
+                      child: Stack(
                         children: [
-                          ProductBlocListView(),
-                          CategoryBlocListView(),
+                          TabBarView(
+                            children: [
+                              CategoryBlocListView(),
+                              ProductBlocListView(),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16.0, bottom: 16.0),
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  if (tabIndex == 0) {
+                                    CategoryPage.showAddCategoryBottomSheet(context);
+                                  } else {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                      return AddProductPage();
+                                    }));
+                                  }
+                                },
+                                child: const Icon(Icons.add),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

@@ -14,63 +14,65 @@ class CategoryPage extends StatelessWidget {
       ),
       body: CategoryBlocListView(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          String? name;
-          final formKey = GlobalKey<FormState>();
-          showModalBottomSheet(context: context,
-            showDragHandle: true,
-            useSafeArea: true,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24)
-            ),
-            constraints: const BoxConstraints(
-              maxWidth: 600,
-            ),
-            builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Form(
-                      key: formKey,
-                      child: TextFormField(
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          hintText: 'Category name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          filled: true,
-                        ),
-                        onChanged: (value) => name = value,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Category name is required';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    FilledButton(
-                      onPressed: () {
-                        final isValid = formKey.currentState?.validate() ?? false;
-                        if (isValid && name != null) {
-                          context.read<CategoryBloc>().add(CategoryEvent.addCategory(name: name!));
-                          Navigator.pop(context);
-                        }
-                      }, 
-                      child: const Text('Save'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
+        onPressed: () => showAddCategoryBottomSheet(context),
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  static Future<void> showAddCategoryBottomSheet(BuildContext context) {
+    String? name;
+    final formKey = GlobalKey<FormState>();
+    return showModalBottomSheet(context: context,
+      showDragHandle: true,
+      useSafeArea: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24)
+      ),
+      constraints: const BoxConstraints(
+        maxWidth: 600,
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Form(
+                key: formKey,
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: 'Category name',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    filled: true,
+                  ),
+                  onChanged: (value) => name = value,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Category name is required';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () {
+                  final isValid = formKey.currentState?.validate() ?? false;
+                  if (isValid && name != null) {
+                    context.read<CategoryBloc>().add(CategoryEvent.addCategory(name: name!));
+                    Navigator.pop(context);
+                  }
+                }, 
+                child: const Text('Save'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

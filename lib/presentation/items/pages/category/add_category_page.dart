@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
 
-import '../bloc/category/category_bloc.dart';
+import '../../bloc/category/category_bloc.dart';
 
 class AddCategoryPage extends StatefulWidget {
   const AddCategoryPage({super.key});

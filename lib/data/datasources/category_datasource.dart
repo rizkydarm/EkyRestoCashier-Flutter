@@ -15,7 +15,7 @@ class CategoryDataSource {
       CREATE TABLE $tableCategories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        business_id INTEGER,
+        category_id INTEGER,
         created_at TEXT,
         updated_at TEXT
       )

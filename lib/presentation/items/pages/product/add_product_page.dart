@@ -48,6 +48,7 @@ class AddProductPage extends StatelessWidget {
     CategoryModel? selectedCategoryData;
 
     bool isImage = false;
+    final emojiController = TextEditingController();
 
     final List<Color> colors = [
       Colors.red,
@@ -60,11 +61,9 @@ class AddProductPage extends StatelessWidget {
       Colors.teal
     ];
 
-    Color selectedColor = Colors.red;
+    Color selectedColor = Colors.white;
 
     final formKey = GlobalKey<FormState>();
-
-    XFile? image;
 
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
 
@@ -153,14 +152,15 @@ class AddProductPage extends StatelessWidget {
                       value: false,
                       groupValue: isImage,
                       onChanged: (value) => setState(() => isImage = value!),
-                      title: Text('Warna')
+                      title: Text('Color')
                     ),
                     RadioListTile<bool>(
                       value: true,
                       groupValue: isImage,
                       onChanged: (value) => setState(() => isImage = value!),
-                      title: Text('Gambar')
+                      title: Text('Emoji')
                     ),
+                    const SizedBox(height: 16),
                     if (!isImage) Wrap(
                       spacing: 8,
                       runSpacing: 8,
@@ -197,73 +197,17 @@ class AddProductPage extends StatelessWidget {
                           ),
                         ),
                       )).toList(),
-                    ),
-                    const SizedBox(height: 16),
-                    if (isImage) Row(
-                      children: [
-                        SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              color: Colors.grey.shade300,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: image != null ? ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.file(
-                                File(image!.path),
-                                fit: BoxFit.cover,
-                              ),
-                            ) : Icon(Icons.image),
-                          ),
+                    ) else TextField(
+                      controller: emojiController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        const SizedBox(width: 16),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                minimumSize: Size(200, 40),
-                              ),
-                              onPressed: () async {
-                                final tempImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-                                if (tempImage != null) {
-                                  setState(() => image = tempImage);
-                                }
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.folder),
-                                  SpaceWidth(8),
-                                  const Text('Pilih Gambar'),
-                                ],
-                              ),
-                            ),
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                minimumSize: Size(200, 40),
-                              ),
-                              onPressed: () async {
-                                final tempImage = await ImagePicker().pickImage(source: ImageSource.camera);
-                                if (tempImage != null) {
-                                  setState(() => image = tempImage);
-                                }
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.camera_alt),
-                                  SpaceWidth(8),
-                                  const Text('Ambil Foto'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                        hintText: 'Choose 1 emoji in keyboard',
+                        suffixIcon: Icon(Icons.emoji_emotions),
+                        suffixIconColor: Colors.grey,
+                      ),
+                    )
                   ],
                 );
               }
@@ -295,48 +239,28 @@ class AddProductPage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         if ((formKey.currentState?.validate() ?? false) && selectedCategoryData != null) {
-                          final data = ProductModel(
-                            name: nameController.text,
-                            categoryId: selectedCategoryData!.id!,
-                            price: priceController.text.toIntegerFromText.toDouble().toString(),
-                            cost: costController.text.toIntegerFromText.toDouble().toString(),
-                            stock: 0,
-                            color: getColorString(selectedColor),
-                            barcode: barcodeController.text,
-                            description: nameController.text,
-                          );
-
                           if (isImage) {
-                            if (image != null) {
+                            if (emojiController.text.isEmpty && emojiController.text.length > 1) {
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Belum bisa menambahkan gambar')),
-                              );
-                              // context.read<ProductBloc>().add(ProductEvent.addProductWithImage(data, image!));
-                              return;
-                            } else {
-                              if (!context.mounted) return;
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text('Pilih Gambar'),
-                                    content: Text('Pilih gambar terlebih dahulu'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text('OK')
-                                      )
-                                    ],
-                                  );
-                                }
+                                SnackBar(content: Text('Emoji is required')),
                               );
                               return;
                             }
-                          } else {
-                            if (!context.mounted) return;
-                            context.read<ProductBloc>().add(ProductEvent.addProduct(data));
                           }
+                          final data = ProductModel(
+                            name: nameController.text,
+                            categoryId: selectedCategoryData!.id!,
+                            category: selectedCategoryData!,
+                            price: priceController.text.toIntegerFromText.toDouble().toString(),
+                            cost: costController.text.toIntegerFromText.toDouble().toString(),
+                            stock: 1,
+                            color: getColorString(selectedColor),
+                            barcode: barcodeController.text,
+                            description: nameController.text,
+                            image: isImage ? emojiController.text : '▪️',
+                          );
+                          context.read<ProductBloc>().add(ProductEvent.addProduct(data));
                         }
                       },
                       child: const Text('Simpan')

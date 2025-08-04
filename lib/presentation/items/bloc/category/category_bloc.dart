@@ -26,7 +26,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         name: event.name,        
         createdAt: DateTime.now(),
       );
-      await dbCategory.saveCategory(category);
+      try {
+        await dbCategory.saveCategory(category);
+      } catch (e) {
+        emit(CategoryState.error(e.toString()));
+      }
       add(_GetCategories());
     });
 

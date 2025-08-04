@@ -80,13 +80,10 @@ class ProductBlocListView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final product = data[index];
                 return ListTile(
-                  leading: product.image != null ? ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      '${Variables.baseUrl}${product.image!}',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
+                  leading: product.image != null ? Text(
+                    product.image!,
+                    style: TextStyle(
+                      fontSize: 32
                     ),
                   ) : Container(
                     width: 50,

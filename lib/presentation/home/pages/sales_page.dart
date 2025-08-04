@@ -155,11 +155,24 @@ class SalesPage extends StatelessWidget {
                                                                 borderRadius: BorderRadius.circular(8),
                                                                 color: changeStringtoColor(product.color ?? "#000000"),
                                                               ),
-                                                              child: selectedProduct ? Icon(
-                                                                Icons.check_circle, 
-                                                                size: 30, 
-                                                                color: AppColors.white
-                                                              ) : null,
+                                                              child: Stack(
+                                                                alignment: Alignment.center,
+                                                                children: [
+                                                                  Center(
+                                                                    child: Text(
+                                                                      product.image!,
+                                                                      style: TextStyle(
+                                                                        fontSize: 100
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  selectedProduct ? Icon(
+                                                                    Icons.check_circle, 
+                                                                    size: 30, 
+                                                                    color: AppColors.white
+                                                                  ) : SizedBox.shrink(),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
                                                           SizedBox(height: 8),

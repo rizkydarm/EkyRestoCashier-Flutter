@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:eky_pos/data/datasources/product_datasource.dart';
+import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/presentation/items/models/product_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';

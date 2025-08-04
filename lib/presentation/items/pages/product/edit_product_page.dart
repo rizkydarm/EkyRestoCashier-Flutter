@@ -36,6 +36,7 @@ class _EditProductPageState extends State<EditProductPage> {
   final _descriptionController = TextEditingController();
   final _barcodeController = TextEditingController();
   final _costController = TextEditingController();
+  final _emojiController = TextEditingController();
 
   // String _selectedCategory = 'Pilih Kategori';
 
@@ -53,29 +54,9 @@ class _EditProductPageState extends State<EditProductPage> {
     Colors.teal
   ];
 
-  Color _selectedColor = Colors.red;
+  Color _selectedColor = Colors.white;
 
   final _formKey = GlobalKey<FormState>();
-
-  XFile? _image;
-
-  void _getImage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _image = image;
-      });
-    }
-  }
-
-  void _takePicture() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (image != null) {
-      setState(() {
-        _image = image;
-      });
-    }
-  }
 
   void changeColor(Color color) {
     setState(() {
@@ -94,9 +75,9 @@ class _EditProductPageState extends State<EditProductPage> {
     _descriptionController.text = widget.data.description ?? '';
     _barcodeController.text = widget.data.barcode ?? '';
     _costController.text = widget.data.cost!.currencyFormatRpV3;
-    _selectedCategoryData = widget.data.category;
     _selectedColor = changeStringtoColor(widget.data.color ?? '');
     if (widget.data.image != null) {
+      _emojiController.text = widget.data.image ?? '';
       _isImage = true;
     }
     context.read<CategoryBloc>().add(CategoryEvent.getCategories());
@@ -124,18 +105,8 @@ class _EditProductPageState extends State<EditProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Product',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w700)),
+        title: const Text('Edit Product'),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-        ),
       ),
       body: Form(
         key: _formKey,
@@ -153,29 +124,22 @@ class _EditProductPageState extends State<EditProductPage> {
             const SizedBox(height: 16),
             BlocBuilder<CategoryBloc, CategoryState>(
               builder: (context, state) {
-                List<CategoryModel> categories = [
-                  CategoryModel(id: 0, name: 'Pilih Kategori')
-                ];
+                List<CategoryModel> categories = [];
                 state.maybeWhen(
-                  orElse: () {
-                    _selectedCategoryData = categories.first;
-                  },
-                  success: (categories) {
-                    if (_selectedCategoryData != null) {
-                      _selectedCategoryData = categories.first;
-                    }
-                  },
+                  orElse: () {},
+                  success: (data) => categories = data,
                 );
-                return CustomDropdown<CategoryModel>(
-                  value: _selectedCategoryData,
-                  items: categories,
-                  label: 'Kategori',
-                  hint: 'Pilih Kategori',
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCategoryData = value;
-                    });
-                  },
+                _selectedCategoryData = categories.firstWhere((element) => element.id == widget.data.categoryId);
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return CustomDropdown<CategoryModel>(
+                      hint: 'Choose Category',
+                      value: _selectedCategoryData,
+                      items: categories,
+                      label: 'Category',
+                      onChanged: (value) => setState(() => _selectedCategoryData = value),
+                    );
+                  }
                 );
               },
             ),
@@ -210,140 +174,73 @@ class _EditProductPageState extends State<EditProductPage> {
             Text('Tampilan di POS'),
             const SizedBox(height: 16),
             RadioListTile<bool>(
-                value: false,
-                groupValue: _isImage,
-                onChanged: (value) {
-                  setState(() {
-                    _isImage = value!;
-                  });
-                },
-                title: Text('Warna')),
+              value: false,
+              groupValue: _isImage,
+              onChanged: (value) {
+                setState(() {
+                  _isImage = value!;
+                });
+              },
+              title: Text('Warna')
+            ),
             RadioListTile(
-                value: true,
-                groupValue: _isImage,
-                onChanged: (value) {
-                  setState(() {
-                    _isImage = value!;
-                  });
-                },
-                title: Text('Gambar')),
+              value: true,
+              groupValue: _isImage,
+              onChanged: (value) {
+                setState(() {
+                  _isImage = value!;
+                });
+              },
+              title: Text('Gambar')
+            ),
             const SizedBox(height: 16),
-            if (!_isImage)
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _colors
-                    .map((color) => GestureDetector(
-                          onTap: () {
-                            changeColor(color);
-                          },
-                          child: _selectedColor == color
-                              ? Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: color,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 4,
-                                    ),
-                                  ),
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: color,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: Colors.grey.shade300,
-                                    ),
-                                  ),
-                                ),
-                        ))
-                    .toList(),
-              ),
-            // const SizedBox(height: 16),
-            if (_isImage)
-              //upload image or pick image from gallery
-              Row(
-                children: [
-                  //Container for image preview
-                  Container(
-                    width: 100,
-                    height: 100,
+            if (!_isImage) Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: _colors.map((color) => GestureDetector(
+                onTap: () => setState(() => _selectedColor = color),
+                child: _selectedColor == color ? SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(10),
+                      color: color,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 4,
+                      ),
                     ),
-                    child: _image != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.file(
-                              File(_image!.path),
-                              fit: BoxFit.cover,
-                            ))
-                        : widget.data.image != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  '${Variables.baseUrl}${widget.data.image!}',
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Icon(
-                                Icons.image,
-                                color: Colors.white,
-                                size: 50,
-                              ),
+                    child: Icon(
+                      Icons.check,
+                      color: Colors.white,
+                    ),
                   ),
-                  const SizedBox(width: 16),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(200, 40),
-                        ),
-                        onPressed: () {
-                          _getImage();
-                        },
-                        child: Row(
-                          children: [
-                            Icon(Icons.folder),
-                            SpaceWidth(8),
-                            const Text('Pilih Gambar'),
-                          ],
-                        ),
+                ) : SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Colors.grey.shade300,
                       ),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(200, 40),
-                        ),
-                        onPressed: () {
-                          _takePicture();
-                        },
-                        child: Row(
-                          children: [
-                            Icon(Icons.camera_alt),
-                            SpaceWidth(8),
-                            const Text('Ambil Foto'),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ],
+                ),
+              )).toList(),
+            ) else TextField(
+              controller: _emojiController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                hintText: 'Choose 1 emoji in keyboard',
+                suffixIcon: Icon(Icons.emoji_emotions),
+                suffixIconColor: Colors.grey,
               ),
+            ),
             const SizedBox(height: 24),
             ElevatedButton(
               style: ElevatedButton.styleFrom(

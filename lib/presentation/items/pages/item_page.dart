@@ -3,7 +3,7 @@ import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
 import 'package:eky_pos/presentation/items/pages/product/add_product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
-import 'package:eky_pos/presentation/items/pages/category_page.dart';
+import 'package:eky_pos/presentation/items/pages/category/category_page.dart';
 import 'package:eky_pos/presentation/items/pages/product/product_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -56,8 +56,8 @@ class ItemPage extends StatelessWidget {
                         children: [
                           TabBarView(
                             children: [
-                              CategoryBlocListView(),
                               ProductBlocListView(),
+                              CategoryBlocListView(),
                             ],
                           ),
                           Align(
@@ -67,11 +67,11 @@ class ItemPage extends StatelessWidget {
                               child: FloatingActionButton(
                                 onPressed: () {
                                   if (tabIndex == 0) {
-                                    CategoryPage.showAddCategoryBottomSheet(context);
-                                  } else {
                                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                                       return AddProductPage();
                                     }));
+                                  } else {
+                                    CategoryPage.showAddCategoryBottomSheet(context);
                                   }
                                 },
                                 child: const Icon(Icons.add),

@@ -1,3 +1,4 @@
+import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:eky_pos/core/constants/colors.dart';
@@ -21,48 +22,47 @@ class DetailProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detail Product',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w700)),
+        title: const Text('Detail Product'),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          data.image != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    Variables.baseUrl + data.image!,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: changeStringtoColor(data.color ?? ''),
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: changeStringtoColor(data.color ?? Colors.white.toString()),
+              ),
+              child: Center(
+                child: Text(data.image ?? '▪️',
+                  style: const TextStyle(
+                    fontSize: 32,
                   ),
                 ),
+              ),
+            ),
+          ),
           ListTile(
             title: const Text('Nama Product'),
             subtitle: Text(data.name ?? ''),
           ),
           //category
-          ListTile(
-            title: const Text('Kategori Product'),
-            subtitle: Text(data.category?.name ?? ''),
+
+          BlocBuilder<CategoryBloc, CategoryState>(
+            builder: (context, state) {
+              final categories = state.maybeWhen(
+                orElse: () => [],
+                success: (data) => data,
+              );
+              final categoryName = categories.firstWhere((element) => element.id == data.categoryId)?.name ?? "-";
+              return ListTile(
+                title: const Text('Kategori Product'),
+                subtitle: Text(categoryName),
+              );
+            }
           ),
           ListTile(
             title: const Text('Harga Jual Product'),

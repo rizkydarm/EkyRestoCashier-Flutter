@@ -132,7 +132,7 @@ class QRISPaymentPage extends StatelessWidget {
             ),
             SpaceHeight(16),
             Text('Transaction ID:'),
-            Text(transaction.orderNumber ?? '-'),
+            Text(transaction.transactionId ?? '-'),
             Spacer(),
             Flexible(
               child: ElevatedButton(
@@ -147,7 +147,7 @@ class QRISPaymentPage extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => InvoicePage(
                         nominal: totalPrice,
-                        totalPrice: double.parse(transaction.totalPrice ?? '0'),
+                        totalPrice: transaction.totalPrice ?? 0,
                         transaction: transaction,
                       )
                     ),

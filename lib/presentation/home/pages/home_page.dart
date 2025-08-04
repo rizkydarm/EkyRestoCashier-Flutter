@@ -44,10 +44,10 @@ class HomePage extends StatelessWidget {
       SalesAndCheckoutPages(
         toggleSideMenuNotifier: toggleSideMenuNotifier
       ),
-      TransactionPage(
+      ItemPage(
         toggleSideMenuNotifier: toggleSideMenuNotifier,
       ),
-      ItemPage(
+      TransactionPage(
         toggleSideMenuNotifier: toggleSideMenuNotifier,
       ),
       PrinterPage(
@@ -73,15 +73,15 @@ class HomePage extends StatelessWidget {
         onTap: (index, controller) {
           controller.changePage(index);
         },
-        title: 'Transactions',
-        icon: Icon(Icons.receipt),
+        title: 'Items',
+        icon: Icon(Icons.list),
       ),
       SideMenuItem(
         onTap: (index, controller) {
           controller.changePage(index);
         },
-        title: 'Items',
-        icon: Icon(Icons.list),
+        title: 'Transactions',
+        icon: Icon(Icons.receipt),
       ),
       SideMenuItem(
         onTap: (index, controller) {

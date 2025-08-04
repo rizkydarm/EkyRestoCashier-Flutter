@@ -14,7 +14,7 @@ import 'package:eky_pos/presentation/home/pages/invoice_page.dart';
 
 import '../../../core/components/spaces.dart';
 import '../../../core/constants/colors.dart';
-import '../bloc/online_checker/online_checker_bloc.dart';
+// import '../bloc/online_checker/online_checker_bloc.dart';
 import '../bloc/order_offline/order_offline_bloc.dart';
 
 class PaymentPage extends StatelessWidget {
@@ -249,103 +249,103 @@ class PaymentPage extends StatelessWidget {
               }
             ),
             const SpaceHeight(28.0),
-            BlocBuilder<CheckoutBloc, CheckoutState>(
-              builder: (context, state) {
-                double subtotal = state.maybeWhen(
-                  orElse: () => 0,
-                  success: (orders, subtotal, totalPayment, qty) {
-                    return subtotal;
-                  },
-                );
-                double totalPrice = state.maybeWhen(
-                  orElse: () => 0,
-                  success: (orders, subtotal, totalPayment, qty) {
-                    return totalPayment;
-                  },
-                );
-                int totalItems = state.maybeWhen(
-                  orElse: () => 0,
-                  success: (orders, subtotal, totalPayment, qty) {
-                    return qty;
-                  },
-                );                    
-                double discount = state.maybeWhen(
-                  orElse: () => 0,
-                  success: (orders, subtotal, totalPayment, qty) {
-                    return 0;
-                  },
-                );
-                List<ProductQuantity> items = state.maybeWhen(
-                  orElse: () => [],
-                  success: (orders, subtotal, totalPayment, qty) {
-                    return orders;
-                  },
-                );
-                return BlocListener<OrderOfflineBloc, OrderOfflineState>(
-                  listener: (context, state) {
-                    state.maybeWhen(
-                      orElse: () {},
-                      success: (trx) {
-                        if (isCash) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => InvoicePage(
-                                nominal: totalPaymentNotifier.value,
-                                totalPrice: double.parse(trx.totalPrice ?? '0'),
-                                transaction: trx,
-                              )
-                            ),
-                            (route) => false,
-                          );
-                        } else {
-                          Navigator.push(context, 
-                            MaterialPageRoute(
-                              builder: (context) => QRISPaymentPage(
-                                totalPrice: double.parse(trx.totalPrice ?? '0'),
-                                transaction: trx,
-                              ),
-                            ),
-                          );  
-                        }
-                      },
-                      error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(msg),
-                          backgroundColor: AppColors.error,
-                        ),
-                      ),
-                    );
-                  },
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final request = OrderRequestModel(
-                        outletId: 0,
-                        subtotal: subtotal,
-                        totalPrice: totalPrice,
-                        totalItems: totalItems,
-                        discount: discount,
-                        paymentMethod: isCash ? 'Cash' : 'QRIS',
-                        items: items,
-                      );
-                      context.read<OrderOfflineBloc>().add(
-                        OrderOfflineEvent.createOfflineOrder(
-                          orderRequestModel: request,
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white,
-                      minimumSize: const Size(double.infinity, 56),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: const Text('Bayar'),
-                  ),
-                );
-              },
-            ),
+            // BlocBuilder<CheckoutBloc, CheckoutState>(
+            //   builder: (context, state) {
+            //     double subtotal = state.maybeWhen(
+            //       orElse: () => 0,
+            //       success: (orders, subtotal, totalPayment, qty) {
+            //         return subtotal;
+            //       },
+            //     );
+            //     double totalPrice = state.maybeWhen(
+            //       orElse: () => 0,
+            //       success: (orders, subtotal, totalPayment, qty) {
+            //         return totalPayment;
+            //       },
+            //     );
+            //     int totalItems = state.maybeWhen(
+            //       orElse: () => 0,
+            //       success: (orders, subtotal, totalPayment, qty) {
+            //         return qty;
+            //       },
+            //     );                    
+            //     double discount = state.maybeWhen(
+            //       orElse: () => 0,
+            //       success: (orders, subtotal, totalPayment, qty) {
+            //         return 0;
+            //       },
+            //     );
+            //     List<ProductQuantity> items = state.maybeWhen(
+            //       orElse: () => [],
+            //       success: (orders, subtotal, totalPayment, qty) {
+            //         return orders;
+            //       },
+            //     );
+            //     return BlocListener<OrderOfflineBloc, OrderOfflineState>(
+            //       listener: (context, state) {
+            //         state.maybeWhen(
+            //           orElse: () {},
+            //           success: (trx) {
+            //             if (isCash) {
+            //               Navigator.pushAndRemoveUntil(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                   builder: (context) => InvoicePage(
+            //                     nominal: totalPaymentNotifier.value,
+            //                     totalPrice: double.parse(trx.totalPrice ?? '0'),
+            //                     transaction: trx,
+            //                   )
+            //                 ),
+            //                 (route) => false,
+            //               );
+            //             } else {
+            //               Navigator.push(context, 
+            //                 MaterialPageRoute(
+            //                   builder: (context) => QRISPaymentPage(
+            //                     totalPrice: double.parse(trx.totalPrice ?? '0'),
+            //                     transaction: trx,
+            //                   ),
+            //                 ),
+            //               );  
+            //             }
+            //           },
+            //           error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
+            //             SnackBar(
+            //               content: Text(msg),
+            //               backgroundColor: AppColors.error,
+            //             ),
+            //           ),
+            //         );
+            //       },
+            //       child: ElevatedButton(
+            //         onPressed: () {
+            //           final request = OrderRequestModel(
+            //             outletId: 0,
+            //             subtotal: subtotal,
+            //             totalPrice: totalPrice,
+            //             totalItems: totalItems,
+            //             discount: discount,
+            //             paymentMethod: isCash ? 'Cash' : 'QRIS',
+            //             items: items,
+            //           );
+            //           context.read<OrderOfflineBloc>().add(
+            //             OrderOfflineEvent.createOfflineOrder(
+            //               orderRequestModel: request,
+            //             ),
+            //           );
+            //         },
+            //         style: ElevatedButton.styleFrom(
+            //           backgroundColor: AppColors.primary,
+            //           foregroundColor: AppColors.white,
+            //           minimumSize: const Size(double.infinity, 56),
+            //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            //           padding: const EdgeInsets.symmetric(vertical: 16),
+            //         ),
+            //         child: const Text('Bayar'),
+            //       ),
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),

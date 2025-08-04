@@ -60,23 +60,23 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           DrawerMenuItem(
-            title: 'Transaction',
-            icon: Icons.receipt,
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const TransactionPage()),
-                (route) => false,
-              );
-            },
-          ),
-          DrawerMenuItem(
             title: 'Product & Stock',
             icon: Icons.list,
             onPressed: () {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const ItemPage()),
+                (route) => false,
+              );
+            },
+          ),
+          DrawerMenuItem(
+            title: 'Transaction',
+            icon: Icons.receipt,
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const TransactionPage()),
                 (route) => false,
               );
             },

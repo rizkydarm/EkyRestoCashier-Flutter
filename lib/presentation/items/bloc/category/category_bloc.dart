@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:uuid/uuid.dart';
+import 'package:eky_pos/data/datasources/category_datasource.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/data/datasources/db_local_datasource.dart';
@@ -10,32 +10,29 @@ part 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
-  final _uuid = Uuid();
-  
   CategoryBloc() : super(_Initial()) {
 
-    final dbLocalDatasource = DBLocalDatasource.instance;
+    final dbCategory = CategoryDataSource(dbLocal: DBLocalDatasource.instance);
     
     on<_GetCategories>((event, emit) async {
       emit(CategoryState.loading());
-      final result = await dbLocalDatasource.getAllCategory();
+      final result = await dbCategory.getAllCategory();
       emit(CategoryState.success(result));
     });
 
     on<_AddCategory>((event, emit) async {
       emit(CategoryState.loading());
-      final category = Category(
+      final category = CategoryModel(
         name: event.name,        
         createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
       );
-      await dbLocalDatasource.saveCategory(category);
+      await dbCategory.saveCategory(category);
       add(_GetCategories());
     });
 
     on<_UpdateCategory>((event, emit) async {
       emit(CategoryState.loading());
-      await dbLocalDatasource.updateCategory(
+      await dbCategory.updateCategory(
         event.id,
         event.name,
       );
@@ -44,7 +41,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
     on<_DeleteCategory>((event, emit) async {
       emit(CategoryState.loading());
-      await dbLocalDatasource.deleteCategory(event.id);
+      await dbCategory.deleteCategory(event.id);
       add(_GetCategories());
     });
   }

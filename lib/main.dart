@@ -1,12 +1,11 @@
 import 'package:eky_pos/core/utils/talker.dart';
 import 'package:eky_pos/presentation/home/pages/home_page.dart';
-import 'package:eky_pos/presentation/table_management/widgets/table_provider.dart';
+import 'package:eky_pos/presentation/table_management/bloc/table_manag_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
 import 'package:eky_pos/data/datasources/db_local_datasource.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
-import 'package:eky_pos/presentation/home/bloc/online_checker/online_checker_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/order/order_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/order_offline/order_offline_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/transaction/transaction_bloc.dart';
@@ -72,16 +71,10 @@ void main() {
       create: (context) => GetQrcodeBloc(),
     ),
     BlocProvider(
-      create: (context) => OnlineCheckerBloc(),
-    ),
-    BlocProvider(
-      create: (context) => OrderOfflineBloc(),
-    ),
-    BlocProvider(
       create: (context) => TransactionOfflineBloc(),
     ),
-    ChangeNotifierProvider(
-      create: (context) => TableManagementProvider(),
+    BlocProvider(
+      create: (context) => TableManagementBloc(),
     ),
   ];
   runApp(MultiBlocProvider(

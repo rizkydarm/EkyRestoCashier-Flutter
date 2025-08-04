@@ -6,7 +6,7 @@ import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 
 class EditCategoryPage extends StatefulWidget {
-  final Category category;
+  final CategoryModel category;
   const EditCategoryPage({
     super.key,
     required this.category,
@@ -30,17 +30,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-        ),
-        title: const Text('Edit Kategori',
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.white)),
+        title: const Text('Edit Kategori'),
         centerTitle: true,
       ),
       body: Padding(

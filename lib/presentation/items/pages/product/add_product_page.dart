@@ -45,7 +45,7 @@ class AddProductPage extends StatelessWidget {
       );
     });
 
-    Category? selectedCategoryData;
+    CategoryModel? selectedCategoryData;
 
     bool isImage = false;
 
@@ -96,14 +96,14 @@ class AddProductPage extends StatelessWidget {
             const SizedBox(height: 16),
             BlocBuilder<CategoryBloc, CategoryState>(
               builder: (context, state) {
-                List<Category> categories = [];
+                List<CategoryModel> categories = [];
                 state.maybeWhen(
                   orElse: () {},
                   success: (data) => categories = data,
                 );
                 return StatefulBuilder(
                   builder: (context, setState) {
-                    return CustomDropdown<Category>(
+                    return CustomDropdown<CategoryModel>(
                       hint: 'Choose Category',
                       value: selectedCategoryData,
                       items: categories,
@@ -295,7 +295,7 @@ class AddProductPage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         if ((formKey.currentState?.validate() ?? false) && selectedCategoryData != null) {
-                          final data = Product(
+                          final data = ProductModel(
                             name: nameController.text,
                             categoryId: selectedCategoryData!.id!,
                             price: priceController.text.toIntegerFromText.toDouble().toString(),

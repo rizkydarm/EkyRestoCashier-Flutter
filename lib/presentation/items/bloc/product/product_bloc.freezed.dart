@@ -54,9 +54,7 @@ extension ProductEventPatterns on ProductEvent {
     TResult Function(_GetProducts value)? getProducts,
     TResult Function(_GetProductById value)? getProductById,
     TResult Function(_AddProduct value)? addProduct,
-    TResult Function(_AddProductWithImage value)? addProductWithImage,
     TResult Function(_EditProduct value)? editProduct,
-    TResult Function(_EditProductWithImage value)? editProductWithImage,
     TResult Function(_DeleteProduct value)? deleteProduct,
     TResult Function(_SearchProduct value)? searchProduct,
     TResult Function(_UpdateStock value)? updateStock,
@@ -74,12 +72,8 @@ extension ProductEventPatterns on ProductEvent {
         return getProductById(_that);
       case _AddProduct() when addProduct != null:
         return addProduct(_that);
-      case _AddProductWithImage() when addProductWithImage != null:
-        return addProductWithImage(_that);
       case _EditProduct() when editProduct != null:
         return editProduct(_that);
-      case _EditProductWithImage() when editProductWithImage != null:
-        return editProductWithImage(_that);
       case _DeleteProduct() when deleteProduct != null:
         return deleteProduct(_that);
       case _SearchProduct() when searchProduct != null:
@@ -114,9 +108,7 @@ extension ProductEventPatterns on ProductEvent {
     required TResult Function(_GetProducts value) getProducts,
     required TResult Function(_GetProductById value) getProductById,
     required TResult Function(_AddProduct value) addProduct,
-    required TResult Function(_AddProductWithImage value) addProductWithImage,
     required TResult Function(_EditProduct value) editProduct,
-    required TResult Function(_EditProductWithImage value) editProductWithImage,
     required TResult Function(_DeleteProduct value) deleteProduct,
     required TResult Function(_SearchProduct value) searchProduct,
     required TResult Function(_UpdateStock value) updateStock,
@@ -134,12 +126,8 @@ extension ProductEventPatterns on ProductEvent {
         return getProductById(_that);
       case _AddProduct():
         return addProduct(_that);
-      case _AddProductWithImage():
-        return addProductWithImage(_that);
       case _EditProduct():
         return editProduct(_that);
-      case _EditProductWithImage():
-        return editProductWithImage(_that);
       case _DeleteProduct():
         return deleteProduct(_that);
       case _SearchProduct():
@@ -173,9 +161,7 @@ extension ProductEventPatterns on ProductEvent {
     TResult? Function(_GetProducts value)? getProducts,
     TResult? Function(_GetProductById value)? getProductById,
     TResult? Function(_AddProduct value)? addProduct,
-    TResult? Function(_AddProductWithImage value)? addProductWithImage,
     TResult? Function(_EditProduct value)? editProduct,
-    TResult? Function(_EditProductWithImage value)? editProductWithImage,
     TResult? Function(_DeleteProduct value)? deleteProduct,
     TResult? Function(_SearchProduct value)? searchProduct,
     TResult? Function(_UpdateStock value)? updateStock,
@@ -192,12 +178,8 @@ extension ProductEventPatterns on ProductEvent {
         return getProductById(_that);
       case _AddProduct() when addProduct != null:
         return addProduct(_that);
-      case _AddProductWithImage() when addProductWithImage != null:
-        return addProductWithImage(_that);
       case _EditProduct() when editProduct != null:
         return editProduct(_that);
-      case _EditProductWithImage() when editProductWithImage != null:
-        return editProductWithImage(_that);
       case _DeleteProduct() when deleteProduct != null:
         return deleteProduct(_that);
       case _SearchProduct() when searchProduct != null:
@@ -230,11 +212,8 @@ extension ProductEventPatterns on ProductEvent {
     TResult Function()? started,
     TResult Function()? getProducts,
     TResult Function(String id)? getProductById,
-    TResult Function(Product product)? addProduct,
-    TResult Function(Product product, XFile image)? addProductWithImage,
-    TResult Function(Product product, int id)? editProduct,
-    TResult Function(Product product, XFile image, int id)?
-        editProductWithImage,
+    TResult Function(ProductModel product)? addProduct,
+    TResult Function(ProductModel product, int id)? editProduct,
     TResult Function(int id)? deleteProduct,
     TResult Function(String query)? searchProduct,
     TResult Function(int stock, String type, String note, int id)? updateStock,
@@ -252,12 +231,8 @@ extension ProductEventPatterns on ProductEvent {
         return getProductById(_that.id);
       case _AddProduct() when addProduct != null:
         return addProduct(_that.product);
-      case _AddProductWithImage() when addProductWithImage != null:
-        return addProductWithImage(_that.product, _that.image);
       case _EditProduct() when editProduct != null:
         return editProduct(_that.product, _that.id);
-      case _EditProductWithImage() when editProductWithImage != null:
-        return editProductWithImage(_that.product, _that.image, _that.id);
       case _DeleteProduct() when deleteProduct != null:
         return deleteProduct(_that.id);
       case _SearchProduct() when searchProduct != null:
@@ -291,11 +266,8 @@ extension ProductEventPatterns on ProductEvent {
     required TResult Function() started,
     required TResult Function() getProducts,
     required TResult Function(String id) getProductById,
-    required TResult Function(Product product) addProduct,
-    required TResult Function(Product product, XFile image) addProductWithImage,
-    required TResult Function(Product product, int id) editProduct,
-    required TResult Function(Product product, XFile image, int id)
-        editProductWithImage,
+    required TResult Function(ProductModel product) addProduct,
+    required TResult Function(ProductModel product, int id) editProduct,
     required TResult Function(int id) deleteProduct,
     required TResult Function(String query) searchProduct,
     required TResult Function(int stock, String type, String note, int id)
@@ -313,12 +285,8 @@ extension ProductEventPatterns on ProductEvent {
         return getProductById(_that.id);
       case _AddProduct():
         return addProduct(_that.product);
-      case _AddProductWithImage():
-        return addProductWithImage(_that.product, _that.image);
       case _EditProduct():
         return editProduct(_that.product, _that.id);
-      case _EditProductWithImage():
-        return editProductWithImage(_that.product, _that.image, _that.id);
       case _DeleteProduct():
         return deleteProduct(_that.id);
       case _SearchProduct():
@@ -351,11 +319,8 @@ extension ProductEventPatterns on ProductEvent {
     TResult? Function()? started,
     TResult? Function()? getProducts,
     TResult? Function(String id)? getProductById,
-    TResult? Function(Product product)? addProduct,
-    TResult? Function(Product product, XFile image)? addProductWithImage,
-    TResult? Function(Product product, int id)? editProduct,
-    TResult? Function(Product product, XFile image, int id)?
-        editProductWithImage,
+    TResult? Function(ProductModel product)? addProduct,
+    TResult? Function(ProductModel product, int id)? editProduct,
     TResult? Function(int id)? deleteProduct,
     TResult? Function(String query)? searchProduct,
     TResult? Function(int stock, String type, String note, int id)? updateStock,
@@ -372,12 +337,8 @@ extension ProductEventPatterns on ProductEvent {
         return getProductById(_that.id);
       case _AddProduct() when addProduct != null:
         return addProduct(_that.product);
-      case _AddProductWithImage() when addProductWithImage != null:
-        return addProductWithImage(_that.product, _that.image);
       case _EditProduct() when editProduct != null:
         return editProduct(_that.product, _that.id);
-      case _EditProductWithImage() when editProductWithImage != null:
-        return editProductWithImage(_that.product, _that.image, _that.id);
       case _DeleteProduct() when deleteProduct != null:
         return deleteProduct(_that.id);
       case _SearchProduct() when searchProduct != null:
@@ -503,7 +464,7 @@ class __$GetProductByIdCopyWithImpl<$Res>
 class _AddProduct implements ProductEvent {
   const _AddProduct(this.product);
 
-  final Product product;
+  final ProductModel product;
 
   /// Create a copy of ProductEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -536,7 +497,7 @@ abstract mixin class _$AddProductCopyWith<$Res>
           _AddProduct value, $Res Function(_AddProduct) _then) =
       __$AddProductCopyWithImpl;
   @useResult
-  $Res call({Product product});
+  $Res call({ProductModel product});
 }
 
 /// @nodoc
@@ -556,79 +517,7 @@ class __$AddProductCopyWithImpl<$Res> implements _$AddProductCopyWith<$Res> {
       null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable
-              as Product,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _AddProductWithImage implements ProductEvent {
-  const _AddProductWithImage(this.product, this.image);
-
-  final Product product;
-  final XFile image;
-
-  /// Create a copy of ProductEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$AddProductWithImageCopyWith<_AddProductWithImage> get copyWith =>
-      __$AddProductWithImageCopyWithImpl<_AddProductWithImage>(
-          this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _AddProductWithImage &&
-            (identical(other.product, product) || other.product == product) &&
-            (identical(other.image, image) || other.image == image));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, product, image);
-
-  @override
-  String toString() {
-    return 'ProductEvent.addProductWithImage(product: $product, image: $image)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$AddProductWithImageCopyWith<$Res>
-    implements $ProductEventCopyWith<$Res> {
-  factory _$AddProductWithImageCopyWith(_AddProductWithImage value,
-          $Res Function(_AddProductWithImage) _then) =
-      __$AddProductWithImageCopyWithImpl;
-  @useResult
-  $Res call({Product product, XFile image});
-}
-
-/// @nodoc
-class __$AddProductWithImageCopyWithImpl<$Res>
-    implements _$AddProductWithImageCopyWith<$Res> {
-  __$AddProductWithImageCopyWithImpl(this._self, this._then);
-
-  final _AddProductWithImage _self;
-  final $Res Function(_AddProductWithImage) _then;
-
-  /// Create a copy of ProductEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? product = null,
-    Object? image = null,
-  }) {
-    return _then(_AddProductWithImage(
-      null == product
-          ? _self.product
-          : product // ignore: cast_nullable_to_non_nullable
-              as Product,
-      null == image
-          ? _self.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as XFile,
+              as ProductModel,
     ));
   }
 }
@@ -638,7 +527,7 @@ class __$AddProductWithImageCopyWithImpl<$Res>
 class _EditProduct implements ProductEvent {
   const _EditProduct(this.product, this.id);
 
-  final Product product;
+  final ProductModel product;
   final int id;
 
   /// Create a copy of ProductEvent
@@ -673,7 +562,7 @@ abstract mixin class _$EditProductCopyWith<$Res>
           _EditProduct value, $Res Function(_EditProduct) _then) =
       __$EditProductCopyWithImpl;
   @useResult
-  $Res call({Product product, int id});
+  $Res call({ProductModel product, int id});
 }
 
 /// @nodoc
@@ -694,86 +583,7 @@ class __$EditProductCopyWithImpl<$Res> implements _$EditProductCopyWith<$Res> {
       null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable
-              as Product,
-      null == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _EditProductWithImage implements ProductEvent {
-  const _EditProductWithImage(this.product, this.image, this.id);
-
-  final Product product;
-  final XFile image;
-  final int id;
-
-  /// Create a copy of ProductEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$EditProductWithImageCopyWith<_EditProductWithImage> get copyWith =>
-      __$EditProductWithImageCopyWithImpl<_EditProductWithImage>(
-          this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _EditProductWithImage &&
-            (identical(other.product, product) || other.product == product) &&
-            (identical(other.image, image) || other.image == image) &&
-            (identical(other.id, id) || other.id == id));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, product, image, id);
-
-  @override
-  String toString() {
-    return 'ProductEvent.editProductWithImage(product: $product, image: $image, id: $id)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$EditProductWithImageCopyWith<$Res>
-    implements $ProductEventCopyWith<$Res> {
-  factory _$EditProductWithImageCopyWith(_EditProductWithImage value,
-          $Res Function(_EditProductWithImage) _then) =
-      __$EditProductWithImageCopyWithImpl;
-  @useResult
-  $Res call({Product product, XFile image, int id});
-}
-
-/// @nodoc
-class __$EditProductWithImageCopyWithImpl<$Res>
-    implements _$EditProductWithImageCopyWith<$Res> {
-  __$EditProductWithImageCopyWithImpl(this._self, this._then);
-
-  final _EditProductWithImage _self;
-  final $Res Function(_EditProductWithImage) _then;
-
-  /// Create a copy of ProductEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? product = null,
-    Object? image = null,
-    Object? id = null,
-  }) {
-    return _then(_EditProductWithImage(
-      null == product
-          ? _self.product
-          : product // ignore: cast_nullable_to_non_nullable
-              as Product,
-      null == image
-          ? _self.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as XFile,
+              as ProductModel,
       null == id
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -1269,7 +1079,7 @@ extension ProductStatePatterns on ProductState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Product> data)? success,
+    TResult Function(List<ProductModel> data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -1305,7 +1115,7 @@ extension ProductStatePatterns on ProductState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Product> data) success,
+    required TResult Function(List<ProductModel> data) success,
     required TResult Function(String message) error,
   }) {
     final _that = this;
@@ -1339,7 +1149,7 @@ extension ProductStatePatterns on ProductState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<Product> data)? success,
+    TResult? Function(List<ProductModel> data)? success,
     TResult? Function(String message)? error,
   }) {
     final _that = this;
@@ -1401,10 +1211,10 @@ class _Loading implements ProductState {
 /// @nodoc
 
 class _Success implements ProductState {
-  const _Success(final List<Product> data) : _data = data;
+  const _Success(final List<ProductModel> data) : _data = data;
 
-  final List<Product> _data;
-  List<Product> get data {
+  final List<ProductModel> _data;
+  List<ProductModel> get data {
     if (_data is EqualUnmodifiableListView) return _data;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_data);
@@ -1441,7 +1251,7 @@ abstract mixin class _$SuccessCopyWith<$Res>
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
       __$SuccessCopyWithImpl;
   @useResult
-  $Res call({List<Product> data});
+  $Res call({List<ProductModel> data});
 }
 
 /// @nodoc
@@ -1461,7 +1271,7 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
       null == data
           ? _self._data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<Product>,
+              as List<ProductModel>,
     ));
   }
 }

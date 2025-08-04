@@ -100,12 +100,12 @@ class SalesPage extends StatelessWidget {
                             builder: (context, value, child) {
                               final filteredData = value == null ? products : products.where((product) {
                                 final searchTerm = value.toLowerCase();
-                                final isName = product.name!.toLowerCase().contains(searchTerm);
+                                final isName = product.name?.toLowerCase().contains(searchTerm) ?? false;
                                 final productCategory = categories.firstWhere(
                                   (cat) => cat.id == product.categoryId,
-                                  orElse: () => Category(id: -1, name: '-'),
+                                  orElse: () => CategoryModel(id: -1, name: '-'),
                                 );                    
-                                final isCategory = productCategory.name!.toLowerCase().contains(searchTerm);
+                                final isCategory = productCategory.name?.toLowerCase().contains(searchTerm) ?? false;
                                 return isName || isCategory;
                               }).toList();
                               return Padding(

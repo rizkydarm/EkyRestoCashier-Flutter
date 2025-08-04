@@ -1,7 +1,7 @@
+import 'package:eky_pos/presentation/table_management/bloc/table_manag_bloc.dart';
 import 'package:eky_pos/presentation/table_management/models/restotable_model.dart';
-import 'package:eky_pos/presentation/table_management/widgets/table_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TableDetailsSheet extends StatefulWidget {
   final RestaurantTable table;
@@ -23,9 +23,7 @@ class _TableDetailsSheetState extends State<TableDetailsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final tableProvider = Provider.of<TableManagementProvider>(context, listen: false);
-
-    return Container(
+    return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -54,14 +52,14 @@ class _TableDetailsSheetState extends State<TableDetailsSheet> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  tableProvider.updateTable(_table);
+                  context.read<TableManagementBloc>().add(TableManagementEvent.updateTable(table: _table));
                   Navigator.pop(context);
                 },
                 child: Text('Save'),
               ),
               OutlinedButton(
                 onPressed: () {
-                  tableProvider.removeTable(_table.id);
+                  context.read<TableManagementBloc>().add(TableManagementEvent.removeTable(tableId: _table.id));
                   Navigator.pop(context);
                 },
                 child: Text('Delete'),

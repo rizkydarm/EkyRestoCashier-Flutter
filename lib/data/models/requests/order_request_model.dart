@@ -31,7 +31,7 @@ class OrderRequestModel {
       // 'tax': tax,
       'discount': discount,
       'payment_method': paymentMethod,
-      'items': items.map((x) => x.toMap()).toList(),
+      // 'items': items.map((x) => x.toMap()).toList(),
     };
   }
 

@@ -1,10 +1,9 @@
-import 'package:eky_pos/core/constants/colors.dart';
+import 'package:eky_pos/presentation/table_management/bloc/table_manag_bloc.dart';
 import 'package:eky_pos/presentation/table_management/models/restotable_model.dart';
 import 'package:eky_pos/presentation/table_management/widgets/table_detail_bottomsheet.dart';
-import 'package:eky_pos/presentation/table_management/widgets/table_provider.dart';
 import 'package:eky_pos/presentation/table_management/widgets/table_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TableManagementPage extends StatefulWidget {
   
@@ -17,8 +16,10 @@ class TableManagementPage extends StatefulWidget {
 }
 
 class _TableManagementPageState extends State<TableManagementPage> {
-  final GlobalKey _canvasKey = GlobalKey();
-  int _tableCounter = 1;
+  final GlobalKey _canvasKey = GlobalKey(); 
+  
+  final double canvasWidth = 1000;
+  final double canvasHeight = 1000;
 
   @override
   Widget build(BuildContext context) {
@@ -34,57 +35,77 @@ class _TableManagementPageState extends State<TableManagementPage> {
         onPressed: _addNewTable,
         child: Icon(Icons.add),
       ),
-      body: Consumer<TableManagementProvider>(
-        builder: (context, tableProvider, child) {
-          return Container(
-            color: Colors.grey[200],
-            child: Stack(
-              key: _canvasKey,
-              children: [
-                // Background grid (optional)
-                _buildGridBackground(),
-                
-                // Tables
-                ...tableProvider.tables.map((table) => TableWidget(
-                      key: ValueKey(table.id),
-                      table: table,
-                      onPositionChanged: (updatedTable) {
-                        tableProvider.updateTable(updatedTable);
-                      },
-                      onTap: _showTableDetails,
-                    )),
-              ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth,
+                minHeight: constraints.maxHeight,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: canvasWidth,
+                  height: canvasHeight,
+                  child: ColoredBox(
+                    color: Colors.grey[200] ?? Colors.white,
+                    child: BlocBuilder<TableManagementBloc, TableManagementState>(
+                      builder: (context, state) {
+                        return state.maybeWhen(
+                          orElse: () => SizedBox(),
+                          error: (error) => Center(child: Text(error)),
+                          loading: () => Center(child: CircularProgressIndicator()),
+                          success: (tables) {
+                            return Stack(
+                              key: _canvasKey,
+                              children: [
+                                LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    return CustomPaint(
+                                      size: Size(constraints.maxWidth, constraints.maxHeight),
+                                      painter: GridPainter(),
+                                    );
+                                  },
+                                ),
+                                ...tables.map((table) => TableWidget(
+                                  key: ValueKey(table.id),
+                                  table: table,
+                                  onPositionChanged: (updatedTable) {
+                                    context.read<TableManagementBloc>().add(TableManagementEvent.updateTable(table: updatedTable));
+                                  },
+                                  onTap: _showTableDetails,
+                                  canvasKey: _canvasKey,
+                                )),
+                              ],
+                            );
+                          }
+                        );
+                      }
+                    ),
+                  ),
+                ),
+              ),
             ),
           );
-        },
+        }
       ),
     );
   }
 
-  Widget _buildGridBackground() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return CustomPaint(
-          size: Size(constraints.maxWidth, constraints.maxHeight),
-          painter: GridPainter(),
-        );
-      },
-    );
-  }
-
   void _addNewTable() {
-    final tableProvider = Provider.of<TableManagementProvider>(context, listen: false);
+    final tableCounter = context.read<TableManagementBloc>().tableCounter;
     
     final newTable = RestaurantTable(
-      id: _tableCounter,
-      name: 'T$_tableCounter',
-      x: 100.0 + (_tableCounter * 20) % 200,
-      y: 100.0 + (_tableCounter * 30) % 200,
+      id: tableCounter,
+      name: 'T$tableCounter',
+      x: 100.0 + (tableCounter * 20) % 200,
+      y: 100.0 + (tableCounter * 30) % 200,
       capacity: 4,
     );
 
-    tableProvider.addTable(newTable);
-    _tableCounter++;
+    context.read<TableManagementBloc>().add(TableManagementEvent.addTable(table: newTable));
   }
 
   void _showTableDetails(RestaurantTable table) {

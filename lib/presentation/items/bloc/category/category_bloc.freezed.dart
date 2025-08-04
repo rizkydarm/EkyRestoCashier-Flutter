@@ -607,7 +607,7 @@ extension CategoryStatePatterns on CategoryState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<Category> categories)? success,
+    TResult Function(List<CategoryModel> categories)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -643,7 +643,7 @@ extension CategoryStatePatterns on CategoryState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<Category> categories) success,
+    required TResult Function(List<CategoryModel> categories) success,
     required TResult Function(String message) error,
   }) {
     final _that = this;
@@ -677,7 +677,7 @@ extension CategoryStatePatterns on CategoryState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<Category> categories)? success,
+    TResult? Function(List<CategoryModel> categories)? success,
     TResult? Function(String message)? error,
   }) {
     final _that = this;
@@ -739,10 +739,11 @@ class _Loading implements CategoryState {
 /// @nodoc
 
 class _Success implements CategoryState {
-  const _Success(final List<Category> categories) : _categories = categories;
+  const _Success(final List<CategoryModel> categories)
+      : _categories = categories;
 
-  final List<Category> _categories;
-  List<Category> get categories {
+  final List<CategoryModel> _categories;
+  List<CategoryModel> get categories {
     if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_categories);
@@ -780,7 +781,7 @@ abstract mixin class _$SuccessCopyWith<$Res>
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
       __$SuccessCopyWithImpl;
   @useResult
-  $Res call({List<Category> categories});
+  $Res call({List<CategoryModel> categories});
 }
 
 /// @nodoc
@@ -800,7 +801,7 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
       null == categories
           ? _self._categories
           : categories // ignore: cast_nullable_to_non_nullable
-              as List<Category>,
+              as List<CategoryModel>,
     ));
   }
 }

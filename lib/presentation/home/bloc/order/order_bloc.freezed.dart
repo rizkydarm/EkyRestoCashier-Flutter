@@ -437,7 +437,7 @@ extension OrderStatePatterns on OrderState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Transaction data)? success,
+    TResult Function(TransactionModel data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -473,7 +473,7 @@ extension OrderStatePatterns on OrderState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Transaction data) success,
+    required TResult Function(TransactionModel data) success,
     required TResult Function(String message) error,
   }) {
     final _that = this;
@@ -507,7 +507,7 @@ extension OrderStatePatterns on OrderState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(Transaction data)? success,
+    TResult? Function(TransactionModel data)? success,
     TResult? Function(String message)? error,
   }) {
     final _that = this;
@@ -571,7 +571,7 @@ class _Loading implements OrderState {
 class _Success implements OrderState {
   const _Success(this.data);
 
-  final Transaction data;
+  final TransactionModel data;
 
   /// Create a copy of OrderState
   /// with the given fields replaced by the non-null parameter values.
@@ -603,7 +603,7 @@ abstract mixin class _$SuccessCopyWith<$Res>
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
       __$SuccessCopyWithImpl;
   @useResult
-  $Res call({Transaction data});
+  $Res call({TransactionModel data});
 }
 
 /// @nodoc
@@ -623,7 +623,7 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
       null == data
           ? _self.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Transaction,
+              as TransactionModel,
     ));
   }
 }

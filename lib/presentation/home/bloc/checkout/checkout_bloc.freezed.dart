@@ -164,10 +164,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(Product product)? addToCart,
-    TResult Function(Product product)? removeFromCart,
-    TResult Function(Product product)? incrementProduct,
-    TResult Function(Product product)? decrementProduct,
+    TResult Function(ProductModel product)? addToCart,
+    TResult Function(ProductModel product)? removeFromCart,
+    TResult Function(ProductModel product)? incrementProduct,
+    TResult Function(ProductModel product)? decrementProduct,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -203,10 +203,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(Product product) addToCart,
-    required TResult Function(Product product) removeFromCart,
-    required TResult Function(Product product) incrementProduct,
-    required TResult Function(Product product) decrementProduct,
+    required TResult Function(ProductModel product) addToCart,
+    required TResult Function(ProductModel product) removeFromCart,
+    required TResult Function(ProductModel product) incrementProduct,
+    required TResult Function(ProductModel product) decrementProduct,
   }) {
     final _that = this;
     switch (_that) {
@@ -240,10 +240,10 @@ extension CheckoutEventPatterns on CheckoutEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(Product product)? addToCart,
-    TResult? Function(Product product)? removeFromCart,
-    TResult? Function(Product product)? incrementProduct,
-    TResult? Function(Product product)? decrementProduct,
+    TResult? Function(ProductModel product)? addToCart,
+    TResult? Function(ProductModel product)? removeFromCart,
+    TResult? Function(ProductModel product)? incrementProduct,
+    TResult? Function(ProductModel product)? decrementProduct,
   }) {
     final _that = this;
     switch (_that) {
@@ -288,7 +288,7 @@ class _Started implements CheckoutEvent {
 class _AddToCart implements CheckoutEvent {
   const _AddToCart({required this.product});
 
-  final Product product;
+  final ProductModel product;
 
   /// Create a copy of CheckoutEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -321,7 +321,7 @@ abstract mixin class _$AddToCartCopyWith<$Res>
           _AddToCart value, $Res Function(_AddToCart) _then) =
       __$AddToCartCopyWithImpl;
   @useResult
-  $Res call({Product product});
+  $Res call({ProductModel product});
 }
 
 /// @nodoc
@@ -341,7 +341,7 @@ class __$AddToCartCopyWithImpl<$Res> implements _$AddToCartCopyWith<$Res> {
       product: null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable
-              as Product,
+              as ProductModel,
     ));
   }
 }
@@ -351,7 +351,7 @@ class __$AddToCartCopyWithImpl<$Res> implements _$AddToCartCopyWith<$Res> {
 class _RemoveFromCart implements CheckoutEvent {
   const _RemoveFromCart({required this.product});
 
-  final Product product;
+  final ProductModel product;
 
   /// Create a copy of CheckoutEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -384,7 +384,7 @@ abstract mixin class _$RemoveFromCartCopyWith<$Res>
           _RemoveFromCart value, $Res Function(_RemoveFromCart) _then) =
       __$RemoveFromCartCopyWithImpl;
   @useResult
-  $Res call({Product product});
+  $Res call({ProductModel product});
 }
 
 /// @nodoc
@@ -405,7 +405,7 @@ class __$RemoveFromCartCopyWithImpl<$Res>
       product: null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable
-              as Product,
+              as ProductModel,
     ));
   }
 }
@@ -415,7 +415,7 @@ class __$RemoveFromCartCopyWithImpl<$Res>
 class _IncrementProduct implements CheckoutEvent {
   const _IncrementProduct({required this.product});
 
-  final Product product;
+  final ProductModel product;
 
   /// Create a copy of CheckoutEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -448,7 +448,7 @@ abstract mixin class _$IncrementProductCopyWith<$Res>
           _IncrementProduct value, $Res Function(_IncrementProduct) _then) =
       __$IncrementProductCopyWithImpl;
   @useResult
-  $Res call({Product product});
+  $Res call({ProductModel product});
 }
 
 /// @nodoc
@@ -469,7 +469,7 @@ class __$IncrementProductCopyWithImpl<$Res>
       product: null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable
-              as Product,
+              as ProductModel,
     ));
   }
 }
@@ -479,7 +479,7 @@ class __$IncrementProductCopyWithImpl<$Res>
 class _DecrementProduct implements CheckoutEvent {
   const _DecrementProduct({required this.product});
 
-  final Product product;
+  final ProductModel product;
 
   /// Create a copy of CheckoutEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -512,7 +512,7 @@ abstract mixin class _$DecrementProductCopyWith<$Res>
           _DecrementProduct value, $Res Function(_DecrementProduct) _then) =
       __$DecrementProductCopyWithImpl;
   @useResult
-  $Res call({Product product});
+  $Res call({ProductModel product});
 }
 
 /// @nodoc
@@ -533,7 +533,7 @@ class __$DecrementProductCopyWithImpl<$Res>
       product: null == product
           ? _self.product
           : product // ignore: cast_nullable_to_non_nullable
-              as Product,
+              as ProductModel,
     ));
   }
 }

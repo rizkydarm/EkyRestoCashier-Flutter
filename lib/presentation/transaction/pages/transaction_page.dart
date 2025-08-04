@@ -61,14 +61,14 @@ class TransactionPage extends StatelessWidget {
                     }
                   },
                   leading: Text((transactions![index].items?.length ?? -1).toString()),
-                  title: Text(transactions[index].totalPrice!.currencyFormatRpV3,
+                  title: Text(transactions[index].totalPrice!.toString(),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   subtitle: Text(transactions[index].createdAt!.toLocal().toFormattedDateOnly()),
-                  trailing: Text(transactions[index].orderNumber!,
+                  trailing: Text(transactions[index].transactionId!,
                     style: TextStyle(
                       fontSize: 16,
                     ),

@@ -32,7 +32,7 @@ class InvoicePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nota ${transaction.orderNumber}'),
+        title: Text('Nota ${transaction.transactionId}'),
         centerTitle: true,
       ),
       body: Column(

@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DetailProductPage extends StatelessWidget {
   
-  final Product data;
+  final ProductModel data;
   
   const DetailProductPage({
     super.key,

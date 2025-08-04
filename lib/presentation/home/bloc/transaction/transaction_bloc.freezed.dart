@@ -169,8 +169,8 @@ extension TransactionEventPatterns on TransactionEvent {
     TResult Function()? started,
     TResult Function()? getAllOrder,
     TResult Function()? getAllOrderItem,
-    TResult Function(String transactionId)? getOrderByTransactionId,
-    TResult Function(String transactionId)? getItemsByTransactionId,
+    TResult Function(int id)? getOrderByTransactionId,
+    TResult Function(int id)? getItemsByTransactionId,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -182,9 +182,9 @@ extension TransactionEventPatterns on TransactionEvent {
       case _GetAllOrderItem() when getAllOrderItem != null:
         return getAllOrderItem();
       case _GetOrderByTransactionId() when getOrderByTransactionId != null:
-        return getOrderByTransactionId(_that.transactionId);
+        return getOrderByTransactionId(_that.id);
       case _GetItemsByTransactionId() when getItemsByTransactionId != null:
-        return getItemsByTransactionId(_that.transactionId);
+        return getItemsByTransactionId(_that.id);
       case _:
         return orElse();
     }
@@ -208,8 +208,8 @@ extension TransactionEventPatterns on TransactionEvent {
     required TResult Function() started,
     required TResult Function() getAllOrder,
     required TResult Function() getAllOrderItem,
-    required TResult Function(String transactionId) getOrderByTransactionId,
-    required TResult Function(String transactionId) getItemsByTransactionId,
+    required TResult Function(int id) getOrderByTransactionId,
+    required TResult Function(int id) getItemsByTransactionId,
   }) {
     final _that = this;
     switch (_that) {
@@ -220,9 +220,9 @@ extension TransactionEventPatterns on TransactionEvent {
       case _GetAllOrderItem():
         return getAllOrderItem();
       case _GetOrderByTransactionId():
-        return getOrderByTransactionId(_that.transactionId);
+        return getOrderByTransactionId(_that.id);
       case _GetItemsByTransactionId():
-        return getItemsByTransactionId(_that.transactionId);
+        return getItemsByTransactionId(_that.id);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -245,8 +245,8 @@ extension TransactionEventPatterns on TransactionEvent {
     TResult? Function()? started,
     TResult? Function()? getAllOrder,
     TResult? Function()? getAllOrderItem,
-    TResult? Function(String transactionId)? getOrderByTransactionId,
-    TResult? Function(String transactionId)? getItemsByTransactionId,
+    TResult? Function(int id)? getOrderByTransactionId,
+    TResult? Function(int id)? getItemsByTransactionId,
   }) {
     final _that = this;
     switch (_that) {
@@ -257,9 +257,9 @@ extension TransactionEventPatterns on TransactionEvent {
       case _GetAllOrderItem() when getAllOrderItem != null:
         return getAllOrderItem();
       case _GetOrderByTransactionId() when getOrderByTransactionId != null:
-        return getOrderByTransactionId(_that.transactionId);
+        return getOrderByTransactionId(_that.id);
       case _GetItemsByTransactionId() when getItemsByTransactionId != null:
-        return getItemsByTransactionId(_that.transactionId);
+        return getItemsByTransactionId(_that.id);
       case _:
         return null;
     }
@@ -329,9 +329,9 @@ class _GetAllOrderItem implements TransactionEvent {
 /// @nodoc
 
 class _GetOrderByTransactionId implements TransactionEvent {
-  const _GetOrderByTransactionId(this.transactionId);
+  const _GetOrderByTransactionId(this.id);
 
-  final String transactionId;
+  final int id;
 
   /// Create a copy of TransactionEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -346,16 +346,15 @@ class _GetOrderByTransactionId implements TransactionEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GetOrderByTransactionId &&
-            (identical(other.transactionId, transactionId) ||
-                other.transactionId == transactionId));
+            (identical(other.id, id) || other.id == id));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, transactionId);
+  int get hashCode => Object.hash(runtimeType, id);
 
   @override
   String toString() {
-    return 'TransactionEvent.getOrderByTransactionId(transactionId: $transactionId)';
+    return 'TransactionEvent.getOrderByTransactionId(id: $id)';
   }
 }
 
@@ -366,7 +365,7 @@ abstract mixin class _$GetOrderByTransactionIdCopyWith<$Res>
           $Res Function(_GetOrderByTransactionId) _then) =
       __$GetOrderByTransactionIdCopyWithImpl;
   @useResult
-  $Res call({String transactionId});
+  $Res call({int id});
 }
 
 /// @nodoc
@@ -381,13 +380,13 @@ class __$GetOrderByTransactionIdCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? transactionId = null,
+    Object? id = null,
   }) {
     return _then(_GetOrderByTransactionId(
-      null == transactionId
-          ? _self.transactionId
-          : transactionId // ignore: cast_nullable_to_non_nullable
-              as String,
+      null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -395,9 +394,9 @@ class __$GetOrderByTransactionIdCopyWithImpl<$Res>
 /// @nodoc
 
 class _GetItemsByTransactionId implements TransactionEvent {
-  const _GetItemsByTransactionId(this.transactionId);
+  const _GetItemsByTransactionId(this.id);
 
-  final String transactionId;
+  final int id;
 
   /// Create a copy of TransactionEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -412,16 +411,15 @@ class _GetItemsByTransactionId implements TransactionEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GetItemsByTransactionId &&
-            (identical(other.transactionId, transactionId) ||
-                other.transactionId == transactionId));
+            (identical(other.id, id) || other.id == id));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, transactionId);
+  int get hashCode => Object.hash(runtimeType, id);
 
   @override
   String toString() {
-    return 'TransactionEvent.getItemsByTransactionId(transactionId: $transactionId)';
+    return 'TransactionEvent.getItemsByTransactionId(id: $id)';
   }
 }
 
@@ -432,7 +430,7 @@ abstract mixin class _$GetItemsByTransactionIdCopyWith<$Res>
           $Res Function(_GetItemsByTransactionId) _then) =
       __$GetItemsByTransactionIdCopyWithImpl;
   @useResult
-  $Res call({String transactionId});
+  $Res call({int id});
 }
 
 /// @nodoc
@@ -447,13 +445,13 @@ class __$GetItemsByTransactionIdCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? transactionId = null,
+    Object? id = null,
   }) {
     return _then(_GetItemsByTransactionId(
-      null == transactionId
-          ? _self.transactionId
-          : transactionId // ignore: cast_nullable_to_non_nullable
-              as String,
+      null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -603,8 +601,8 @@ extension TransactionStatePatterns on TransactionState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<TransactionModel>? transactions, List<Item>? items,
-            TransactionModel? transaction)?
+    TResult Function(List<TransactionModel>? transactions,
+            List<TransactionItemModel>? items, TransactionModel? transaction)?
         success,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -642,7 +640,7 @@ extension TransactionStatePatterns on TransactionState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<TransactionModel>? transactions,
-            List<Item>? items, TransactionModel? transaction)
+            List<TransactionItemModel>? items, TransactionModel? transaction)
         success,
     required TResult Function(String message) error,
   }) {
@@ -677,8 +675,8 @@ extension TransactionStatePatterns on TransactionState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<TransactionModel>? transactions, List<Item>? items,
-            TransactionModel? transaction)?
+    TResult? Function(List<TransactionModel>? transactions,
+            List<TransactionItemModel>? items, TransactionModel? transaction)?
         success,
     TResult? Function(String message)? error,
   }) {
@@ -742,7 +740,7 @@ class _Loading implements TransactionState {
 
 class _Success implements TransactionState {
   const _Success(final List<TransactionModel>? transactions,
-      final List<Item>? items, this.transaction)
+      final List<TransactionItemModel>? items, this.transaction)
       : _transactions = transactions,
         _items = items;
 
@@ -755,8 +753,8 @@ class _Success implements TransactionState {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<Item>? _items;
-  List<Item>? get items {
+  final List<TransactionItemModel>? _items;
+  List<TransactionItemModel>? get items {
     final value = _items;
     if (value == null) return null;
     if (_items is EqualUnmodifiableListView) return _items;
@@ -806,7 +804,7 @@ abstract mixin class _$SuccessCopyWith<$Res>
   @useResult
   $Res call(
       {List<TransactionModel>? transactions,
-      List<Item>? items,
+      List<TransactionItemModel>? items,
       TransactionModel? transaction});
 }
 
@@ -833,7 +831,7 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
       freezed == items
           ? _self._items
           : items // ignore: cast_nullable_to_non_nullable
-              as List<Item>?,
+              as List<TransactionItemModel>?,
       freezed == transaction
           ? _self.transaction
           : transaction // ignore: cast_nullable_to_non_nullable

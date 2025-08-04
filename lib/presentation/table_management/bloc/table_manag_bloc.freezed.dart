@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'order_offline_bloc.dart';
+part of 'table_manag_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,11 +13,11 @@ part of 'order_offline_bloc.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$OrderOfflineEvent {
+mixin _$TableManagementEvent {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is OrderOfflineEvent);
+        (other.runtimeType == runtimeType && other is TableManagementEvent);
   }
 
   @override
@@ -25,18 +25,18 @@ mixin _$OrderOfflineEvent {
 
   @override
   String toString() {
-    return 'OrderOfflineEvent()';
+    return 'TableManagementEvent()';
   }
 }
 
 /// @nodoc
-class $OrderOfflineEventCopyWith<$Res> {
-  $OrderOfflineEventCopyWith(
-      OrderOfflineEvent _, $Res Function(OrderOfflineEvent) __);
+class $TableManagementEventCopyWith<$Res> {
+  $TableManagementEventCopyWith(
+      TableManagementEvent _, $Res Function(TableManagementEvent) __);
 }
 
-/// Adds pattern-matching-related methods to [OrderOfflineEvent].
-extension OrderOfflineEventPatterns on OrderOfflineEvent {
+/// Adds pattern-matching-related methods to [TableManagementEvent].
+extension TableManagementEventPatterns on TableManagementEvent {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -52,15 +52,24 @@ extension OrderOfflineEventPatterns on OrderOfflineEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
-    TResult Function(_CreateOfflineOrder value)? createOfflineOrder,
+    TResult Function(_AddTable value)? addTable,
+    TResult Function(_UpdateTable value)? updateTable,
+    TResult Function(_RemoveTable value)? removeTable,
+    TResult Function(_GetTableById value)? getTableById,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started(_that);
-      case _CreateOfflineOrder() when createOfflineOrder != null:
-        return createOfflineOrder(_that);
+      case _AddTable() when addTable != null:
+        return addTable(_that);
+      case _UpdateTable() when updateTable != null:
+        return updateTable(_that);
+      case _RemoveTable() when removeTable != null:
+        return removeTable(_that);
+      case _GetTableById() when getTableById != null:
+        return getTableById(_that);
       case _:
         return orElse();
     }
@@ -82,14 +91,23 @@ extension OrderOfflineEventPatterns on OrderOfflineEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
-    required TResult Function(_CreateOfflineOrder value) createOfflineOrder,
+    required TResult Function(_AddTable value) addTable,
+    required TResult Function(_UpdateTable value) updateTable,
+    required TResult Function(_RemoveTable value) removeTable,
+    required TResult Function(_GetTableById value) getTableById,
   }) {
     final _that = this;
     switch (_that) {
       case _Started():
         return started(_that);
-      case _CreateOfflineOrder():
-        return createOfflineOrder(_that);
+      case _AddTable():
+        return addTable(_that);
+      case _UpdateTable():
+        return updateTable(_that);
+      case _RemoveTable():
+        return removeTable(_that);
+      case _GetTableById():
+        return getTableById(_that);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -110,14 +128,23 @@ extension OrderOfflineEventPatterns on OrderOfflineEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
-    TResult? Function(_CreateOfflineOrder value)? createOfflineOrder,
+    TResult? Function(_AddTable value)? addTable,
+    TResult? Function(_UpdateTable value)? updateTable,
+    TResult? Function(_RemoveTable value)? removeTable,
+    TResult? Function(_GetTableById value)? getTableById,
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started(_that);
-      case _CreateOfflineOrder() when createOfflineOrder != null:
-        return createOfflineOrder(_that);
+      case _AddTable() when addTable != null:
+        return addTable(_that);
+      case _UpdateTable() when updateTable != null:
+        return updateTable(_that);
+      case _RemoveTable() when removeTable != null:
+        return removeTable(_that);
+      case _GetTableById() when getTableById != null:
+        return getTableById(_that);
       case _:
         return null;
     }
@@ -138,15 +165,24 @@ extension OrderOfflineEventPatterns on OrderOfflineEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
-    TResult Function(OrderRequestModel orderRequestModel)? createOfflineOrder,
+    TResult Function(RestaurantTable table)? addTable,
+    TResult Function(RestaurantTable table)? updateTable,
+    TResult Function(int tableId)? removeTable,
+    TResult Function(int tableId)? getTableById,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started();
-      case _CreateOfflineOrder() when createOfflineOrder != null:
-        return createOfflineOrder(_that.orderRequestModel);
+      case _AddTable() when addTable != null:
+        return addTable(_that.table);
+      case _UpdateTable() when updateTable != null:
+        return updateTable(_that.table);
+      case _RemoveTable() when removeTable != null:
+        return removeTable(_that.tableId);
+      case _GetTableById() when getTableById != null:
+        return getTableById(_that.tableId);
       case _:
         return orElse();
     }
@@ -168,15 +204,23 @@ extension OrderOfflineEventPatterns on OrderOfflineEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
-    required TResult Function(OrderRequestModel orderRequestModel)
-        createOfflineOrder,
+    required TResult Function(RestaurantTable table) addTable,
+    required TResult Function(RestaurantTable table) updateTable,
+    required TResult Function(int tableId) removeTable,
+    required TResult Function(int tableId) getTableById,
   }) {
     final _that = this;
     switch (_that) {
       case _Started():
         return started();
-      case _CreateOfflineOrder():
-        return createOfflineOrder(_that.orderRequestModel);
+      case _AddTable():
+        return addTable(_that.table);
+      case _UpdateTable():
+        return updateTable(_that.table);
+      case _RemoveTable():
+        return removeTable(_that.tableId);
+      case _GetTableById():
+        return getTableById(_that.tableId);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -197,14 +241,23 @@ extension OrderOfflineEventPatterns on OrderOfflineEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
-    TResult? Function(OrderRequestModel orderRequestModel)? createOfflineOrder,
+    TResult? Function(RestaurantTable table)? addTable,
+    TResult? Function(RestaurantTable table)? updateTable,
+    TResult? Function(int tableId)? removeTable,
+    TResult? Function(int tableId)? getTableById,
   }) {
     final _that = this;
     switch (_that) {
       case _Started() when started != null:
         return started();
-      case _CreateOfflineOrder() when createOfflineOrder != null:
-        return createOfflineOrder(_that.orderRequestModel);
+      case _AddTable() when addTable != null:
+        return addTable(_that.table);
+      case _UpdateTable() when updateTable != null:
+        return updateTable(_that.table);
+      case _RemoveTable() when removeTable != null:
+        return removeTable(_that.tableId);
+      case _GetTableById() when getTableById != null:
+        return getTableById(_that.tableId);
       case _:
         return null;
     }
@@ -213,7 +266,7 @@ extension OrderOfflineEventPatterns on OrderOfflineEvent {
 
 /// @nodoc
 
-class _Started implements OrderOfflineEvent {
+class _Started implements TableManagementEvent {
   const _Started();
 
   @override
@@ -227,81 +280,268 @@ class _Started implements OrderOfflineEvent {
 
   @override
   String toString() {
-    return 'OrderOfflineEvent.started()';
+    return 'TableManagementEvent.started()';
   }
 }
 
 /// @nodoc
 
-class _CreateOfflineOrder implements OrderOfflineEvent {
-  const _CreateOfflineOrder({required this.orderRequestModel});
+class _AddTable implements TableManagementEvent {
+  const _AddTable({required this.table});
 
-  final OrderRequestModel orderRequestModel;
+  final RestaurantTable table;
 
-  /// Create a copy of OrderOfflineEvent
+  /// Create a copy of TableManagementEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$CreateOfflineOrderCopyWith<_CreateOfflineOrder> get copyWith =>
-      __$CreateOfflineOrderCopyWithImpl<_CreateOfflineOrder>(this, _$identity);
+  _$AddTableCopyWith<_AddTable> get copyWith =>
+      __$AddTableCopyWithImpl<_AddTable>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _CreateOfflineOrder &&
-            (identical(other.orderRequestModel, orderRequestModel) ||
-                other.orderRequestModel == orderRequestModel));
+            other is _AddTable &&
+            (identical(other.table, table) || other.table == table));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, orderRequestModel);
+  int get hashCode => Object.hash(runtimeType, table);
 
   @override
   String toString() {
-    return 'OrderOfflineEvent.createOfflineOrder(orderRequestModel: $orderRequestModel)';
+    return 'TableManagementEvent.addTable(table: $table)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$CreateOfflineOrderCopyWith<$Res>
-    implements $OrderOfflineEventCopyWith<$Res> {
-  factory _$CreateOfflineOrderCopyWith(
-          _CreateOfflineOrder value, $Res Function(_CreateOfflineOrder) _then) =
-      __$CreateOfflineOrderCopyWithImpl;
+abstract mixin class _$AddTableCopyWith<$Res>
+    implements $TableManagementEventCopyWith<$Res> {
+  factory _$AddTableCopyWith(_AddTable value, $Res Function(_AddTable) _then) =
+      __$AddTableCopyWithImpl;
   @useResult
-  $Res call({OrderRequestModel orderRequestModel});
+  $Res call({RestaurantTable table});
 }
 
 /// @nodoc
-class __$CreateOfflineOrderCopyWithImpl<$Res>
-    implements _$CreateOfflineOrderCopyWith<$Res> {
-  __$CreateOfflineOrderCopyWithImpl(this._self, this._then);
+class __$AddTableCopyWithImpl<$Res> implements _$AddTableCopyWith<$Res> {
+  __$AddTableCopyWithImpl(this._self, this._then);
 
-  final _CreateOfflineOrder _self;
-  final $Res Function(_CreateOfflineOrder) _then;
+  final _AddTable _self;
+  final $Res Function(_AddTable) _then;
 
-  /// Create a copy of OrderOfflineEvent
+  /// Create a copy of TableManagementEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? orderRequestModel = null,
+    Object? table = null,
   }) {
-    return _then(_CreateOfflineOrder(
-      orderRequestModel: null == orderRequestModel
-          ? _self.orderRequestModel
-          : orderRequestModel // ignore: cast_nullable_to_non_nullable
-              as OrderRequestModel,
+    return _then(_AddTable(
+      table: null == table
+          ? _self.table
+          : table // ignore: cast_nullable_to_non_nullable
+              as RestaurantTable,
     ));
   }
 }
 
 /// @nodoc
-mixin _$OrderOfflineState {
+
+class _UpdateTable implements TableManagementEvent {
+  const _UpdateTable({required this.table});
+
+  final RestaurantTable table;
+
+  /// Create a copy of TableManagementEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$UpdateTableCopyWith<_UpdateTable> get copyWith =>
+      __$UpdateTableCopyWithImpl<_UpdateTable>(this, _$identity);
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is OrderOfflineState);
+        (other.runtimeType == runtimeType &&
+            other is _UpdateTable &&
+            (identical(other.table, table) || other.table == table));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, table);
+
+  @override
+  String toString() {
+    return 'TableManagementEvent.updateTable(table: $table)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$UpdateTableCopyWith<$Res>
+    implements $TableManagementEventCopyWith<$Res> {
+  factory _$UpdateTableCopyWith(
+          _UpdateTable value, $Res Function(_UpdateTable) _then) =
+      __$UpdateTableCopyWithImpl;
+  @useResult
+  $Res call({RestaurantTable table});
+}
+
+/// @nodoc
+class __$UpdateTableCopyWithImpl<$Res> implements _$UpdateTableCopyWith<$Res> {
+  __$UpdateTableCopyWithImpl(this._self, this._then);
+
+  final _UpdateTable _self;
+  final $Res Function(_UpdateTable) _then;
+
+  /// Create a copy of TableManagementEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? table = null,
+  }) {
+    return _then(_UpdateTable(
+      table: null == table
+          ? _self.table
+          : table // ignore: cast_nullable_to_non_nullable
+              as RestaurantTable,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _RemoveTable implements TableManagementEvent {
+  const _RemoveTable({required this.tableId});
+
+  final int tableId;
+
+  /// Create a copy of TableManagementEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$RemoveTableCopyWith<_RemoveTable> get copyWith =>
+      __$RemoveTableCopyWithImpl<_RemoveTable>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _RemoveTable &&
+            (identical(other.tableId, tableId) || other.tableId == tableId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, tableId);
+
+  @override
+  String toString() {
+    return 'TableManagementEvent.removeTable(tableId: $tableId)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$RemoveTableCopyWith<$Res>
+    implements $TableManagementEventCopyWith<$Res> {
+  factory _$RemoveTableCopyWith(
+          _RemoveTable value, $Res Function(_RemoveTable) _then) =
+      __$RemoveTableCopyWithImpl;
+  @useResult
+  $Res call({int tableId});
+}
+
+/// @nodoc
+class __$RemoveTableCopyWithImpl<$Res> implements _$RemoveTableCopyWith<$Res> {
+  __$RemoveTableCopyWithImpl(this._self, this._then);
+
+  final _RemoveTable _self;
+  final $Res Function(_RemoveTable) _then;
+
+  /// Create a copy of TableManagementEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? tableId = null,
+  }) {
+    return _then(_RemoveTable(
+      tableId: null == tableId
+          ? _self.tableId
+          : tableId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _GetTableById implements TableManagementEvent {
+  const _GetTableById({required this.tableId});
+
+  final int tableId;
+
+  /// Create a copy of TableManagementEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$GetTableByIdCopyWith<_GetTableById> get copyWith =>
+      __$GetTableByIdCopyWithImpl<_GetTableById>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GetTableById &&
+            (identical(other.tableId, tableId) || other.tableId == tableId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, tableId);
+
+  @override
+  String toString() {
+    return 'TableManagementEvent.getTableById(tableId: $tableId)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$GetTableByIdCopyWith<$Res>
+    implements $TableManagementEventCopyWith<$Res> {
+  factory _$GetTableByIdCopyWith(
+          _GetTableById value, $Res Function(_GetTableById) _then) =
+      __$GetTableByIdCopyWithImpl;
+  @useResult
+  $Res call({int tableId});
+}
+
+/// @nodoc
+class __$GetTableByIdCopyWithImpl<$Res>
+    implements _$GetTableByIdCopyWith<$Res> {
+  __$GetTableByIdCopyWithImpl(this._self, this._then);
+
+  final _GetTableById _self;
+  final $Res Function(_GetTableById) _then;
+
+  /// Create a copy of TableManagementEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? tableId = null,
+  }) {
+    return _then(_GetTableById(
+      tableId: null == tableId
+          ? _self.tableId
+          : tableId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+mixin _$TableManagementState {
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is TableManagementState);
   }
 
   @override
@@ -309,18 +549,18 @@ mixin _$OrderOfflineState {
 
   @override
   String toString() {
-    return 'OrderOfflineState()';
+    return 'TableManagementState()';
   }
 }
 
 /// @nodoc
-class $OrderOfflineStateCopyWith<$Res> {
-  $OrderOfflineStateCopyWith(
-      OrderOfflineState _, $Res Function(OrderOfflineState) __);
+class $TableManagementStateCopyWith<$Res> {
+  $TableManagementStateCopyWith(
+      TableManagementState _, $Res Function(TableManagementState) __);
 }
 
-/// Adds pattern-matching-related methods to [OrderOfflineState].
-extension OrderOfflineStatePatterns on OrderOfflineState {
+/// Adds pattern-matching-related methods to [TableManagementState].
+extension TableManagementStatePatterns on TableManagementState {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -441,7 +681,7 @@ extension OrderOfflineStatePatterns on OrderOfflineState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(TransactionModel data)? success,
+    TResult Function(List<RestaurantTable> tables)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -452,7 +692,7 @@ extension OrderOfflineStatePatterns on OrderOfflineState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(_that.data);
+        return success(_that.tables);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -477,7 +717,7 @@ extension OrderOfflineStatePatterns on OrderOfflineState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(TransactionModel data) success,
+    required TResult Function(List<RestaurantTable> tables) success,
     required TResult Function(String message) error,
   }) {
     final _that = this;
@@ -487,7 +727,7 @@ extension OrderOfflineStatePatterns on OrderOfflineState {
       case _Loading():
         return loading();
       case _Success():
-        return success(_that.data);
+        return success(_that.tables);
       case _Error():
         return error(_that.message);
       case _:
@@ -511,7 +751,7 @@ extension OrderOfflineStatePatterns on OrderOfflineState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(TransactionModel data)? success,
+    TResult? Function(List<RestaurantTable> tables)? success,
     TResult? Function(String message)? error,
   }) {
     final _that = this;
@@ -521,7 +761,7 @@ extension OrderOfflineStatePatterns on OrderOfflineState {
       case _Loading() when loading != null:
         return loading();
       case _Success() when success != null:
-        return success(_that.data);
+        return success(_that.tables);
       case _Error() when error != null:
         return error(_that.message);
       case _:
@@ -532,7 +772,7 @@ extension OrderOfflineStatePatterns on OrderOfflineState {
 
 /// @nodoc
 
-class _Initial implements OrderOfflineState {
+class _Initial implements TableManagementState {
   const _Initial();
 
   @override
@@ -546,13 +786,13 @@ class _Initial implements OrderOfflineState {
 
   @override
   String toString() {
-    return 'OrderOfflineState.initial()';
+    return 'TableManagementState.initial()';
   }
 }
 
 /// @nodoc
 
-class _Loading implements OrderOfflineState {
+class _Loading implements TableManagementState {
   const _Loading();
 
   @override
@@ -566,18 +806,23 @@ class _Loading implements OrderOfflineState {
 
   @override
   String toString() {
-    return 'OrderOfflineState.loading()';
+    return 'TableManagementState.loading()';
   }
 }
 
 /// @nodoc
 
-class _Success implements OrderOfflineState {
-  const _Success(this.data);
+class _Success implements TableManagementState {
+  const _Success(final List<RestaurantTable> tables) : _tables = tables;
 
-  final TransactionModel data;
+  final List<RestaurantTable> _tables;
+  List<RestaurantTable> get tables {
+    if (_tables is EqualUnmodifiableListView) return _tables;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tables);
+  }
 
-  /// Create a copy of OrderOfflineState
+  /// Create a copy of TableManagementState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -589,25 +834,26 @@ class _Success implements OrderOfflineState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Success &&
-            (identical(other.data, data) || other.data == data));
+            const DeepCollectionEquality().equals(other._tables, _tables));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, data);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_tables));
 
   @override
   String toString() {
-    return 'OrderOfflineState.success(data: $data)';
+    return 'TableManagementState.success(tables: $tables)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$SuccessCopyWith<$Res>
-    implements $OrderOfflineStateCopyWith<$Res> {
+    implements $TableManagementStateCopyWith<$Res> {
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) _then) =
       __$SuccessCopyWithImpl;
   @useResult
-  $Res call({TransactionModel data});
+  $Res call({List<RestaurantTable> tables});
 }
 
 /// @nodoc
@@ -617,29 +863,29 @@ class __$SuccessCopyWithImpl<$Res> implements _$SuccessCopyWith<$Res> {
   final _Success _self;
   final $Res Function(_Success) _then;
 
-  /// Create a copy of OrderOfflineState
+  /// Create a copy of TableManagementState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? data = null,
+    Object? tables = null,
   }) {
     return _then(_Success(
-      null == data
-          ? _self.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as TransactionModel,
+      null == tables
+          ? _self._tables
+          : tables // ignore: cast_nullable_to_non_nullable
+              as List<RestaurantTable>,
     ));
   }
 }
 
 /// @nodoc
 
-class _Error implements OrderOfflineState {
+class _Error implements TableManagementState {
   const _Error(this.message);
 
   final String message;
 
-  /// Create a copy of OrderOfflineState
+  /// Create a copy of TableManagementState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
@@ -659,13 +905,13 @@ class _Error implements OrderOfflineState {
 
   @override
   String toString() {
-    return 'OrderOfflineState.error(message: $message)';
+    return 'TableManagementState.error(message: $message)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$ErrorCopyWith<$Res>
-    implements $OrderOfflineStateCopyWith<$Res> {
+    implements $TableManagementStateCopyWith<$Res> {
   factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) =
       __$ErrorCopyWithImpl;
   @useResult
@@ -679,7 +925,7 @@ class __$ErrorCopyWithImpl<$Res> implements _$ErrorCopyWith<$Res> {
   final _Error _self;
   final $Res Function(_Error) _then;
 
-  /// Create a copy of OrderOfflineState
+  /// Create a copy of TableManagementState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({

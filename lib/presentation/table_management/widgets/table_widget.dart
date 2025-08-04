@@ -5,12 +5,14 @@ class TableWidget extends StatefulWidget {
   final RestaurantTable table;
   final Function(RestaurantTable) onPositionChanged;
   final Function(RestaurantTable) onTap;
+  final GlobalKey canvasKey;
 
   const TableWidget({
     super.key,
     required this.table,
     required this.onPositionChanged,
     required this.onTap,
+    required this.canvasKey,
   });
 
   @override
@@ -20,6 +22,7 @@ class TableWidget extends StatefulWidget {
 class _TableWidgetState extends State<TableWidget> {
   late double _x;
   late double _y;
+  final GlobalKey _widgetKey = GlobalKey();
 
   @override
   void initState() {
@@ -37,25 +40,38 @@ class _TableWidgetState extends State<TableWidget> {
         onTap: () => widget.onTap(widget.table),
         child: Draggable(
           feedback: _buildTableWidget(true),
-          // childWhenDragging: Container(),
+          childWhenDragging: SizedBox(), // Empty when dragging
           onDragEnd: (details) {
+            // Get canvas render box
+            final RenderBox canvasRenderBox = widget.canvasKey.currentContext!.findRenderObject() as RenderBox;
+            
+            // Convert global coordinates to canvas coordinates
+            final Offset canvasPosition = canvasRenderBox.localToGlobal(Offset.zero);
+            final Offset globalPosition = details.offset;
+            
+            // Calculate relative position
+            final double relativeX = globalPosition.dx - canvasPosition.dx;
+            final double relativeY = globalPosition.dy - canvasPosition.dy;
+            
+            // Ensure position stays within canvas bounds
+            final double boundedX = relativeX.clamp(0.0, canvasRenderBox.size.width - widget.table.width); // 80 is table width
+            final double boundedY = relativeY.clamp(0.0, canvasRenderBox.size.height - widget.table.height); // 80 is table height
+            
             setState(() {
-              _x = details.offset.dx;
-              _y = details.offset.dy;
-              
-              // Update the table position
+              _x = boundedX;
+              _y = boundedY;
               widget.onPositionChanged(
                 widget.table.copyWith(x: _x, y: _y),
               );
             });
           },
-          child: _buildTableWidget(false),
+          child: _buildTableWidget(false, key: _widgetKey),
         ),
       ),
     );
   }
 
-  Widget _buildTableWidget(bool isDragging) {
+  Widget _buildTableWidget(bool isDragging, {Key? key}) {
     Color backgroundColor;
     IconData iconData;
 
@@ -79,6 +95,7 @@ class _TableWidgetState extends State<TableWidget> {
     }
 
     return Container(
+      key: key,
       width: widget.table.width,
       height: widget.table.height,
       decoration: BoxDecoration(
@@ -88,15 +105,13 @@ class _TableWidgetState extends State<TableWidget> {
           color: Colors.black,
           width: 2,
         ),
-        boxShadow: isDragging
-            ? [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 8,
-                  offset: Offset(4, 4),
-                )
-              ]
-            : [],
+        boxShadow: isDragging ? [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 8,
+            offset: Offset(4, 4),
+          )
+        ] : [],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

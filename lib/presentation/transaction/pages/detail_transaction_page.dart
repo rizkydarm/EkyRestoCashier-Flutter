@@ -46,7 +46,7 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('ID Transaksi'),
-                      Text('${widget.transaction.orderNumber}'),
+                      Text('${widget.transaction.transactionId}'),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -63,7 +63,7 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Total'),
-                        Text(widget.transaction.totalPrice!.currencyFormatRpV3),
+                        Text(widget.transaction.totalPrice!.toString()),
                       ]),
                   const SizedBox(height: 8),
                   Row(
@@ -103,8 +103,8 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                         style: const TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 16)),
                     subtitle: Text(
-                        '${item.quantity} x ${item.price!.currencyFormatRpV3}'),
-                    trailing: Text(item.total!.currencyFormatRpV3,
+                        '${item.quantity} x ${item.product!.price!.toString()}'),
+                    trailing: Text(item.product!.price!.toString(),
                         style: const TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 16)),
                   ),
@@ -124,23 +124,23 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
               minimumSize: const Size(double.infinity, 50),
             ),
             onPressed: () async {
-              final printValue = await CwbPrint.instance.printOrderV2(
-                  widget.transaction.items!
-                      .map((e) => ProductQuantity(
-                          product: e.product!, quantity: e.quantity!))
-                      .toList(),
-                  widget.transaction.totalItems!,
-                  widget.transaction.totalPrice!.toDouble.toInt(),
-                  widget.transaction.paymentMethod!,
-                  widget.transaction.totalPrice!.toIntegerFromText,
-                  'Kasir 1',
-                  'Customer',
-                  widget.transaction.tax!.toDouble,
-                  widget.transaction.subTotal!.toDouble,
-                  widget.transaction.orderNumber ?? '',
-                  widget.transaction.discount!.toDouble,
-                  true);
-              await PrintBluetoothThermal.writeBytes(printValue);
+              // final printValue = await CwbPrint.instance.printOrderV2(
+              //     widget.transaction.items!
+              //         .map((e) => ProductQuantity(
+              //             product: e.product!, quantity: e.quantity!))
+              //         .toList(),
+              //     widget.transaction.totalItems!,
+              //     widget.transaction.totalPrice!.toDouble.toInt(),
+              //     widget.transaction.paymentMethod!,
+              //     widget.transaction.totalPrice!.toDouble.toInt(),
+              //     'Kasir 1',
+              //     'Customer',
+              //     widget.transaction.tax!.toDouble,
+              //     widget.transaction.subTotal!.toDouble,
+              //     widget.transaction.transactionId ?? '',
+              //     widget.transaction.discount!.toDouble,
+              //     true);
+              // await PrintBluetoothThermal.writeBytes(printValue);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

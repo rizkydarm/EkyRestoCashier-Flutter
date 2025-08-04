@@ -19,7 +19,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../models/product_model.dart';
 
 class EditProductPage extends StatefulWidget {
-  final Product data;
+  final ProductModel data;
   const EditProductPage({
     super.key,
     required this.data,
@@ -36,11 +36,10 @@ class _EditProductPageState extends State<EditProductPage> {
   final _descriptionController = TextEditingController();
   final _barcodeController = TextEditingController();
   final _costController = TextEditingController();
-  final _businessIdController = TextEditingController();
 
   // String _selectedCategory = 'Pilih Kategori';
 
-  Category? _selectedCategoryData;
+  CategoryModel? _selectedCategoryData;
 
   //8 list colors
   final List<Color> _colors = [
@@ -95,7 +94,6 @@ class _EditProductPageState extends State<EditProductPage> {
     _descriptionController.text = widget.data.description ?? '';
     _barcodeController.text = widget.data.barcode ?? '';
     _costController.text = widget.data.cost!.currencyFormatRpV3;
-    _businessIdController.text = widget.data.businessId.toString();
     _selectedCategoryData = widget.data.category;
     _selectedColor = changeStringtoColor(widget.data.color ?? '');
     if (widget.data.image != null) {
@@ -155,22 +153,20 @@ class _EditProductPageState extends State<EditProductPage> {
             const SizedBox(height: 16),
             BlocBuilder<CategoryBloc, CategoryState>(
               builder: (context, state) {
-                List<Category> categories = [
-                  Category(id: 0, name: 'Pilih Kategori')
+                List<CategoryModel> categories = [
+                  CategoryModel(id: 0, name: 'Pilih Kategori')
                 ];
                 state.maybeWhen(
                   orElse: () {
                     _selectedCategoryData = categories.first;
                   },
-                  success: (data) {
-                    categories = data ?? [];
+                  success: (categories) {
                     if (_selectedCategoryData != null) {
                       _selectedCategoryData = categories.first;
                     }
                   },
                 );
-
-                return CustomDropdown<Category>(
+                return CustomDropdown<CategoryModel>(
                   value: _selectedCategoryData,
                   items: categories,
                   label: 'Kategori',
@@ -356,10 +352,7 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  // final authData = await AuthLocalDatasource().getUserData();
-                  // final outletData =
-                  //     await AuthLocalDatasource().getOutletData();
-                  final data = Product(
+                  final data = ProductModel(
                     id: widget.data.id,
                     name: _nameController.text,
                     categoryId: 0,
@@ -368,7 +361,6 @@ class _EditProductPageState extends State<EditProductPage> {
                     stock: 0,
                     color: getColorString(_selectedColor),
                     barcode: _barcodeController.text,
-                    // businessId: authData!.data!.businessId!,
                     description: _nameController.text,
                   );
 

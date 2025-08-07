@@ -22,7 +22,7 @@ jobs:
       - checkout
       
       - flutter/install_flutter:
-          flutter_version: 3.16.0  # Specify your Flutter version
+          flutter_version: 3.32.6  # Specify your Flutter version
           
       - run:
           name: Install dependencies
@@ -59,7 +59,6 @@ jobs:
           command: flutter build apk --release --target-platform=android-arm64
 
 workflows:
-  my_workflow:
-    jobs:
-      - build_ios
-      - build_android
+  jobs:
+    - build_ios
+    - build_android

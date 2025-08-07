@@ -49,14 +49,6 @@ jobs:
       - flutter/install_sdk_and_pub:
           channel: stable
           version: 3.32.6
-
-      - run:
-          name: Install Linux dependencies
-          command: |
-            apt-get update
-            apt-get install clang
-            apt-get install ninja-build
-            apt-get install libgtk-3-dev
       
       - run:
           name: Accept Android licenses

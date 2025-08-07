@@ -1,0 +1,69 @@
+version: 2.1
+
+orbs:
+  flutter: circleci/flutter@2.0.0
+  android: circleci/android@2.5.0
+
+executors:
+  macos-executor:
+    macos:
+      xcode: 15.0  # Use latest stable Xcode
+    resource_class: macos.m1.medium.gen1
+  
+  android-executor:
+    docker:
+      - image: cimg/android:2023.12-flutter
+    resource_class: medium
+
+jobs:
+  build_ios:
+    executor: macos-executor
+    steps:
+      - checkout
+      
+      - flutter/install_flutter:
+          flutter_version: 3.16.0  # Specify your Flutter version
+          
+      - run:
+          name: Install dependencies
+          command: flutter pub get
+          
+      - run:
+          name: Install iOS platform tools
+          command: |
+            flutter config --enable-ios
+            flutter precache --ios
+            
+      - run:
+          name: Build iOS
+          command: flutter build ipa --release --no-codesign
+
+  build_android:
+    executor: android-executor
+    steps:
+      - checkout
+      
+      - flutter/install_flutter:
+          flutter_version: 3.16.0  # Specify your Flutter version
+          
+      - run:
+          name: Install dependencies
+          command: flutter pub get
+          
+      - run:
+          name: Build Android
+          command: flutter build apk --release --target-platform=android-arm64
+
+workflows:
+  build_and_test:
+    jobs:
+      - build_ios:
+          filters:
+            branches:
+              only:
+                - main
+      - build_android:
+          filters:
+            branches:
+              only:
+                - main

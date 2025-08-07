@@ -5,6 +5,12 @@
             "username": "admin",
             "password": "admin",
             "role": "admin"
+        },
+        {
+            "id": 2,
+            "username": "cashier",
+            "password": "cashier",
+            "role": "cashier"
         }
     ]
 }

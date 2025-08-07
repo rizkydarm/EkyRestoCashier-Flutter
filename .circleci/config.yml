@@ -25,8 +25,7 @@ jobs:
           channel: stable
           version: 3.32.6
 
-      - flutter/install_ios_pod
-      - flutter/install_ios_gem
+      # - flutter/install_ios_pod
           
       - run:
           name: Install dependencies
@@ -51,8 +50,7 @@ jobs:
           channel: stable
           version: 3.32.6
 
-      - flutter/install_android_gradle_dependencies
-      - flutter/install_android_gem
+      # - flutter/install_android_gradle_dependencies
           
       - run:
           name: Install dependencies

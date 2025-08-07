@@ -50,8 +50,6 @@ jobs:
           channel: stable
           version: 3.32.6
 
-      - flutter/install_android_gradle_dependencies
-
       - run:
           name: Install Linux dependencies
           command: |

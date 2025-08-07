@@ -1,5 +1,4 @@
 workflows:
-
     build-android-workflow:
         name: Build Android workflow
         environment:

@@ -59,6 +59,7 @@ jobs:
           command: flutter build apk --release --target-platform=android-arm64
 
 workflows:
-  jobs:
-    - build_ios
-    - build_android
+  build-workflow:  # This should be a workflow name, not "jobs"
+    jobs:          # "jobs" should be under the workflow name
+      - build_ios
+      - build_android

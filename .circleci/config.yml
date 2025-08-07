@@ -12,7 +12,7 @@ executors:
   
   android-executor:
     docker:
-      - image: cimg/android:2023.12-flutter
+      - image: cimg/android:2023.12
     resource_class: medium
 
 jobs:

@@ -55,15 +55,7 @@ jobs:
           command: flutter build apk --release --target-platform=android-arm64
 
 workflows:
-  build_and_test:
+  build:
     jobs:
-      - build_ios:
-          filters:
-            branches:
-              only:
-                - main
-      - build_android:
-          filters:
-            branches:
-              only:
-                - main
+      - build_ios
+      - build_android

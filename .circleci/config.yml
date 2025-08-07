@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  flutter: circleci/flutter@2.0.0
+  flutter: circleci/flutter@3.0.0
   android: circleci/android@2.5.0
 
 executors:
@@ -43,8 +43,12 @@ jobs:
     steps:
       - checkout
       
-      - flutter/install_flutter:
-          flutter_version: 3.16.0  # Specify your Flutter version
+      - flutter/install_sdk_and_pub:
+          channel: stable
+          version: 3.32.7
+
+      - flutter/install_android_gradle_dependencies
+      - flutter/install_android_gem
           
       - run:
           name: Install dependencies
@@ -55,7 +59,7 @@ jobs:
           command: flutter build apk --release --target-platform=android-arm64
 
 workflows:
-  build:
+  my_workflow:
     jobs:
       - build_ios
       - build_android

@@ -49,6 +49,16 @@ jobs:
       - flutter/install_sdk_and_pub:
           channel: stable
           version: 3.32.6
+
+      - run:
+          name: Upgrade AGP version
+          command: |
+            source $BASH_ENV
+            # Check if settings.gradle exists and update AGP version
+            if [ -f "android/settings.gradle" ]; then
+              sed -i 's/id "com.android.application" version "[0-9.]*"/id "com.android.application" version "8.2.1"/' android/settings.gradle
+              echo "Updated AGP version in settings.gradle"
+            fi
       
       - run:
           name: Accept Android licenses

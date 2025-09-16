@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
-import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
+import 'package:eky_pos/presentation/home/widgets/main_drawer.dart';
 import 'package:eky_pos/presentation/tax_discount/bloc/business_setting/business_setting_bloc.dart';
 import 'package:eky_pos/presentation/tax_discount/pages/add_tax_page.dart';
 import 'package:eky_pos/presentation/tax_discount/pages/detail_tax_page.dart';
@@ -15,7 +15,7 @@ class TaxDiscountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(),
+      drawer: MainDrawer(),
       appBar: AppBar(
         title: const Text('Tax & Discount'),
         centerTitle: true,

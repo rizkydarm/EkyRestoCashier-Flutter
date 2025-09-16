@@ -5,7 +5,7 @@ import 'package:eky_pos/presentation/staff/pages/add_staff_page.dart';
 import 'package:eky_pos/presentation/staff/pages/detail_staff_page.dart';
 
 import '../../../core/constants/colors.dart';
-import '../../home/widgets/drawer_widget.dart';
+import '../../home/widgets/main_drawer.dart';
 
 class StaffPage extends StatefulWidget {
   const StaffPage({super.key});
@@ -27,7 +27,7 @@ class _StaffPageState extends State<StaffPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: DrawerWidget(),
+      drawer: MainDrawer(),
       appBar: AppBar(
         title: const Text(
           'Staff Managements',

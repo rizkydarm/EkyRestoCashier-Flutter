@@ -1,3 +1,4 @@
+import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
@@ -11,7 +12,10 @@ import 'package:responsive_builder/responsive_builder.dart';
 import '../../bloc/product/product_bloc.dart';
 
 class ProductPage extends StatelessWidget {
-  const ProductPage({super.key});
+
+  final CategoryModel category;
+
+  const ProductPage({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {

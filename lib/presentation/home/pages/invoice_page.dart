@@ -232,12 +232,12 @@ class InvoicePage extends StatelessWidget {
                             minimumSize: const Size(double.infinity, 56),
                           ),
                           onPressed: () {
-                            context.read<CheckoutBloc>().add(const CheckoutEvent.started());
-                            context.read<ProductBloc>().add(const ProductEvent.getProducts());
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return const HomePage();
-                            }));
+                            // context.read<CheckoutBloc>().add(const CheckoutEvent.started());
+                            // context.read<ProductBloc>().add(const ProductEvent.getProducts());
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return const HomePage();
+                            // }));
                           },
                           icon: Icon(Icons.check_circle),
                           label: Text('Finish'),

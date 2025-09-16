@@ -32,8 +32,8 @@ class _LoginPageState extends State<LoginPage> {
       //       email: _emailController.text,
       //       password: _passwordController.text,
       //     ));
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
   }
 
@@ -130,10 +130,10 @@ class _LoginPageState extends State<LoginPage> {
                             //     await AuthLocalDatasource().saveOutletData(r);
                             //   },
                             // );
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const HomePage()));
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => const HomePage()));
                           },
                           error: (message) {
                             ScaffoldMessenger.of(context).showSnackBar(

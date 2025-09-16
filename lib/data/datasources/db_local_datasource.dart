@@ -28,6 +28,8 @@ class DBLocalDatasource {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = dbPath + filePath;
+    // await deleteDatabase(path);
+    // await clearAllData();
     return await openDatabase(
       path,
       version: 1,

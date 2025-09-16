@@ -1,187 +1,78 @@
-import 'package:dartz/dartz.dart';
-import 'package:easy_sidemenu/easy_sidemenu.dart';
-import 'package:eky_pos/data/models/responses/category_response_model.dart';
-import 'package:eky_pos/data/models/responses/product_response_model.dart';
-import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:eky_pos/presentation/home/pages/sales_page.dart';
-import 'package:eky_pos/presentation/home/widgets/fade_page_view.dart';
-import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
-import 'package:eky_pos/presentation/items/pages/item_page.dart';
-import 'package:eky_pos/presentation/printer/pages/printer_page.dart';
-import 'package:eky_pos/presentation/table_management/pages/table_management_page.dart';
-import 'package:eky_pos/presentation/tax_discount/pages/tax_discount_page.dart';
-import 'package:eky_pos/presentation/transaction/pages/transaction_page.dart';
-import 'package:flutter/gestures.dart';
+import 'package:eky_pos/presentation/home/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/presentation/home/pages/checkout_page.dart';
-import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
-import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, required this.navigationShell});
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final StatefulNavigationShell navigationShell;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    
-    context.read<ProductBloc>().add(ProductEvent.getProducts());
-    context.read<CategoryBloc>().add(CategoryEvent.getCategories());
 
-    final fadePageController = FadePageViewController();
-    final sideMenuController = SideMenuController();
+    final isLargeScreen = MediaQuery.of(context).size.width > 840;
+    final toggleDrawerProvider = Provider.of<ToggleDrawerProvider>(context);
 
-    sideMenuController.addListener((index) {
-      fadePageController.changePage(index);
-    });
-
-    final toggleSideMenuNotifier = ValueNotifier<bool>(false);
-
-    final pages = [
-      SalesAndCheckoutPages(
-        toggleSideMenuNotifier: toggleSideMenuNotifier
-      ),
-      ItemPage(
-        toggleSideMenuNotifier: toggleSideMenuNotifier,
-      ),
-      TransactionPage(
-        toggleSideMenuNotifier: toggleSideMenuNotifier,
-      ),
-      PrinterPage(
-        toggleSideMenuNotifier: toggleSideMenuNotifier,
-      ),
-      TableManagementPage(
-        toggleSideMenuNotifier: toggleSideMenuNotifier,
-      ),
-      TaxDiscountPage(
-        toggleSideMenuNotifier: toggleSideMenuNotifier,
-      ),
-    ];
-
-    final sideMenuItems = [
-      SideMenuItem(
-        onTap: (index, controller) {
-          controller.changePage(index);
-        },
-        title: 'Sales',
-        icon: Icon(Icons.food_bank),
-      ),
-      SideMenuItem(
-        onTap: (index, controller) {
-          controller.changePage(index);
-        },
-        title: 'Items',
-        icon: Icon(Icons.list),
-      ),
-      SideMenuItem(
-        onTap: (index, controller) {
-          controller.changePage(index);
-        },
-        title: 'Transactions',
-        icon: Icon(Icons.receipt),
-      ),
-      SideMenuItem(
-        onTap: (index, controller) {
-          controller.changePage(index);
-        },
-        title: 'Printer',
-        icon: Icon(Icons.print),
-      ),
-      SideMenuItem(
-        onTap: (index, controller) {
-          controller.changePage(index);
-        },
-        title: 'Table Management',
-        icon: Icon(Icons.table_bar),
-      ),
-      SideMenuItem(
-        onTap: (index, controller) {
-          controller.changePage(index);
-        },
-        title: 'Tax & Discount',
-        icon: Icon(Icons.percent),
-      ),
-    ];
-
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return ResponsiveBuilder(
-          builder: (context, sizingInformation) {
-            switch (sizingInformation.deviceScreenType) {
-              case DeviceScreenType.desktop:
-              case DeviceScreenType.tablet:
-              if (orientation == Orientation.landscape) {
-                return Row(
-                  children: [ 
-                    ValueListenableBuilder(
-                      valueListenable: toggleSideMenuNotifier,
-                      builder: (context, isResized, child) {
-                        return isResized ? const SizedBox.shrink() : child ?? const SizedBox.shrink();
-                      },
-                      child: Material(
-                        child: SideMenu(
-                          controller: sideMenuController,
-                          style: SideMenuStyle(
-                            displayMode: SideMenuDisplayMode.auto,
-                            openSideMenuWidth: 200,
-                            compactSideMenuWidth: 70,
-                            itemOuterPadding: EdgeInsets.zero,
-                            itemBorderRadius: BorderRadius.zero,
-                          ),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              ColoredBox(
-                                color: AppColors.primary, 
-                                child: SizedBox(
-                                  height: kToolbarHeight,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 100,
-                                child: Center(
-                                  child: Image.asset('assets/icons/ekycashier_outline.png', height: 50),
-                                )
-                              ),
-                            ],
-                          ),
-                          items: sideMenuItems,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: FadePageView(
-                        controller: fadePageController,
-                        pages: pages,
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                return SalesPage();
+    return Row(
+      children: [ 
+        if (!toggleDrawerProvider.isExpanded)
+          MainDrawer(
+            width: isLargeScreen ? 240 : 0,
+            onTap: (type) {
+              switch (type) {
+                case DrawerMenuItemType.sales:
+                  widget.navigationShell.goBranch(0, initialLocation: 0 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.product:
+                  widget.navigationShell.goBranch(1, initialLocation: 1 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.transaction:
+                  widget.navigationShell.goBranch(2, initialLocation: 2 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.tableManagement:
+                  widget.navigationShell.goBranch(3, initialLocation: 3 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.printer:
+                  widget.navigationShell.goBranch(4, initialLocation: 4 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.staff:
+                  widget.navigationShell.goBranch(5, initialLocation: 5 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.taxDiscount:
+                  widget.navigationShell.goBranch(6, initialLocation: 6 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.salesReport:
+                  widget.navigationShell.goBranch(7, initialLocation: 7 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.outletManagement:
+                  widget.navigationShell.goBranch(8, initialLocation: 7 == widget.navigationShell.currentIndex);
+                  break;
+                case DrawerMenuItemType.logout:
+                  break;
               }
-              case DeviceScreenType.mobile:
-                return SalesPage();
-              default:
-                return const SizedBox();
-            }
-          },
-        );
-      }
+            },
+          ),
+        Expanded(
+          child: widget.navigationShell,
+        ),
+      ],
     );
   }
 }
 
 class SalesAndCheckoutPages extends StatelessWidget {
-  
-  final ValueNotifier<bool>? toggleSideMenuNotifier;
 
   const SalesAndCheckoutPages({
     super.key,
-    this.toggleSideMenuNotifier,
   });
 
   @override
@@ -190,7 +81,7 @@ class SalesAndCheckoutPages extends StatelessWidget {
       children: [
         Expanded(
           flex: 2,
-          child: SalesPage(toggleSideMenuNotifier: toggleSideMenuNotifier)
+          child: SalesPage()
         ),
         Expanded(
           flex: 1,
@@ -201,3 +92,13 @@ class SalesAndCheckoutPages extends StatelessWidget {
   }
 }
 
+class ToggleDrawerProvider extends ChangeNotifier {
+  bool _isExpanded = false;
+
+  bool get isExpanded => _isExpanded;
+
+  void toggle() {
+    _isExpanded = !_isExpanded;
+    notifyListeners();
+  }
+}

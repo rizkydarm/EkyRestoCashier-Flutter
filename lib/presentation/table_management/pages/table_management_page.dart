@@ -1,15 +1,14 @@
+import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:eky_pos/presentation/table_management/bloc/table_manag_bloc.dart';
 import 'package:eky_pos/presentation/table_management/models/restotable_model.dart';
 import 'package:eky_pos/presentation/table_management/widgets/table_detail_bottomsheet.dart';
 import 'package:eky_pos/presentation/table_management/widgets/table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class TableManagementPage extends StatefulWidget {
-  
-  final ValueNotifier<bool>? toggleSideMenuNotifier;
-  
-  const TableManagementPage({super.key, this.toggleSideMenuNotifier});
+  const TableManagementPage({super.key});
 
   @override
   State<TableManagementPage> createState() => _TableManagementPageState();
@@ -23,13 +22,23 @@ class _TableManagementPageState extends State<TableManagementPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLargeScreen = MediaQuery.of(context).size.width > 840;
+    final scaffoldKey = GlobalKey<ScaffoldState>();
+    print("build table management page");
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text('Table Management'),
-        leading: widget.toggleSideMenuNotifier != null ? IconButton(
-          icon: const Icon(Icons.menu_open),
-          onPressed: () => widget.toggleSideMenuNotifier!.value = !widget.toggleSideMenuNotifier!.value,
-        ) : null,
+        leading: IconButton(
+          icon: Icon(isLargeScreen ? Icons.menu_open : Icons.menu),
+          onPressed: () {
+            if (isLargeScreen) {
+              Provider.of<ToggleDrawerProvider>(context, listen: false).toggle();
+            } else {
+              scaffoldKey.currentState?.openDrawer();
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addNewTable,

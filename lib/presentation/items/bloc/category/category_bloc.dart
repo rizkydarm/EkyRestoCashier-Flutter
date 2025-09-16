@@ -16,8 +16,13 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     
     on<_GetCategories>((event, emit) async {
       emit(CategoryState.loading());
-      final result = await dbCategory.getAllCategory();
-      emit(CategoryState.success(result));
+      await dbCategory.getAllCategory().then((result) {
+        print("get categories");
+        emit(CategoryState.success(result));
+      }).onError((error, st) {
+        print(st);
+        emit(CategoryState.error(error.toString()));
+      });
     });
 
     on<_AddCategory>((event, emit) async {
@@ -26,12 +31,12 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         name: event.name,        
         createdAt: DateTime.now(),
       );
-      try {
-        await dbCategory.saveCategory(category);
-      } catch (e) {
-        emit(CategoryState.error(e.toString()));
-      }
-      add(_GetCategories());
+      await dbCategory.saveCategory(category).then((value) {
+        add(_GetCategories());
+      }).onError((error, st) {
+        print(st);
+        emit(CategoryState.error(error.toString()));
+      });
     });
 
     on<_UpdateCategory>((event, emit) async {
@@ -39,14 +44,22 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       await dbCategory.updateCategory(
         event.id,
         event.name,
-      );
-      add(_GetCategories());
+      ).then((value) {
+        add(_GetCategories());
+      }).onError((error, st) {
+        print(st);
+        emit(CategoryState.error(error.toString()));
+      });
     });
 
     on<_DeleteCategory>((event, emit) async {
       emit(CategoryState.loading());
-      await dbCategory.deleteCategory(event.id);
-      add(_GetCategories());
+      await dbCategory.deleteCategory(event.id).then((value) {
+        add(_GetCategories());
+      }).onError((error, st) {
+        print(st);
+        emit(CategoryState.error(error.toString()));
+      });
     });
   }
 }

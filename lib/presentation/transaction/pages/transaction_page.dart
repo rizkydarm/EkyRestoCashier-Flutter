@@ -1,10 +1,12 @@
 import 'package:eky_pos/core/extensions/date_time_ext.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
-import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
+import 'package:eky_pos/presentation/home/pages/home_page.dart';
+import 'package:eky_pos/presentation/home/widgets/main_drawer.dart';
 import 'package:eky_pos/presentation/transaction/pages/detail_transaction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/presentation/home/bloc/transaction/transaction_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class TransactionPage extends StatelessWidget {
@@ -17,19 +19,30 @@ class TransactionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     context.read<TransactionBloc>().add(const TransactionEvent.getAllOrder());
+    
     final scaffoldKey = GlobalKey<ScaffoldState>();
-    final deviceType = getDeviceType(MediaQuery.of(context).size);
+    final isLargeScreen = MediaQuery.of(context).size.width > 840;
+
+    print("build transaction page");
+    
     return Scaffold(
       key: scaffoldKey,
-      drawer: deviceType == DeviceScreenType.mobile ? DrawerWidget() : null,
+      drawer: isLargeScreen ? null : MainDrawer(),
       appBar: AppBar(
         title: const Text('Transactions'),
         centerTitle: true,
-        leading: toggleSideMenuNotifier != null ? IconButton(
-          icon: const Icon(Icons.menu_open),
-          onPressed: () => toggleSideMenuNotifier!.value = !toggleSideMenuNotifier!.value,
-        ) : null,
+        leading: IconButton(
+          icon: Icon(isLargeScreen ? Icons.menu_open : Icons.menu),
+          onPressed: () {
+            if (isLargeScreen) {
+              Provider.of<ToggleDrawerProvider>(context, listen: false).toggle();
+            } else {
+              scaffoldKey.currentState?.openDrawer();
+            }
+          }
+        ),
       ),
       body: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
-import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
+import 'package:eky_pos/presentation/home/widgets/main_drawer.dart';
 import 'package:eky_pos/presentation/printer/bloc/printer/printer_bloc.dart';
 import 'package:eky_pos/presentation/printer/pages/add_printer_page.dart';
 import 'package:eky_pos/presentation/printer/pages/detail_printer_page.dart';
@@ -28,7 +28,7 @@ class _PrinterPageState extends State<PrinterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: DrawerWidget(),
+      drawer: MainDrawer(),
       appBar: AppBar(
         title: const Text('Printers'),
         centerTitle: true,

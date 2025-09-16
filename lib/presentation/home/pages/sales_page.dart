@@ -1,51 +1,60 @@
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
+import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eky_pos/core/constants/colors.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/presentation/home/pages/checkout_page.dart';
-import 'package:eky_pos/presentation/home/widgets/drawer_widget.dart';
+import 'package:eky_pos/presentation/home/widgets/main_drawer.dart';
 import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
-import 'package:responsive_builder/responsive_builder.dart';
+import 'package:provider/provider.dart';
 
 
 class SalesPage extends StatelessWidget {
-
-  final ValueNotifier<bool>? toggleSideMenuNotifier;
   
   const SalesPage({
     super.key,
-    this.toggleSideMenuNotifier,
   });   
 
   @override
   Widget build(BuildContext context) {
+
+    // context.read<ProductBloc>().add(ProductEvent.getProducts());
+    // context.read<CategoryBloc>().add(CategoryEvent.getCategories());
+
     final searchedTextNotifier = ValueNotifier<String?>(null);
     final scaffoldKey = GlobalKey<ScaffoldState>();
-    final orientation = MediaQuery.of(context).orientation;
-    final deviceType = getDeviceType(MediaQuery.of(context).size);
-    final isLargeScreen = orientation == Orientation.landscape && (deviceType == DeviceScreenType.desktop || deviceType == DeviceScreenType.tablet);
-    final isSmallScreen = orientation == Orientation.portrait || deviceType == DeviceScreenType.mobile;
+
+    final isLargeScreen = MediaQuery.of(context).size.width > 840;
+
+    print("build sales pages");
+    
     return Scaffold(
       key: scaffoldKey,
-      drawer: isLargeScreen ? null : DrawerWidget(),
-      drawerScrimColor: Colors.transparent,
+      drawer: isLargeScreen ? null : MainDrawer(),
       appBar: AppBar(
         title: const Text('Sales'),
         centerTitle: true,
-        leading: toggleSideMenuNotifier != null ? IconButton(
-          icon: const Icon(Icons.menu_open),
-          onPressed: () => toggleSideMenuNotifier!.value = !toggleSideMenuNotifier!.value,
-        ) : null,
+        leading: IconButton(
+          icon: Icon( isLargeScreen ? Icons.menu_open : Icons.menu),
+          onPressed: () {
+            if (isLargeScreen) {
+              Provider.of<ToggleDrawerProvider>(context, listen: false).toggle();
+            } else {
+              scaffoldKey.currentState?.openDrawer();
+            }
+          }
+        ),
       ),
-      bottomNavigationBar: isSmallScreen ? BottomAppBar(
+      bottomNavigationBar: !isLargeScreen ? BottomAppBar(
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
+          buildWhen: (previous, current) => previous != current,
           builder: (context, state) {
             return state.maybeWhen(
               orElse: () => const SizedBox.shrink(),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const SizedBox.shrink(),
               success: (cart, subtotal, total, qty) => ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -84,11 +93,13 @@ class SalesPage extends StatelessWidget {
             child: BlocBuilder<CategoryBloc, CategoryState>(
               builder: (context, categoryState) {
                 return categoryState.maybeWhen(
+                  error: (message) => Center(child: Text(message)),
                   orElse: () => Center(child: Text("No Items")),
                   loading: () => Center(child: CircularProgressIndicator()),
                   success: (categories) => BlocBuilder<ProductBloc, ProductState>(
                     builder: (context, productState) {
                       return productState.maybeWhen(
+                        error: (message) => Center(child: Text(message)),
                         orElse: () => Center(child: Text("No Items")),
                         loading: () => Center(child: CircularProgressIndicator()),
                         success: (products) {
@@ -112,7 +123,7 @@ class SalesPage extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(horizontal: 16),
                                 child: GridView.builder(
                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: deviceType == DeviceScreenType.mobile ? 2 : 3,
+                                    crossAxisCount: isLargeScreen ? 3 : 2,
                                     childAspectRatio: 0.8,
                                     crossAxisSpacing: 8,
                                     mainAxisSpacing: 8,
@@ -149,7 +160,7 @@ class SalesPage extends StatelessWidget {
                                                         children: [
                                                           SizedBox(
                                                             width: double.infinity,
-                                                            height: deviceType == DeviceScreenType.mobile ? 100 : 150,
+                                                            height: isLargeScreen ? 150 : 100,
                                                             child: DecoratedBox(
                                                               decoration: BoxDecoration(
                                                                 borderRadius: BorderRadius.circular(8),

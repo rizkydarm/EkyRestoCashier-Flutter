@@ -48,7 +48,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<_GetProducts>((event, emit) async {
-      emit(ProductState.loading());
+      emit(_Loading());
       await dbProduct.getAllProduct().then((result) {
         print('get products');
         emit(_Success(result));
@@ -72,12 +72,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<_UpdateStock>((event, emit) async {
-      emit(ProductState.loading());
+      emit(_Loading());
       add(_GetProducts());
     });
 
     on<_GetProductsByCategory>((event, emit) async {
-      emit(ProductState.loading());
+      emit(_Loading());
       await dbProduct.getAllProduct().then((result) {
         final searchResult = result.where((element) =>
           element.categoryId! == event.categoryId)
@@ -90,7 +90,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<_GetProductByBarcode>((event, emit) async {
-      emit(ProductState.loading());
+      emit(_Loading());
       await dbProduct.getAllProduct().then((result) {
         final searchResult = result.where((element) =>
           element.barcode == event.barcode)

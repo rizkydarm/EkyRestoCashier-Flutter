@@ -1,38 +1,37 @@
-import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
-
 import 'package:eky_pos/core/extensions/int_ext.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/data/dataoutputs/cwb_print.dart';
 import 'package:eky_pos/data/models/responses/transaction_response_model.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 
-import 'package:eky_pos/presentation/home/pages/sales_page.dart';
-import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
-
-import '../../../core/components/spaces.dart';
-import '../../../core/constants/colors.dart';
-
-class InvoicePage extends StatelessWidget {
-  
+class InvoiceArgs {
   final double nominal;
   final double totalPrice;
   final TransactionModel transaction;
 
-  const InvoicePage({
-    super.key,
+  InvoiceArgs({
     required this.nominal,
     required this.totalPrice,
     required this.transaction,
+  });
+}
+
+class InvoicePage extends StatelessWidget {
+  
+  final InvoiceArgs invoice;
+
+  const InvoicePage({
+    super.key,
+    required this.invoice,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nota ${transaction.transactionId}'),
+        title: Text('Nota ${invoice.transaction.transactionId}'),
         centerTitle: true,
       ),
       body: Column(
@@ -50,9 +49,9 @@ class InvoicePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          totalPrice.currencyFormatRp,
+                          invoice.totalPrice.currencyFormatRp,
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: Colors.black,
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                           ),
@@ -60,7 +59,7 @@ class InvoicePage extends StatelessWidget {
                         Text(
                           'Payment Total',
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: Colors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                           ),
@@ -69,7 +68,7 @@ class InvoicePage extends StatelessWidget {
                     ),
                   ),
                   VerticalDivider(
-                    color: AppColors.grey,
+                    color: Colors.grey,
                     thickness: 1,
                   ),
                   Expanded(
@@ -77,10 +76,10 @@ class InvoicePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${nominal - totalPrice}'
+                          '${invoice.nominal - invoice.totalPrice}'
                               .currencyFormatRpV3,
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: Colors.black,
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                           ),
@@ -88,7 +87,7 @@ class InvoicePage extends StatelessWidget {
                         Text(
                           'Change',
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: Colors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                           ),
@@ -103,6 +102,7 @@ class InvoicePage extends StatelessWidget {
           const Divider(indent: 16, endIndent: 16),
           Expanded(
             child: BlocBuilder<CheckoutBloc, CheckoutState>(
+              buildWhen: (previous, current) => previous != current,
               builder: (context, state) {
                 return state.maybeWhen(orElse: () {
                   return const Center(
@@ -116,7 +116,7 @@ class InvoicePage extends StatelessWidget {
                         title: Text(
                           orders[index].product.name ?? '',
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
@@ -124,17 +124,16 @@ class InvoicePage extends StatelessWidget {
                         subtitle: Text(
                           '${orders[index].product.price!.currencyFormatRpV3} x ${orders[index].quantity}',
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
                         trailing: Text(
-                          (orders[index].product.price!.toDouble *
-                                  orders[index].quantity)
-                              .currencyFormatRp,
+                          (orders[index].product.price!.toDouble * orders[index].quantity)
+                          .currencyFormatRp,
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
@@ -182,6 +181,7 @@ class InvoicePage extends StatelessWidget {
           ),
           const Divider(),
           BlocBuilder<CheckoutBloc, CheckoutState>(
+            buildWhen: (previous, current) => previous != current,
             builder: (context, state) {
               return state.maybeWhen(
                 orElse: () {
@@ -200,35 +200,35 @@ class InvoicePage extends StatelessWidget {
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade300,
-                            foregroundColor: AppColors.black,
+                            foregroundColor: Colors.black,
                             minimumSize: const Size(double.infinity, 56),
                           ),
                           onPressed: () async {
-                            final printValue = await CwbPrint.instance
-                              .printOrderV2(
-                                cart,
-                                totalItems,
-                                total.toInt(),
-                                'Tunai',
-                                nominal.toInt(),
-                                'Mawar',
-                                'Customer',
-                                10000, //tax
-                                totalPrice,
-                                'Nota: 101001', // No.nota
-                                0, // discount
-                                false
-                              );
-                            await PrintBluetoothThermal.writeBytes(printValue);
+                            // final printValue = await CwbPrint.instance
+                            //   .printOrderV2(
+                            //     cart,
+                            //     totalItems,
+                            //     total.toInt(),
+                            //     'Tunai',
+                            //     invoice.nominal.toInt(),
+                            //     'Mawar',
+                            //     'Customer',
+                            //     10000, //tax
+                            //     invoice.totalPrice,
+                            //     'Nota: 101001', // No.nota
+                            //     0, // discount
+                            //     false
+                            //   );
+                            // await PrintBluetoothThermal.writeBytes(printValue);
                           },
                           icon: Icon(Icons.print),
                           label: Text('Print Invoice'),
                         ),
-                        SpaceHeight(16),
+                        SizedBox(height: 16),
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: AppColors.white,
+                            backgroundColor: Colors.grey.shade300,
+                            foregroundColor: Colors.black,
                             minimumSize: const Size(double.infinity, 56),
                           ),
                           onPressed: () {

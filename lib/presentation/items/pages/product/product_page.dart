@@ -24,7 +24,13 @@ class ProductPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
-        centerTitle: true
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => context.read<ProductBloc>().add(const ProductEvent.getProducts()),
+          )
+        ],
       ),
       body: ProductBlocListView(),
       floatingActionButton: FloatingActionButton(
@@ -45,7 +51,9 @@ class ProductBlocListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProductBloc, ProductState>(
+      buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
+        print("build ProductBloc in ProductPage.ListView");
         return state.maybeWhen(
           orElse: () => Center(child: Text("No Items")),
           loading: () => Center(child: CircularProgressIndicator()),

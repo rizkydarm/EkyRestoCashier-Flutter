@@ -1,4 +1,3 @@
-import 'package:eky_pos/core/extensions/build_context_ext.dart';
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:eky_pos/presentation/home/widgets/main_drawer.dart';
@@ -14,8 +13,6 @@ class CategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    context.read<CategoryBloc>().add(const CategoryEvent.getCategories());
-
     final scaffoldKey = GlobalKey<ScaffoldState>();
     final isLargeScreen = MediaQuery.of(context).size.width > 840;
     
@@ -38,62 +35,68 @@ class CategoryPage extends StatelessWidget {
       drawer: isLargeScreen ? null : MainDrawer(),
       body: CategoryBlocListView(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showAddCategoryBottomSheet(context),
+        onPressed: () => showAddCategoryDialog(context),
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  static Future<void> showAddCategoryBottomSheet(BuildContext context, {CategoryModel? category}) {
+  static Future<void> showAddCategoryDialog(BuildContext context, {CategoryModel? category}) {
     String? name;
     final formKey = GlobalKey<FormState>();
-    return showModalBottomSheet(context: context,
-      showDragHandle: true,
-      useSafeArea: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24)
-      ),
-      constraints: const BoxConstraints(
-        maxWidth: 600,
-      ),
+    return showDialog(
+      context: context,
+      useRootNavigator: true,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Form(
-                key: formKey,
-                child: TextFormField(
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: 'Category name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+        return Dialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.4,
+              maxHeight: MediaQuery.of(context).size.height * 0.4,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Form(
+                    key: formKey,
+                    child: TextFormField(
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText: 'Category name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        filled: true,
+                      ),
+                      onChanged: (value) => name = value,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Category name is required';
+                        }
+                        return null;
+                      },
                     ),
-                    filled: true,
                   ),
-                  onChanged: (value) => name = value,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Category name is required';
-                    }
-                    return null;
-                  },
-                ),
+                  const Spacer(),
+                  FilledButton(
+                    onPressed: () {
+                      final isValid = formKey.currentState?.validate() ?? false;
+                      if (isValid && name != null) {
+                        context.read<CategoryBloc>().add(CategoryEvent.addCategory(name: name!));
+                        context.pop();
+                      }
+                    }, 
+                    child: const Text('Save'),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              FilledButton(
-                onPressed: () {
-                  final isValid = formKey.currentState?.validate() ?? false;
-                  if (isValid && name != null) {
-                    context.read<CategoryBloc>().add(CategoryEvent.addCategory(name: name!));
-                    Navigator.pop(context);
-                  }
-                }, 
-                child: const Text('Save'),
-              ),
-            ],
+            ),
           ),
         );
       },
@@ -109,7 +112,9 @@ class CategoryBlocListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(
+      // buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
+        print("build CategoryBloc in CategoryPage.ListView");
         return state.maybeWhen(
           orElse: () => Center(child: const Text('No Items')),
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -118,8 +123,9 @@ class CategoryBlocListView extends StatelessWidget {
             if (data.isEmpty) {
               return const Center(child: Text('No Items'));
             }
-            return ListView.builder(
+            return ListView.separated(
               itemCount: data.length,
+              separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(data[index].name ?? '-'),
@@ -134,7 +140,7 @@ class CategoryBlocListView extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            CategoryPage.showAddCategoryBottomSheet(context);
+                            CategoryPage.showAddCategoryDialog(context, category: data[index]);
                           },
                         ),
                         IconButton(

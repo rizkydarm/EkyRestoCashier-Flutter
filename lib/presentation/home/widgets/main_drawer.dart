@@ -91,7 +91,7 @@ class MainDrawer extends StatelessWidget {
             },
           ),
           DrawerMenuItem(
-            title: 'Product & Stock',
+            title: 'Products',
             icon: Icons.list,
             onPressed: () {
               if (isLargeScreen) {

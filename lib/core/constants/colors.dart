@@ -53,7 +53,7 @@ String getColorString(Color color) {
   } else if (color == Colors.teal) {
     return 'teal';
   } else {
-    return 'red';
+    return 'white';
   }
 }
 
@@ -75,6 +75,6 @@ Color changeStringtoColor(String color) {
   } else if (color == 'teal') {
     return Colors.teal;
   } else {
-    return Colors.red;
+    return Colors.white;
   }
 }

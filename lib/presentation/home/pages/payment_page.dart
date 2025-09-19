@@ -1,3 +1,4 @@
+import 'package:eky_pos/data/models/responses/transaction_response_model.dart';
 import 'package:eky_pos/presentation/home/pages/qris_payment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:eky_pos/presentation/home/bloc/order/order_bloc.dart';
 import 'package:eky_pos/presentation/home/models/product_quantity.dart';
 import 'package:eky_pos/presentation/home/pages/invoice_page.dart';
 import 'package:eky_pos/presentation/home/pages/invoice_page.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/components/spaces.dart';
 import '../../../core/constants/colors.dart';
@@ -33,14 +35,7 @@ class PaymentPage extends StatelessWidget {
       );
     });
     bool isCash = true;
-    bool sameNominal = false;
-    final totalPaymentNotifier = ValueNotifier<double>(0);
-    totalPaymentNotifier.value = context.read<CheckoutBloc>().state.maybeWhen(
-      orElse: () => 0,
-      success: (orders, subtotal, totalPayment, qty) {
-        return totalPayment;
-      },
-    );
+    bool exactNominal = false;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Payment'),
@@ -58,11 +53,17 @@ class PaymentPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ValueListenableBuilder(
-                      valueListenable: totalPaymentNotifier,
-                      builder: (context, totalPayment, child) {
+                    BlocBuilder<CheckoutBloc, CheckoutState>(
+                      buildWhen: (previous, current) => previous != current,
+                      builder: (context, state) {
+                        print("build CheckoutBloc in PaymentPage.Text");
                         return Text(
-                          totalPayment.currencyFormatRp,
+                          state.maybeWhen(
+                            orElse: () => 0,
+                            success: (orders, subtotal, totalPayment, qty) {
+                              return totalPayment;
+                            },
+                          ).toDouble().currencyFormatRp,
                           style: TextStyle(
                             color: AppColors.black,
                             fontSize: 22,
@@ -146,7 +147,6 @@ class PaymentPage extends StatelessWidget {
                           clipBehavior: Clip.antiAlias,
                           child: InkWell(
                           onTap: () {
-                            nominalController.text = totalPaymentNotifier.value.currencyFormatRp;
                             setState(() => isCash = false);
                           },
                             child: Padding(
@@ -195,7 +195,7 @@ class PaymentPage extends StatelessWidget {
                         ),
                         const SpaceHeight(16.0),
                         TextField(
-                          enabled: isCash ? !sameNominal : false,
+                          enabled: isCash ? !exactNominal : false,
                           controller: nominalController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -222,15 +222,21 @@ class PaymentPage extends StatelessWidget {
                         const SpaceHeight(8.0),
                         Row(
                           children: [
-                            ValueListenableBuilder(
-                              valueListenable: totalPaymentNotifier,
-                              builder: (context, totalPayment, child) {
+                            BlocBuilder<CheckoutBloc, CheckoutState>(
+                              buildWhen: (previous, current) => previous != current,
+                              builder: (context, state) {
+                                print("build CheckoutBloc in PaymentPage.Switch");
                                 return Switch(
-                                  value: sameNominal,
+                                  value: exactNominal,
                                   onChanged: isCash ? (value) => setState(() {
-                                    sameNominal = !sameNominal;
-                                    if (sameNominal) {
-                                      nominalController.text = totalPayment.currencyFormatRp;
+                                    exactNominal = !exactNominal;
+                                    if (exactNominal) {
+                                      nominalController.text = state.maybeWhen(
+                                        orElse: () => '',
+                                        success: (orders, subtotal, totalPayment, qty) {
+                                          return totalPayment.currencyFormatRp;
+                                        },
+                                      );
                                     } else {
                                       nominalController.text = '';
                                     }
@@ -239,7 +245,7 @@ class PaymentPage extends StatelessWidget {
                               }
                             ),
                             const SpaceWidth(8.0),
-                            const Text('Same Nominal'),
+                            const Text('Exact Nominal'),
                           ],
                         ),
                       ],
@@ -251,7 +257,19 @@ class PaymentPage extends StatelessWidget {
             const SpaceHeight(16),
             ElevatedButton(
               onPressed: () {
-                
+                final transaction = TransactionModel();
+                if (isCash) {
+                  context.go('invoice', extra: InvoiceArgs(
+                    nominal: 0,
+                    totalPrice: 0,
+                    transaction: transaction,
+                  ));
+                } else {
+                  context.go('qris_payment', extra: QRISPaymentPageArgs(
+                    totalPrice: 0,
+                    transaction: transaction,
+                  ));
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
@@ -260,7 +278,7 @@ class PaymentPage extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              child: const Text('Bayar'),
+              child: const Text('Confirm'),
             ),
             // BlocBuilder<CheckoutBloc, CheckoutState>(
             //   builder: (context, state) {

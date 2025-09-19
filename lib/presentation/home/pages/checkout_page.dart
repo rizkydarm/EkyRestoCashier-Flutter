@@ -6,6 +6,7 @@ import 'package:eky_pos/core/extensions/int_ext.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:eky_pos/presentation/home/pages/payment_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 
@@ -24,7 +25,9 @@ class CheckoutPage extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
+          buildWhen: (previous, current) => previous != current,
           builder: (context, state) {
+            print("build CheckoutBloc in CheckoutPage");
             return state.maybeWhen(
               orElse: () => const SizedBox.shrink(),
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -33,9 +36,7 @@ class CheckoutPage extends StatelessWidget {
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.white,
                 ),
-                onPressed: cart.isEmpty ? null : !isLargeScreen ? () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const PaymentPage()),
-                ) : () => showDialog(
+                onPressed: cart.isEmpty ? null : !isLargeScreen ? () => context.push('/payment') : () => showDialog(
                   context: context,
                   useRootNavigator: true,
                   builder: (context) => Dialog(
@@ -50,7 +51,7 @@ class CheckoutPage extends StatelessWidget {
                   ),
                 ),
                 icon: const Icon(Icons.payment),
-                label: const Text('Pay'),
+                label: const Text('Checkout'),
               )
             );
           },
@@ -61,6 +62,7 @@ class CheckoutPage extends StatelessWidget {
         children: [
           Expanded(
             child: BlocBuilder<CheckoutBloc, CheckoutState>(
+              buildWhen: (previous, current) => previous != current,
               builder: (context, state) => state.maybeWhen(
               success: (cart, subtotal, total, totalItem) =>
                 ListView.builder(

@@ -44,11 +44,18 @@ class SalesPage extends StatelessWidget {
             }
           }
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => context.read<ProductBloc>().add(const ProductEvent.getProducts()),
+          )
+        ],
       ),
       bottomNavigationBar: !isLargeScreen ? BottomAppBar(
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
           buildWhen: (previous, current) => previous != current,
           builder: (context, state) {
+            print("build CheckoutBloc in SalesPage.BottomAppBar");
             return state.maybeWhen(
               orElse: () => const SizedBox.shrink(),
               loading: () => const SizedBox.shrink(),
@@ -88,13 +95,17 @@ class SalesPage extends StatelessWidget {
           ),
           Expanded(
             child: BlocBuilder<CategoryBloc, CategoryState>(
+              buildWhen: (previous, current) => previous != current,
               builder: (context, categoryState) {
+                print("build CategoryBloc in SalesPage.GridView");
                 return categoryState.maybeWhen(
                   error: (message) => Center(child: Text(message)),
                   orElse: () => Center(child: Text("No Items")),
                   loading: () => Center(child: CircularProgressIndicator()),
                   success: (categories) => BlocBuilder<ProductBloc, ProductState>(
+                    buildWhen: (previous, current) => previous != current,
                     builder: (context, productState) {
+                      print("build ProductBloc in SalesPage.GridView");
                       return productState.maybeWhen(
                         error: (message) => Center(child: Text(message)),
                         orElse: () => Center(child: Text("No Items")),
@@ -129,12 +140,13 @@ class SalesPage extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     final product = filteredData[index];
                                     return BlocBuilder<CheckoutBloc, CheckoutState>(
+                                      buildWhen: (previous, current) => previous != current,
                                       builder: (context, state) {
                                         return state.maybeWhen(
                                           orElse: () => const SizedBox(),
                                           success: (cart, subtotal, total, qty) {
                                             final selectedProduct = cart.any((element) => element.product.id == product.id);
-                                            final categoryName = categories.firstWhere((element) => element.id == product.categoryId).name ?? '-';
+                                            // final categoryName = categories.firstWhere((element) => element.id == product.categoryId).name ?? '-';
                                             return Card(
                                               elevation: selectedProduct ? 0 : 1,
                                               clipBehavior: Clip.antiAlias,
@@ -193,10 +205,10 @@ class SalesPage extends StatelessWidget {
                                                             maxLines: 2,
                                                             overflow: TextOverflow.ellipsis,
                                                           ),
-                                                          Text(
-                                                            categoryName,
-                                                            style: Theme.of(context).textTheme.bodyMedium,
-                                                          ),
+                                                          // Text(
+                                                          //   categoryName,
+                                                          //   style: Theme.of(context).textTheme.bodyMedium,
+                                                          // ),
                                                           Spacer(),
                                                           Text(
                                                             product.price?.currencyFormatRpV3 ?? "-",

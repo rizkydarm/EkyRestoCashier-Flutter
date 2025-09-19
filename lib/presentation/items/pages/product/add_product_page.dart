@@ -44,6 +44,7 @@ class AddProductPage extends StatelessWidget {
     final emojiController = TextEditingController();
 
     final List<Color> colors = [
+      Colors.white,
       Colors.red,
       Colors.blue,
       Colors.green,

@@ -15,13 +15,19 @@ import 'package:qr/qr.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+class QRISPaymentPageArgs {
+  final double totalPrice;
+  final TransactionModel transaction;
+
+  QRISPaymentPageArgs({required this.totalPrice, required this.transaction});
+}
+
 
 class QRISPaymentPage extends StatelessWidget {
 
-  const QRISPaymentPage({super.key, required this.totalPrice, required this.transaction});
+  const QRISPaymentPage({super.key, required this.args});
 
-  final double totalPrice;
-  final TransactionModel transaction;
+  final QRISPaymentPageArgs args;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +130,7 @@ class QRISPaymentPage extends StatelessWidget {
             ),
             SpaceHeight(16),
             Text('Total payment:'),
-            Text(totalPrice.currencyFormatRp,
+            Text(args.totalPrice.currencyFormatRp,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -132,7 +138,7 @@ class QRISPaymentPage extends StatelessWidget {
             ),
             SpaceHeight(16),
             Text('Transaction ID:'),
-            Text(transaction.transactionId ?? '-'),
+            Text(args.transaction.transactionId ?? '-'),
             Spacer(),
             Flexible(
               child: ElevatedButton(
@@ -146,9 +152,11 @@ class QRISPaymentPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => InvoicePage(
-                        nominal: totalPrice,
-                        totalPrice: transaction.totalPrice ?? 0,
-                        transaction: transaction,
+                        invoice: InvoiceArgs(
+                          nominal: args.totalPrice,
+                          totalPrice: args.totalPrice,
+                          transaction: args.transaction,
+                        ),
                       )
                     ),
                     (route) => false,

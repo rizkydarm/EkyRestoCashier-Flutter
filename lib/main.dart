@@ -39,10 +39,10 @@ void main() {
     //   create: (context) => SalesReportBloc(SalesReportRemoteDatasource()),
     // ),
     BlocProvider(
-      create: (context) => CategoryBloc(),
+      create: (context) => CategoryBloc()..add(CategoryEvent.getCategories()),
     ),
     BlocProvider(
-      create: (context) => ProductBloc(),
+      create: (context) => ProductBloc()..add(ProductEvent.getProducts()),
     ),
     BlocProvider(
       create: (context) => CheckoutBloc(),

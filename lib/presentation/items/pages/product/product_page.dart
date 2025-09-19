@@ -7,6 +7,7 @@ import 'package:eky_pos/core/extensions/string_ext.dart';
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:eky_pos/presentation/items/pages/product/add_product_page.dart';
 import 'package:eky_pos/presentation/items/pages/product/detail_product_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../bloc/product/product_bloc.dart';
@@ -26,37 +27,12 @@ class ProductPage extends StatelessWidget {
         centerTitle: true
       ),
       body: ProductBlocListView(),
-      floatingActionButton: ProductFab(),
-    );
-  }
-}
-
-class ProductFab extends StatelessWidget {
-  const ProductFab({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CategoryBloc, CategoryState>(
-      builder: (context, state) {
-        final categories = state.maybeWhen(
-          orElse: () => [],
-          success: (data) => data,
-        );
-        return FloatingActionButton(
-          onPressed: () {
-            if (categories.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Please add category first"),
-              ));
-              return;
-            }
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductPage()));
-          },
-          child: const Icon(Icons.add),
-        );
-      },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.pushNamed('add_product', extra: category);
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
@@ -109,7 +85,7 @@ class ProductBlocListView extends StatelessWidget {
                     }
                   ),
                   trailing: Text(product.price!.currencyFormatRpV3, style: TextStyle(fontSize: 14)),
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProductPage(data: product))),
+                  onTap: () => context.pushNamed('detail_product', extra: product),
                 );
               },
             );

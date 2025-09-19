@@ -21,9 +21,6 @@ class SalesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // context.read<ProductBloc>().add(ProductEvent.getProducts());
-    // context.read<CategoryBloc>().add(CategoryEvent.getCategories());
-
     final searchedTextNotifier = ValueNotifier<String?>(null);
     final scaffoldKey = GlobalKey<ScaffoldState>();
 

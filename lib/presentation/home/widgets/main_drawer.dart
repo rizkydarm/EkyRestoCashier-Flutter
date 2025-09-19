@@ -43,22 +43,40 @@ class MainDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          UserAccountsDrawerHeader(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            accountName: null,
-            accountEmail: Text('rizky@gmail.com - Owner',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
+          ColoredBox(
+            color: Theme.of(context).primaryColor,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SafeArea(
+                bottom: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      radius: 44,
+                      backgroundColor: Colors.white,
+                      child: Image.asset('assets/icons/ekycashier_outline.png', width: 44)
+                    ),
+                    const SizedBox(height: 16),
+                    Text('Restaurant Seafood Enak',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text('Staff - Cahsier',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Image.asset('assets/icons/ekycashier_outline.png', width: 44)
             ),
           ),
           DrawerMenuItem(

@@ -1,8 +1,11 @@
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
+import 'package:eky_pos/data/models/responses/product_response_model.dart';
 import 'package:eky_pos/presentation/home/pages/home_page.dart';
 import 'package:eky_pos/presentation/home/pages/sales_page.dart';
 // import 'package:eky_pos/presentation/home/pages/sales_page.dart';
 import 'package:eky_pos/presentation/items/pages/category/category_page.dart';
+import 'package:eky_pos/presentation/items/pages/product/add_product_page.dart';
+import 'package:eky_pos/presentation/items/pages/product/detail_product_page.dart';
 import 'package:eky_pos/presentation/items/pages/product/product_page.dart';
 import 'package:eky_pos/presentation/printer/pages/printer_page.dart';
 import 'package:eky_pos/presentation/staff/pages/staff_page.dart';
@@ -31,8 +34,8 @@ final GoRouter router = GoRouter(
               path: '/sales',
               builder: (context, state) {
                 print("go to sales page");
-                // final isLargeScreen = MediaQuery.of(context).size.width > 840;
-                return const SalesPage();
+                final isLargeScreen = MediaQuery.of(context).size.width > 840;
+                return isLargeScreen ? const SalesAndCheckoutPages() : const SalesPage();
               },
               routes: [
                 // GoRoute(
@@ -62,6 +65,16 @@ final GoRouter router = GoRouter(
                   builder: (context, state) => ProductPage(
                     category: state.extra as CategoryModel,
                   ),
+                ),
+                GoRoute(
+                  path: 'add_product',
+                  name: 'add_product',
+                  builder: (context, state) => AddProductPage(category: state.extra as CategoryModel),
+                ),
+                GoRoute(
+                  path: 'detail_product',
+                  name: 'detail_product',
+                  builder: (context, state) => DetailProductPage(product: state.extra as ProductModel),
                 ),
               ],
             ),

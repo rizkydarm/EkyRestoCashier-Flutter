@@ -248,7 +248,20 @@ class PaymentPage extends StatelessWidget {
                 );
               }
             ),
-            const SpaceHeight(28.0),
+            const SpaceHeight(16),
+            ElevatedButton(
+              onPressed: () {
+                
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.white,
+                minimumSize: const Size(double.infinity, 56),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text('Bayar'),
+            ),
             // BlocBuilder<CheckoutBloc, CheckoutState>(
             //   builder: (context, state) {
             //     double subtotal = state.maybeWhen(

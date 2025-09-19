@@ -15,12 +15,12 @@ class CheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceType = getDeviceType(MediaQuery.of(context).size);
+    final isLargeScreen = MediaQuery.of(context).size.width > 840;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
         centerTitle: true,
-        automaticallyImplyLeading: deviceType == DeviceScreenType.mobile,
+        automaticallyImplyLeading: !isLargeScreen,
       ),
       bottomNavigationBar: BottomAppBar(
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
@@ -33,7 +33,7 @@ class CheckoutPage extends StatelessWidget {
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.white,
                 ),
-                onPressed: cart.isEmpty ? null : deviceType == DeviceScreenType.mobile ? () => Navigator.push(context,
+                onPressed: cart.isEmpty ? null : !isLargeScreen ? () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const PaymentPage()),
                 ) : () => showDialog(
                   context: context,

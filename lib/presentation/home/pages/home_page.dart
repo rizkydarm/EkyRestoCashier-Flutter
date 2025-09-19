@@ -5,16 +5,10 @@ import 'package:eky_pos/presentation/home/pages/checkout_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
@@ -30,31 +24,31 @@ class _HomePageState extends State<HomePage> {
             onTap: (type) {
               switch (type) {
                 case DrawerMenuItemType.sales:
-                  widget.navigationShell.goBranch(0, initialLocation: 0 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(0, initialLocation: 0 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.product:
-                  widget.navigationShell.goBranch(1, initialLocation: 1 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(1, initialLocation: 1 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.transaction:
-                  widget.navigationShell.goBranch(2, initialLocation: 2 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(2, initialLocation: 2 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.tableManagement:
-                  widget.navigationShell.goBranch(3, initialLocation: 3 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(3, initialLocation: 3 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.printer:
-                  widget.navigationShell.goBranch(4, initialLocation: 4 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(4, initialLocation: 4 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.staff:
-                  widget.navigationShell.goBranch(5, initialLocation: 5 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(5, initialLocation: 5 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.taxDiscount:
-                  widget.navigationShell.goBranch(6, initialLocation: 6 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(6, initialLocation: 6 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.salesReport:
-                  widget.navigationShell.goBranch(7, initialLocation: 7 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(7, initialLocation: 7 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.outletManagement:
-                  widget.navigationShell.goBranch(8, initialLocation: 7 == widget.navigationShell.currentIndex);
+                  navigationShell.goBranch(8, initialLocation: 7 == navigationShell.currentIndex);
                   break;
                 case DrawerMenuItemType.logout:
                   break;
@@ -62,7 +56,7 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         Expanded(
-          child: widget.navigationShell,
+          child: navigationShell,
         ),
       ],
     );

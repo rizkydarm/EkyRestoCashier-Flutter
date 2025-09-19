@@ -11,11 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DetailProductPage extends StatelessWidget {
   
-  final ProductModel data;
+  final ProductModel product;
   
   const DetailProductPage({
     super.key,
-    required this.data,
+    required this.product,
   });
 
   @override
@@ -34,10 +34,10 @@ class DetailProductPage extends StatelessWidget {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: changeStringtoColor(data.color ?? Colors.white.toString()),
+                color: changeStringtoColor(product.color ?? Colors.white.toString()),
               ),
               child: Center(
-                child: Text(data.image ?? '▪️',
+                child: Text(product.image ?? '▪️',
                   style: const TextStyle(
                     fontSize: 32,
                   ),
@@ -47,17 +47,15 @@ class DetailProductPage extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Nama Product'),
-            subtitle: Text(data.name ?? ''),
+            subtitle: Text(product.name ?? ''),
           ),
-          //category
-
           BlocBuilder<CategoryBloc, CategoryState>(
             builder: (context, state) {
               final categories = state.maybeWhen(
                 orElse: () => [],
                 success: (data) => data,
               );
-              final categoryName = categories.firstWhere((element) => element.id == data.categoryId)?.name ?? "-";
+              final categoryName = categories.firstWhere((element) => element.id == product.categoryId)?.name ?? "-";
               return ListTile(
                 title: const Text('Kategori Product'),
                 subtitle: Text(categoryName),
@@ -66,12 +64,12 @@ class DetailProductPage extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Harga Jual Product'),
-            subtitle: Text(data.price!.currencyFormatRpV3),
+            subtitle: Text(product.price!.currencyFormatRpV3),
           ),
 
           ListTile(
             title: const Text('Harga Dasar Product'),
-            subtitle: Text(data.cost!.currencyFormatRpV3),
+            subtitle: Text(product.cost!.currencyFormatRpV3),
           ),
           SizedBox(height: 16),
           //edit button
@@ -89,7 +87,7 @@ class DetailProductPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditProductPage(data: data),
+                        builder: (context) => EditProductPage(data: product),
                       ),
                     );
                   },
@@ -103,7 +101,7 @@ class DetailProductPage extends StatelessWidget {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () {
-                    context.read<ProductBloc>().add(ProductEvent.deleteProduct(data.id!));
+                    context.read<ProductBloc>().add(ProductEvent.deleteProduct(product.id!));
                     Navigator.pop(context);
                   },
                   child: const Text('Delete Product'),

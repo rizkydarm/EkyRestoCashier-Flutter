@@ -1,23 +1,20 @@
-import 'dart:io';
-
-import 'package:eky_pos/core/utils/talker.dart';
+import 'package:eky_pos/core/components/custom_dropdown.dart';
+import 'package:eky_pos/core/extensions/build_context_ext.dart';
 import 'package:eky_pos/data/models/responses/product_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eky_pos/core/components/spaces.dart';
 import 'package:eky_pos/core/constants/colors.dart';
 import 'package:eky_pos/core/extensions/string_ext.dart';
-// import 'package:eky_pos/data/datasources/auth_local_datasource.dart';
 import 'package:eky_pos/data/models/responses/category_response_model.dart';
 import 'package:eky_pos/presentation/items/bloc/category/category_bloc.dart';
 import 'package:eky_pos/presentation/items/bloc/product/product_bloc.dart';
-import 'package:eky_pos/presentation/items/models/product_model.dart';
-import 'package:image_picker/image_picker.dart';
 
-import '../../../../core/components/custom_dropdown.dart';
 
 class AddProductPage extends StatelessWidget {
-  const AddProductPage({super.key});
+
+  final CategoryModel category;
+
+  const AddProductPage({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +28,7 @@ class AddProductPage extends StatelessWidget {
       final nominal = priceController.text.replaceAll(RegExp(r'[^0-9]'), '');
       priceController.value = TextEditingValue(
         text: nominal.currencyFormatRp,
-        selection:
-            TextSelection.collapsed(offset: nominal.currencyFormatRp.length),
+        selection: TextSelection.collapsed(offset: nominal.currencyFormatRp.length),
       );
     });
 
@@ -40,12 +36,9 @@ class AddProductPage extends StatelessWidget {
       final nominal = costController.text.replaceAll(RegExp(r'[^0-9]'), '');
       costController.value = TextEditingValue(
         text: nominal.currencyFormatRp,
-        selection:
-            TextSelection.collapsed(offset: nominal.currencyFormatRp.length),
+        selection: TextSelection.collapsed(offset: nominal.currencyFormatRp.length),
       );
     });
-
-    CategoryModel? selectedCategoryData;
 
     bool isImage = false;
     final emojiController = TextEditingController();
@@ -64,8 +57,6 @@ class AddProductPage extends StatelessWidget {
     Color selectedColor = Colors.white;
 
     final formKey = GlobalKey<FormState>();
-
-    context.read<CategoryBloc>().add(CategoryEvent.getCategories());
 
     return Scaffold(
       appBar: AppBar(
@@ -88,37 +79,41 @@ class AddProductPage extends StatelessWidget {
               controller: nameController,
               decoration: const InputDecoration(
                 labelText: 'Nama Produk',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                ),
               ),
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.next,
             ),
             const SizedBox(height: 16),
-            BlocBuilder<CategoryBloc, CategoryState>(
-              builder: (context, state) {
-                List<CategoryModel> categories = [];
-                state.maybeWhen(
-                  orElse: () {},
-                  success: (data) => categories = data,
-                );
-                return StatefulBuilder(
-                  builder: (context, setState) {
-                    return CustomDropdown<CategoryModel>(
-                      hint: 'Choose Category',
-                      value: selectedCategoryData,
-                      items: categories,
-                      label: 'Category',
-                      onChanged: (value) => setState(() => selectedCategoryData = value),
-                    );
-                  }
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-
+            // BlocBuilder<CategoryBloc, CategoryState>(
+            //   builder: (context, state) {
+            //     List<CategoryModel> categories = state.maybeWhen(
+            //       orElse: () => [],
+            //       success: (data) => data,
+            //     );
+            //     return StatefulBuilder(
+            //       builder: (context, setState) {
+            //         return CustomDropdown<CategoryModel>(
+            //           hint: 'Choose Category',
+            //           value: selectedCategoryData,
+            //           items: categories,
+            //           label: 'Category',
+            //           onChanged: (value) => setState(() => selectedCategoryData = value),
+            //         );
+            //       }
+            //     );
+            //   },
+            // ),
+            // const SizedBox(height: 16),
             TextFormField(
               controller: priceController,
               decoration: const InputDecoration(
                 labelText: 'Harga Jual',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                ),
               ),
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
@@ -128,6 +123,9 @@ class AddProductPage extends StatelessWidget {
               controller: costController,
               decoration: const InputDecoration(
                 labelText: 'Harga Dasar',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                ),
               ),
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
@@ -137,6 +135,9 @@ class AddProductPage extends StatelessWidget {
               controller: barcodeController,
               decoration: const InputDecoration(
                 labelText: 'Barcode',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                ),
               ),
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
@@ -199,11 +200,11 @@ class AddProductPage extends StatelessWidget {
                       )).toList(),
                     ) else TextField(
                       controller: emojiController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
-                        hintText: 'Choose 1 emoji in keyboard',
+                        hintText: 'Pilih 1 emoji di keyboard',
                         suffixIcon: Icon(Icons.emoji_emotions),
                         suffixIconColor: Colors.grey,
                       ),
@@ -212,63 +213,97 @@ class AddProductPage extends StatelessWidget {
                 );
               }
             ),
-            const SizedBox(height: 24),
-            BlocConsumer<ProductBloc, ProductState>(
-              listener: (context, state) {
-                state.maybeWhen(
-                  orElse: () {},
-                  success: (data) {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Produk berhasil ditambahkan')),
-                    );
-                  },
-                );
+            const SizedBox(height: 16),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
+              ),
+              onPressed: () async {
+                if ((formKey.currentState?.validate() ?? false)) {
+                  if (isImage) {
+                    if (emojiController.text.isEmpty && emojiController.text.length > 1) {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Emoji is required')),
+                      );
+                      return;
+                    }
+                  }
+                  final data = ProductModel(
+                    name: nameController.text,
+                    categoryId: category.id!,
+                    category: category,
+                    price: priceController.text.toIntegerFromText.toDouble().toString(),
+                    cost: costController.text.toIntegerFromText.toDouble().toString(),
+                    stock: 1,
+                    color: getColorString(selectedColor),
+                    barcode: barcodeController.text,
+                    description: nameController.text,
+                    image: isImage ? emojiController.text : '▪️',
+                  );
+                  context.read<ProductBloc>().add(ProductEvent.addProduct(data));
+                  context.pop();
+                }
               },
-              builder: (context, state) {
-                return state.maybeWhen(
-                  loading: () {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                  orElse: () {
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 50),
-                      ),
-                      onPressed: () async {
-                        if ((formKey.currentState?.validate() ?? false) && selectedCategoryData != null) {
-                          if (isImage) {
-                            if (emojiController.text.isEmpty && emojiController.text.length > 1) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Emoji is required')),
-                              );
-                              return;
-                            }
-                          }
-                          final data = ProductModel(
-                            name: nameController.text,
-                            categoryId: selectedCategoryData!.id!,
-                            category: selectedCategoryData!,
-                            price: priceController.text.toIntegerFromText.toDouble().toString(),
-                            cost: costController.text.toIntegerFromText.toDouble().toString(),
-                            stock: 1,
-                            color: getColorString(selectedColor),
-                            barcode: barcodeController.text,
-                            description: nameController.text,
-                            image: isImage ? emojiController.text : '▪️',
-                          );
-                          context.read<ProductBloc>().add(ProductEvent.addProduct(data));
-                        }
-                      },
-                      child: const Text('Simpan')
-                    );
-                  },
-                );
-              },
+              child: const Text('Simpan')
             ),
+            const SizedBox(height: 40),
+            // BlocConsumer<ProductBloc, ProductState>(
+            //   listener: (context, state) {
+            //     state.maybeWhen(
+            //       orElse: () {},
+            //       success: (data) {
+            //         Navigator.pop(context);
+            //         ScaffoldMessenger.of(context).showSnackBar(
+            //           SnackBar(content: Text('Produk berhasil ditambahkan')),
+            //         );
+            //       },
+            //     );
+            //   },
+            //   builder: (context, state) {
+            //     return state.maybeWhen(
+            //       loading: () {
+            //         return const Center(
+            //           child: CircularProgressIndicator(),
+            //         );
+            //       },
+            //       orElse: () {
+            //         return ElevatedButton(
+            //           style: ElevatedButton.styleFrom(
+            //             minimumSize: Size(double.infinity, 50),
+            //           ),
+            //           onPressed: () async {
+            //             if ((formKey.currentState?.validate() ?? false) && selectedCategoryData != null) {
+            //               if (isImage) {
+            //                 if (emojiController.text.isEmpty && emojiController.text.length > 1) {
+            //                   if (!context.mounted) return;
+            //                   ScaffoldMessenger.of(context).showSnackBar(
+            //                     SnackBar(content: Text('Emoji is required')),
+            //                   );
+            //                   return;
+            //                 }
+            //               }
+            //               final data = ProductModel(
+            //                 name: nameController.text,
+            //                 categoryId: selectedCategoryData!.id!,
+            //                 category: selectedCategoryData!,
+            //                 price: priceController.text.toIntegerFromText.toDouble().toString(),
+            //                 cost: costController.text.toIntegerFromText.toDouble().toString(),
+            //                 stock: 1,
+            //                 color: getColorString(selectedColor),
+            //                 barcode: barcodeController.text,
+            //                 description: nameController.text,
+            //                 image: isImage ? emojiController.text : '▪️',
+            //               );
+            //               context.read<ProductBloc>().add(ProductEvent.addProduct(data));
+            //             }
+            //           },
+            //           child: const Text('Simpan')
+            //         );
+            //       },
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),

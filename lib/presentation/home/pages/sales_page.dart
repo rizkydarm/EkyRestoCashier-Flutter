@@ -26,7 +26,7 @@ class SalesPage extends StatelessWidget {
 
     final isLargeScreen = MediaQuery.of(context).size.width > 840;
 
-    print("build sales pages");
+    // print("build sales pages");
     
     return Scaffold(
       key: scaffoldKey,
@@ -55,7 +55,7 @@ class SalesPage extends StatelessWidget {
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
           buildWhen: (previous, current) => previous != current,
           builder: (context, state) {
-            print("build CheckoutBloc in SalesPage.BottomAppBar");
+            // print("build CheckoutBloc in SalesPage.BottomAppBar");
             return state.maybeWhen(
               orElse: () => const SizedBox.shrink(),
               loading: () => const SizedBox.shrink(),
@@ -97,7 +97,7 @@ class SalesPage extends StatelessWidget {
             child: BlocBuilder<CategoryBloc, CategoryState>(
               buildWhen: (previous, current) => previous != current,
               builder: (context, categoryState) {
-                print("build CategoryBloc in SalesPage.GridView");
+                // print("build CategoryBloc in SalesPage.GridView");
                 return categoryState.maybeWhen(
                   error: (message) => Center(child: Text(message)),
                   orElse: () => Center(child: Text("No Items")),
@@ -105,7 +105,7 @@ class SalesPage extends StatelessWidget {
                   success: (categories) => BlocBuilder<ProductBloc, ProductState>(
                     buildWhen: (previous, current) => previous != current,
                     builder: (context, productState) {
-                      print("build ProductBloc in SalesPage.GridView");
+                      // print("build ProductBloc in SalesPage.GridView");
                       return productState.maybeWhen(
                         error: (message) => Center(child: Text(message)),
                         orElse: () => Center(child: Text("No Items")),

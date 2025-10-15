@@ -25,7 +25,7 @@ class TransactionPage extends StatelessWidget {
     final scaffoldKey = GlobalKey<ScaffoldState>();
     final isLargeScreen = MediaQuery.of(context).size.width > 840;
 
-    print("build transaction page");
+    // print("build transaction page");
     
     return Scaffold(
       key: scaffoldKey,

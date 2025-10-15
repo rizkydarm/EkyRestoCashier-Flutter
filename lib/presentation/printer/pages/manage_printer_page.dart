@@ -108,7 +108,7 @@ class _ManagePrinterPageState extends State<ManagePrinterPage> {
     setState(() {
       connected = false;
     });
-    print("status disconnect $status");
+    // print("status disconnect $status");
   }
 
   @override

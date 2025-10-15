@@ -27,7 +27,7 @@ class CheckoutPage extends StatelessWidget {
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
           buildWhen: (previous, current) => previous != current,
           builder: (context, state) {
-            print("build CheckoutBloc in CheckoutPage");
+            // print("build CheckoutBloc in CheckoutPage");
             return state.maybeWhen(
               orElse: () => const SizedBox.shrink(),
               loading: () => const Center(child: CircularProgressIndicator()),

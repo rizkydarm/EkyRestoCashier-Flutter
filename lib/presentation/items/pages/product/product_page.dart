@@ -53,7 +53,7 @@ class ProductBlocListView extends StatelessWidget {
     return BlocBuilder<ProductBloc, ProductState>(
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
-        print("build ProductBloc in ProductPage.ListView");
+        // print("build ProductBloc in ProductPage.ListView");
         return state.maybeWhen(
           orElse: () => Center(child: Text("No Items")),
           loading: () => Center(child: CircularProgressIndicator()),

@@ -17,7 +17,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<_GetCategories>((event, emit) async {
       emit(CategoryState.loading());
       await dbCategory.getAllCategory().then((result) {
-        print("get categories");
+        // print("get categories");
         emit(CategoryState.success(result));
       }).onError((error, st) {
         print(st);

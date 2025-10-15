@@ -114,7 +114,7 @@ class CategoryBlocListView extends StatelessWidget {
     return BlocBuilder<CategoryBloc, CategoryState>(
       // buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
-        print("build CategoryBloc in CategoryPage.ListView");
+        // print("build CategoryBloc in CategoryPage.ListView");
         return state.maybeWhen(
           orElse: () => Center(child: const Text('No Items')),
           loading: () => const Center(child: CircularProgressIndicator()),

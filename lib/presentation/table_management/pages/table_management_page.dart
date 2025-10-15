@@ -24,7 +24,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
   Widget build(BuildContext context) {
     final isLargeScreen = MediaQuery.of(context).size.width > 840;
     final scaffoldKey = GlobalKey<ScaffoldState>();
-    print("build table management page");
+    // print("build table management page");
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(

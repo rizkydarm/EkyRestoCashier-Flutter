@@ -50,7 +50,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<_GetProducts>((event, emit) async {
       emit(_Loading());
       await dbProduct.getAllProduct().then((result) {
-        print('get products');
+        // print('get products');
         emit(_Success(result));
       }).onError((error, st) {
         print(st);

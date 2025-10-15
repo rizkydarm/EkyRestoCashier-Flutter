@@ -16,7 +16,7 @@ class CwbPrint {
     try {
       await PrintBluetoothThermal.writeBytes(printValue);
     } on PlatformException catch (e) {
-      print('Error: $e');
+      // print('Error: $e');
     }
   }
 

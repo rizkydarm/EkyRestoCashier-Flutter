@@ -56,7 +56,7 @@ class PaymentPage extends StatelessWidget {
                     BlocBuilder<CheckoutBloc, CheckoutState>(
                       buildWhen: (previous, current) => previous != current,
                       builder: (context, state) {
-                        print("build CheckoutBloc in PaymentPage.Text");
+                        // print("build CheckoutBloc in PaymentPage.Text");
                         return Text(
                           state.maybeWhen(
                             orElse: () => 0,
@@ -225,7 +225,7 @@ class PaymentPage extends StatelessWidget {
                             BlocBuilder<CheckoutBloc, CheckoutState>(
                               buildWhen: (previous, current) => previous != current,
                               builder: (context, state) {
-                                print("build CheckoutBloc in PaymentPage.Switch");
+                                // print("build CheckoutBloc in PaymentPage.Switch");
                                 return Switch(
                                   value: exactNominal,
                                   onChanged: isCash ? (value) => setState(() {
